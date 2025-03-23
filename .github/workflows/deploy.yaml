@@ -1,4 +1,4 @@
-name: Build and Deploy PHP Composer Projects to S3
+name: Build and Deploy Projects to S3
 
 on:
   push:
@@ -29,6 +29,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
           aws-region: us-west-2  # Your AWS region
 
-      - name: Sync to S3 - quick static files
+      - name: Sync to S3
         run: |
           aws s3 cp ./src/public/ s3://calculator.tools/discgolfgame/ --recursive --acl public-read --cache-control max-age=3600
