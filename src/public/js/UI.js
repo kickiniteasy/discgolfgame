@@ -5,89 +5,109 @@ class UI {
         this.throwsElement = document.getElementById('throws');
         this.holeElement = document.getElementById('hole');
         this.distanceEl = document.getElementById('distance');
-        this.powerMeter = document.getElementById('power-meter');
         this.powerFill = document.querySelector('.throw-progress-fill');
         this.messageDisplay = document.getElementById('message');
-        this.discElements = document.querySelectorAll('.disc');
-
-        // Bind disc selection event handlers
-        this.initDiscSelection();
+        this.uiContainer = document.getElementById('ui');
+        this.throwButton = document.getElementById('throw-button');
+        
+        // Players modal elements
+        this.playersButton = document.getElementById('players-button');
+        this.playersModal = document.getElementById('players-modal');
+        this.playersList = document.getElementById('players-list');
+        
+        // Initialize modals
+        this.initializePlayersModal();
     }
 
-    initDiscSelection() {
-        this.discElements.forEach(discEl => {
-            discEl.addEventListener('click', () => {
-                // Only allow changing discs when disc is in hand
-                if (!window.gameState.discInHand) return;
-                
-                // Remove selected class from all discs
-                this.discElements.forEach(el => el.classList.remove('selected'));
-                
-                // Add selected class to clicked disc
-                discEl.classList.add('selected');
-                
-                // Update selected disc in game state
-                window.gameState.selectedDisc = {
-                    type: discEl.dataset.type,
-                    speed: parseInt(discEl.dataset.speed),
-                    glide: parseInt(discEl.dataset.glide),
-                    turn: parseInt(discEl.dataset.turn),
-                    fade: parseInt(discEl.dataset.fade)
-                };
-                
-                // Update disc appearance through the callback
-                if (this.onDiscChangeCallback) {
-                    this.onDiscChangeCallback(window.gameState.selectedDisc);
-                }
-            });
+    initializePlayersModal() {
+        // Show modal on button click
+        this.playersButton.addEventListener('click', () => {
+            this.playersModal.style.display = 'block';
+        });
+
+        // Close modal when clicking close button
+        const closeButton = this.playersModal.querySelector('.close-button');
+        closeButton.addEventListener('click', () => {
+            this.playersModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        this.playersModal.addEventListener('click', (e) => {
+            if (e.target === this.playersModal) {
+                this.playersModal.style.display = 'none';
+            }
         });
     }
 
-    // Power meter methods
-    updatePowerMeter(power) {
-        // Update circular progress on throw button
-        if (this.powerFill) {
-            const progress = power / 100;
-            this.powerFill.style.strokeDashoffset = 283 * (1 - progress);
+    updateScoreboard(players) {
+        if (!this.playersList) return;
+
+        this.playersList.innerHTML = players.map(player => `
+            <div class="player-score ${player.isCurrentTurn ? 'current-turn' : ''}">
+                <div class="player-name" style="color: #${player.color.toString(16).padStart(6, '0')}">${player.name}</div>
+                <div class="player-stats">
+                    <span>Score: ${player.score}</span>
+                    <span>Throws: ${player.throws}</span>
+                </div>
+            </div>
+        `).join('');
+
+        // Update current player indicator on button
+        const currentPlayer = players.find(p => p.isCurrentTurn);
+        if (currentPlayer) {
+            this.playersButton.style.borderColor = `#${currentPlayer.color.toString(16).padStart(6, '0')}`;
         }
     }
 
-    hidePowerMeter() {
-        // No need to hide anything since the throw button is always visible
-        // and the progress is reset by removing the 'throwing' class
-    }
-
-    // Score and game state updates
-    updateScore(score) {
-        this.scoreElement.textContent = `Score: ${score > 0 ? '+' : ''}${score}`;
-    }
-
-    updateThrows(throws) {
-        this.throwsElement.textContent = `Throws: ${throws}`;
-    }
-
-    updateHole(hole) {
-        this.holeElement.textContent = `Hole ${hole}`;
-    }
-
-    updateDistance(distance) {
-        this.distanceEl.textContent = Math.round(distance);
-    }
-
-    // Message display
-    showMessage(text, duration = 3000) {
+    showMessage(text, duration = 2000) {
         if (!this.messageDisplay) return;
-        
         this.messageDisplay.textContent = text;
         this.messageDisplay.style.display = 'block';
-        
         setTimeout(() => {
             this.messageDisplay.style.display = 'none';
         }, duration);
     }
 
-    // Event handler setters
+    updateDistance(distance) {
+        if (!this.distanceEl) return;
+        this.distanceEl.textContent = Math.round(distance * 10) / 10;
+    }
+
+    updateHole(holeNumber) {
+        if (!this.holeElement) return;
+        this.holeElement.textContent = holeNumber;
+    }
+
+    // Power meter methods
+    updatePowerMeter(power) {
+        if (!this.powerFill) return;
+        const circumference = 2 * Math.PI * 45;
+        const offset = circumference - (power / 100) * circumference;
+        this.powerFill.style.strokeDashoffset = offset;
+    }
+
+    hidePowerMeter() {
+        if (!this.throwButton) return;
+        this.throwButton.classList.remove('throwing');
+    }
+
+    showPowerMeter() {
+        if (!this.throwButton) return;
+        this.throwButton.classList.add('throwing');
+    }
+
+    // Score and game state updates
+    updateScore(score) {
+        if (!this.scoreElement) return;
+        this.scoreElement.textContent = score;
+    }
+
+    updateThrows(throws) {
+        if (!this.throwsElement) return;
+        this.throwsElement.textContent = throws;
+    }
+
     setOnDiscChange(callback) {
         this.onDiscChangeCallback = callback;
     }
-} 
+}
