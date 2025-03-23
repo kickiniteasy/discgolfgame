@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <title>Midrange Disc</title>
+    <g transform="translate(10, 30)">
+        <ellipse cx="40" cy="20" rx="35" ry="18" fill="#42a5f5"/>
+        <ellipse cx="40" cy="20" rx="37" ry="20" fill="none" stroke="#1976d2" stroke-width="2"/>
+        <path d="M20,20 Q40,17 60,20" fill="none" stroke="#1976d2" stroke-width="2"/>
+    </g>
+</svg> 

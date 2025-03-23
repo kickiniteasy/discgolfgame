@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <title>Disc Golf Towel</title>
+    <g transform="translate(20, 20)">
+        <path d="M10,20 Q30,15 50,20 L60,40 Q40,45 20,40 L10,20 Z" fill="#90a4ae"/>
+        <path d="M5,30 Q25,25 45,30 Q25,35 5,30 Z" fill="#78909c"/>
+        <path d="M15,25 Q35,22 55,25" fill="none" stroke="#78909c" stroke-width="1"/>
+    </g>
+</svg> 

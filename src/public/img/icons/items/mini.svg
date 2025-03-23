@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <title>Mini Marker Disc</title>
+    <g transform="translate(25, 25)">
+        <circle cx="25" cy="25" r="20" fill="#66bb6a"/>
+        <circle cx="25" cy="25" r="15" fill="#81c784" opacity="0.7"/>
+        <circle cx="25" cy="25" r="5" fill="#43a047"/>
+    </g>
+</svg> 
