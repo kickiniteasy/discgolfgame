@@ -23,16 +23,62 @@ class Player {
         canvas.width = 256;
         canvas.height = 64;
         
-        context.font = '32px Arial';
-        context.fillStyle = 'white';
+        // Set up text style with smaller font and refined background
         context.textAlign = 'center';
-        context.fillText(name, canvas.width / 2, canvas.height / 2);
+        
+        // Measure text width to create appropriate background
+        context.font = '24px Arial';
+        const textMetrics = context.measureText(name);
+        const textWidth = textMetrics.width;
+        const padding = 20;
+        const cornerRadius = 12;
+        
+        // Draw rounded rectangle background
+        const bgWidth = textWidth + padding * 2;
+        const bgHeight = 40;
+        const bgX = (canvas.width - bgWidth) / 2;
+        const bgY = (canvas.height - bgHeight) / 2;
+        
+        context.beginPath();
+        context.moveTo(bgX + cornerRadius, bgY);
+        context.lineTo(bgX + bgWidth - cornerRadius, bgY);
+        context.quadraticCurveTo(bgX + bgWidth, bgY, bgX + bgWidth, bgY + cornerRadius);
+        context.lineTo(bgX + bgWidth, bgY + bgHeight - cornerRadius);
+        context.quadraticCurveTo(bgX + bgWidth, bgY + bgHeight, bgX + bgWidth - cornerRadius, bgY + bgHeight);
+        context.lineTo(bgX + cornerRadius, bgY + bgHeight);
+        context.quadraticCurveTo(bgX, bgY + bgHeight, bgX, bgY + bgHeight - cornerRadius);
+        context.lineTo(bgX, bgY + cornerRadius);
+        context.quadraticCurveTo(bgX, bgY, bgX + cornerRadius, bgY);
+        context.closePath();
+        
+        // Add subtle shadow
+        context.shadowColor = 'rgba(0, 0, 0, 0.3)';
+        context.shadowBlur = 4;
+        context.shadowOffsetX = 0;
+        context.shadowOffsetY = 2;
+        
+        context.fillStyle = 'rgba(0, 0, 0, 0.5)';
+        context.fill();
+        
+        // Reset shadow for text
+        context.shadowColor = 'transparent';
+        
+        // Draw text with outline
+        context.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+        context.lineWidth = 3;
+        context.strokeText(name, canvas.width / 2, canvas.height / 2 + 2);
+        context.fillStyle = 'white';
+        context.fillText(name, canvas.width / 2, canvas.height / 2 + 2);
         
         const texture = new THREE.CanvasTexture(canvas);
-        const spriteMaterial = new THREE.SpriteMaterial({ map: texture });
+        const spriteMaterial = new THREE.SpriteMaterial({ 
+            map: texture,
+            transparent: true,
+            depthTest: false
+        });
         this.nameSprite = new THREE.Sprite(spriteMaterial);
-        this.nameSprite.scale.set(2, 0.5, 1);
-        this.nameSprite.position.y = 1.5;
+        this.nameSprite.scale.set(1.5, 0.4, 1);
+        this.nameSprite.position.y = 0.8;
         
         // Create a group to hold the player model and name
         this.group = new THREE.Group();
