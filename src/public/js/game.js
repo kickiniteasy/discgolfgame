@@ -116,67 +116,20 @@ function initGame() {
     let discHasLanded = false;
     let discStopTimer = 0;
 
-    // Event listeners
-    document.addEventListener('keydown', (e) => {
-        if (e.code === 'Space' && !gameState.throwing && gameState.discInHand) {
-            startThrow();
-        }
-    });
-
-    document.addEventListener('keyup', (e) => {
-        if (e.code === 'Space' && gameState.throwing) {
-            throwDisc();
-        }
-    });
-
-    // Touch and click controls for throw button
-    const throwButton = document.getElementById('throw-button');
-    let throwTouchActive = false;
-
-    throwButton.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        if (!throwTouchActive && !gameState.throwing && gameState.discInHand) {
-            throwTouchActive = true;
-            startThrow();
-        }
-    });
-
-    throwButton.addEventListener('touchend', (e) => {
-        e.preventDefault();
-        if (throwTouchActive) {
-            throwTouchActive = false;
+    // Set up throw handlers through UI
+    ui.setThrowHandlers(
+        () => {
+            if (!gameState.throwing && gameState.discInHand) {
+                startThrow();
+            }
+        },
+        () => {
             if (gameState.throwing) {
                 throwDisc();
             }
-        }
-    });
-
-    // Also handle mouse events for desktop testing
-    throwButton.addEventListener('mousedown', (e) => {
-        if (!throwTouchActive && !gameState.throwing && gameState.discInHand) {
-            throwTouchActive = true;
-            startThrow();
-        }
-    });
-
-    throwButton.addEventListener('mouseup', (e) => {
-        if (throwTouchActive) {
-            throwTouchActive = false;
-            if (gameState.throwing) {
-                throwDisc();
-            }
-        }
-    });
-
-    // Also handle mouse leaving the button
-    throwButton.addEventListener('mouseleave', (e) => {
-        if (throwTouchActive) {
-            throwTouchActive = false;
-            if (gameState.throwing) {
-                throwDisc();
-            }
-        }
-    });
+        },
+        () => !gameState.throwing && gameState.discInHand
+    );
 
     function startThrow() {
         const currentPlayer = playerManager.getCurrentPlayer();
@@ -201,7 +154,6 @@ function initGame() {
         gameState.throwing = true;
         gameState.power = 0;
         gameState.powerIncreasing = true;
-        throwButton.classList.add('throwing');
         ui.showPowerMeter();
         updatePower();
     }
@@ -230,7 +182,7 @@ function initGame() {
         gameState.throwing = false;
         gameState.discInHand = false;
         currentPlayer.incrementThrows();
-        throwButton.classList.remove('throwing');
+        ui.hidePowerMeter();
 
         // Reset landing state
         discHasLanded = false;
@@ -327,7 +279,6 @@ function initGame() {
         currentPlayer.rotateToFacePosition(holePosition);
         cameraController.positionBehindPlayer(currentPlayer.position, holePosition);
         
-        ui.resetPowerMeter();
         ui.updateScoreboard(playerManager.players);
         
         // Show whose turn it is
@@ -345,6 +296,14 @@ function initGame() {
         // Mark current player as completed and update their score
         currentPlayer.completeHole();
         currentPlayer.updateScore(currentPlayer.score + currentPlayer.throws);
+        
+        // Move completed player to next teebox
+        const nextHoleIndex = course.currentHoleIndex + 1;
+        if (nextHoleIndex < course.teeboxes.length) {
+            const nextTeebox = course.teeboxes[nextHoleIndex];
+            const nextTeePosition = nextTeebox.getPosition();
+            currentPlayer.moveToPosition(new THREE.Vector3(nextTeePosition.x, 0.5, nextTeePosition.z));
+        }
         
         // Show completion message for this player
         ui.showMessage(`${currentPlayer.name} completed hole ${course.getHoleNumber()} in ${currentPlayer.throws} throws!`, 2000);
@@ -376,26 +335,40 @@ function initGame() {
 
                 // Set up next hole
                 ui.updateHole(course.getHoleNumber());
-                playerManager.resetPlayerPositions();
                 
                 // Reset game state and UI elements
                 gameState.throwing = false;
                 gameState.power = 0;
-                gameState.powerIncreasing = true;
                 gameState.discInHand = true;
                 ui.hidePowerMeter();
-                throwButton.classList.remove('throwing');
                 
-                // Reset disc and position first player on new teebox
-                resetDisc();
-                
-                // Get hole position for camera setup
+                // Get new hole and teebox positions
+                const teeboxPosition = course.getCurrentTeeboxPosition();
                 const holePosition = course.getCurrentHolePosition();
-                const firstPlayer = playerManager.getCurrentPlayer();
                 
-                // Update player orientation and camera position
+                // Move all players to the teebox position, with current player in front
+                playerManager.players.forEach(player => {
+                    const isCurrentPlayer = player === playerManager.getCurrentPlayer();
+                    // Current player slightly forward on teebox, others slightly back
+                    const zOffset = isCurrentPlayer ? 0 : 0.5;
+                    player.moveToPosition(new THREE.Vector3(teeboxPosition.x, 0.5, teeboxPosition.z + zOffset));
+                    player.resetHoleCompletion();
+                    player.resetThrows();
+                });
+                
+                // Get first player and update their orientation
+                const firstPlayer = playerManager.getCurrentPlayer();
                 firstPlayer.rotateToFacePosition(holePosition);
+                
+                // Update camera position in a single operation
                 cameraController.positionBehindPlayer(firstPlayer.position, holePosition);
+                
+                // Update disc position without triggering camera movement
+                disc.position.copy(firstPlayer.position).add(new THREE.Vector3(0, 0.5, 0));
+                disc.material.color.setHex(firstPlayer.color);
+                discVelocity.set(0, 0, 0);
+                discRotation.set(0, 0, 0);
+                disc.rotation.set(Math.PI / 2, 0, 0);
                 
                 // Update UI for next hole
                 ui.updateScoreboard(playerManager.players);

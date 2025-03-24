@@ -15,8 +15,15 @@ class UI {
         this.playersModal = document.getElementById('players-modal');
         this.playersList = document.getElementById('players-list');
         
-        // Initialize modals
+        // Throw button state
+        this.throwTouchActive = false;
+        this.onStartThrow = null;
+        this.onThrow = null;
+        this.canThrow = () => true; // Default to always allowing throws
+
+        // Initialize modals and controls
         this.initializePlayersModal();
+        this.initializeThrowControls();
     }
 
     initializePlayersModal() {
@@ -37,6 +44,61 @@ class UI {
                 this.playersModal.style.display = 'none';
             }
         });
+    }
+
+    initializeThrowControls() {
+        // Space bar controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' && !this.throwTouchActive && this.canThrow()) {
+                this.throwTouchActive = true;
+                this.onStartThrow?.();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if (e.code === 'Space' && this.throwTouchActive) {
+                this.throwTouchActive = false;
+                this.onThrow?.();
+            }
+        });
+
+        // Touch controls
+        this.throwButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (!this.throwTouchActive && this.canThrow()) {
+                this.throwTouchActive = true;
+                this.onStartThrow?.();
+            }
+        });
+
+        this.throwButton.addEventListener('touchend', (e) => {
+            e.preventDefault();
+            if (this.throwTouchActive) {
+                this.throwTouchActive = false;
+                this.onThrow?.();
+            }
+        });
+
+        // Mouse controls
+        this.throwButton.addEventListener('mousedown', (e) => {
+            if (!this.throwTouchActive && this.canThrow()) {
+                this.throwTouchActive = true;
+                this.onStartThrow?.();
+            }
+        });
+
+        this.throwButton.addEventListener('mouseup', (e) => {
+            if (this.throwTouchActive) {
+                this.throwTouchActive = false;
+                this.onThrow?.();
+            }
+        });
+    }
+
+    setThrowHandlers(onStartThrow, onThrow, canThrow) {
+        this.onStartThrow = onStartThrow;
+        this.onThrow = onThrow;
+        this.canThrow = canThrow;
     }
 
     updateScoreboard(players) {
