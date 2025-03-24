@@ -84,9 +84,6 @@ function initGame() {
     const courseData = Course.getCourseById('beginner');
     const course = new Course(scene, courseData);
 
-    // Camera setup
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -95,15 +92,11 @@ function initGame() {
 
     // Handle window resizing
     window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    // Controls
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.05;
+    // Initialize camera controller
+    const cameraController = new CameraController(scene, renderer);
 
     // Disc setup
     const discGeometry = new THREE.CylinderGeometry(0.1, 0.1, 0.02, 32);
@@ -199,6 +192,12 @@ function initGame() {
             return;
         }
 
+        // If this is the first throw of the hole, player must be on teebox
+        if (currentPlayer.throws === 0 && !course.isOnCurrentTeebox(currentPlayer.position)) {
+            ui.showMessage('You must throw from the teebox on your first shot!');
+            return;
+        }
+
         gameState.throwing = true;
         gameState.power = 0;
         gameState.powerIncreasing = true;
@@ -242,11 +241,7 @@ function initGame() {
     }
 
     function calculateThrowDirection() {
-        const direction = new THREE.Vector3();
-        camera.getWorldDirection(direction);
-        direction.y = 0;
-        direction.normalize();
-        return direction;
+        return cameraController.getDirection();
     }
 
     function updatePower() {
@@ -276,11 +271,21 @@ function initGame() {
         gameState.power = 0;
         gameState.powerIncreasing = true;
 
+        // If this is the first throw, position player on teebox
+        if (currentPlayer.throws === 0) {
+            const teeboxPosition = course.getCurrentTeeboxPosition();
+            currentPlayer.moveToPosition(new THREE.Vector3(teeboxPosition.x, 0.5, teeboxPosition.z));
+        }
+
         disc.position.copy(currentPlayer.position).add(new THREE.Vector3(0, 0.5, 0));
         disc.material.color.setHex(currentPlayer.color);
         discVelocity.set(0, 0, 0);
         discRotation.set(0, 0, 0);
         disc.rotation.set(Math.PI / 2, 0, 0);
+
+        // Update distance display after position change
+        const collisionResult = course.checkDiscCollision(disc.position);
+        ui.updateDistance(collisionResult.distance);
     }
 
     function movePlayerToDisc() {
@@ -318,21 +323,9 @@ function initGame() {
         // Get current player and hole positions
         const holePosition = course.getCurrentHolePosition();
         
-        // Calculate direction from player to hole
-        const directionToHole = new THREE.Vector3()
-            .subVectors(holePosition, currentPlayer.position)
-            .normalize();
-        
-        // Position camera behind player, facing hole
-        const cameraOffset = new THREE.Vector3()
-            .copy(directionToHole)
-            .multiplyScalar(-5); // 5 units behind player
-        cameraOffset.y = 2; // Height above ground
-        
         // Update positions and orientations
         currentPlayer.rotateToFacePosition(holePosition);
-        camera.position.copy(currentPlayer.position).add(cameraOffset);
-        controls.target.copy(currentPlayer.position);
+        cameraController.positionBehindPlayer(currentPlayer.position, holePosition);
         
         ui.resetPowerMeter();
         ui.updateScoreboard(playerManager.players);
@@ -385,23 +378,6 @@ function initGame() {
                 ui.updateHole(course.getHoleNumber());
                 playerManager.resetPlayerPositions();
                 
-                // Set up camera for new hole
-                const holePosition = course.getCurrentHolePosition();
-                const firstPlayer = playerManager.players[0];
-                firstPlayer.rotateToFacePosition(holePosition);
-                
-                // Position camera behind first player
-                const directionToHole = new THREE.Vector3()
-                    .subVectors(holePosition, firstPlayer.position)
-                    .normalize();
-                const cameraOffset = new THREE.Vector3()
-                    .copy(directionToHole)
-                    .multiplyScalar(-5);
-                cameraOffset.y = 2;
-                
-                camera.position.copy(firstPlayer.position).add(cameraOffset);
-                controls.target.copy(firstPlayer.position);
-                
                 // Reset game state and UI elements
                 gameState.throwing = false;
                 gameState.power = 0;
@@ -410,9 +386,19 @@ function initGame() {
                 ui.hidePowerMeter();
                 throwButton.classList.remove('throwing');
                 
+                // Reset disc and position first player on new teebox
+                resetDisc();
+                
+                // Get hole position for camera setup
+                const holePosition = course.getCurrentHolePosition();
+                const firstPlayer = playerManager.getCurrentPlayer();
+                
+                // Update player orientation and camera position
+                firstPlayer.rotateToFacePosition(holePosition);
+                cameraController.positionBehindPlayer(firstPlayer.position, holePosition);
+                
                 // Update UI for next hole
                 ui.updateScoreboard(playerManager.players);
-                resetDisc();
             }, 3000);
             return;
         }
@@ -447,7 +433,7 @@ function initGame() {
         requestAnimationFrame(animate);
 
         // Update controls
-        controls.update();
+        cameraController.update();
 
         // Update disc physics
         if (gameState.discInHand) {
@@ -455,7 +441,7 @@ function initGame() {
             disc.position.copy(currentPlayer.position).add(new THREE.Vector3(0, 0.5, 0));
             
             const direction = new THREE.Vector3();
-            camera.getWorldDirection(direction);
+            cameraController.camera.getWorldDirection(direction);
             disc.lookAt(disc.position.clone().add(direction));
             disc.rotateX(Math.PI / 2);
         } else {
@@ -496,7 +482,7 @@ function initGame() {
                 }
             }
             
-            // Check for hole collision
+            // Check for hole collision and update distance during flight
             const collisionResult = course.checkDiscCollision(disc.position);
             if (collisionResult.isInHole) {
                 completeHole();
@@ -506,37 +492,25 @@ function initGame() {
 
         // Update camera target
         if (gameState.discInHand) {
-            controls.target.copy(playerManager.getCurrentPlayer().position);
+            cameraController.updateTarget(playerManager.getCurrentPlayer().position);
         } else {
-            controls.target.copy(disc.position);
+            cameraController.updateTarget(disc.position);
         }
 
-        renderer.render(scene, camera);
+        renderer.render(scene, cameraController.camera);
     }
 
     // Start the game
     playerManager.resetPlayerPositions();
+    resetDisc(); // Move player to teebox first
     
     // Get initial hole position and first player for proper orientation
     const initialHolePosition = course.getCurrentHolePosition();
     const firstPlayer = playerManager.players[0];
     
-    // Calculate initial direction from player to hole
-    const initialDirectionToHole = new THREE.Vector3()
-        .subVectors(initialHolePosition, firstPlayer.position)
-        .normalize();
-    
-    // Position camera behind first player, facing hole
-    const initialCameraOffset = new THREE.Vector3()
-        .copy(initialDirectionToHole)
-        .multiplyScalar(-5);
-    initialCameraOffset.y = 2;
-    
     // Set up initial positions and orientations
     firstPlayer.rotateToFacePosition(initialHolePosition);
-    camera.position.copy(firstPlayer.position).add(initialCameraOffset);
-    controls.target.copy(firstPlayer.position);
+    cameraController.positionBehindPlayer(firstPlayer.position, initialHolePosition);
     
-    resetDisc();
     animate();
 } 

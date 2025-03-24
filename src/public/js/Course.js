@@ -2,6 +2,7 @@ class Course {
     constructor(scene, courseData) {
         this.scene = scene;
         this.holes = [];
+        this.teeboxes = [];
         this.currentHoleIndex = 0;
         this.name = courseData.name;
         this.par = courseData.par;
@@ -10,11 +11,13 @@ class Course {
     }
 
     initCourse(holesData) {
-        // Clear any existing holes
+        // Clear any existing holes and teeboxes
         this.holes.forEach(hole => hole.remove());
+        this.teeboxes.forEach(teebox => teebox.remove());
         this.holes = [];
+        this.teeboxes = [];
 
-        // Create new holes
+        // Create new holes and teeboxes
         holesData.forEach((holeData, index) => {
             const hole = new Hole(
                 this.scene,
@@ -22,6 +25,16 @@ class Course {
                 index + 1
             );
             this.holes.push(hole);
+
+            // Create teebox 20 units away from hole in opposite direction
+            const teeboxOffset = 20;
+            const teeboxPosition = {
+                x: holeData.teeX !== undefined ? holeData.teeX : holeData.x + teeboxOffset,
+                z: holeData.teeZ !== undefined ? holeData.teeZ : holeData.z + teeboxOffset
+            };
+            
+            const teebox = new Teebox(this.scene, teeboxPosition);
+            this.teeboxes.push(teebox);
         });
     }
 
@@ -29,17 +42,20 @@ class Course {
         return this.holes[this.currentHoleIndex];
     }
 
-    getCurrentHolePosition() {
-        const currentHole = this.getCurrentHole();
-        return currentHole.getPosition();
+    getCurrentTeebox() {
+        return this.teeboxes[this.currentHoleIndex];
     }
 
     getHoleNumber() {
         return this.currentHoleIndex + 1;
     }
 
-    getTotalHoles() {
-        return this.holes.length;
+    getCurrentHolePosition() {
+        return this.getCurrentHole().getPosition();
+    }
+
+    getCurrentTeeboxPosition() {
+        return this.getCurrentTeebox().getPosition();
     }
 
     nextHole() {
@@ -58,6 +74,11 @@ class Course {
         return this.getCurrentHole().checkDiscCollision(discPosition);
     }
 
+    // Check if a position is on the current teebox
+    isOnCurrentTeebox(position) {
+        return this.getCurrentTeebox().isOnTeebox(position);
+    }
+
     // Static method to define available courses
     static getCourseList() {
         return [
@@ -66,9 +87,9 @@ class Course {
                 name: 'Beginner Course',
                 par: 9,
                 holes: [
-                    { x: 0, z: -100 },    // Hole 1
-                    { x: 100, z: -50 },   // Hole 2
-                    { x: -80, z: -120 }   // Hole 3
+                    { x: 0, z: -100, teeX: 0, teeZ: -80 },    // Hole 1
+                    { x: 100, z: -50, teeX: 80, teeZ: -50 },   // Hole 2
+                    { x: -80, z: -120, teeX: -60, teeZ: -120 }   // Hole 3
                 ]
             },
             {
@@ -76,10 +97,10 @@ class Course {
                 name: 'Forest Valley',
                 par: 12,
                 holes: [
-                    { x: 0, z: -150 },    // Hole 1
-                    { x: 120, z: -80 },   // Hole 2
-                    { x: -100, z: -200 },  // Hole 3
-                    { x: 50, z: -250 }    // Hole 4
+                    { x: 0, z: -150, teeX: 0, teeZ: -130 },    // Hole 1
+                    { x: 120, z: -80, teeX: 100, teeZ: -80 },   // Hole 2
+                    { x: -100, z: -200, teeX: -80, teeZ: -200 },  // Hole 3
+                    { x: 50, z: -250, teeX: 30, teeZ: -250 }    // Hole 4
                 ]
             }
             // Add more courses here
