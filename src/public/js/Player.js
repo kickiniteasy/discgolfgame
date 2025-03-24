@@ -8,6 +8,7 @@ class Player {
         this.throws = 0;
         this.position = new THREE.Vector3(0, 0.5, 0);
         this.isCurrentTurn = false;
+        this.hasCompletedHole = false;
         
         // Create player model
         const geometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32);
@@ -49,6 +50,14 @@ class Player {
         this.updatePosition();
     }
     
+    rotateToFacePosition(targetPosition) {
+        const direction = new THREE.Vector3()
+            .subVectors(targetPosition, this.position)
+            .normalize();
+        const angle = Math.atan2(direction.x, direction.z);
+        this.group.rotation.y = angle;
+    }
+    
     setCurrentTurn(isCurrentTurn) {
         this.isCurrentTurn = isCurrentTurn;
         // Highlight current player
@@ -77,5 +86,26 @@ class Player {
     
     getSelectedDisc() {
         return this.bag.getSelectedDisc();
+    }
+    
+    completeHole() {
+        this.hasCompletedHole = true;
+    }
+    
+    resetHoleCompletion() {
+        this.hasCompletedHole = false;
+    }
+    
+    updateColor(newColor) {
+        this.color = newColor;
+        this.model.material.color.setHex(newColor);
+        
+        // Update the player's current disc color if they have one
+        if (this.bag && this.bag.selectedDisc) {
+            const disc = document.querySelector('.disc');
+            if (disc) {
+                disc.material.color.setHex(newColor);
+            }
+        }
     }
 } 

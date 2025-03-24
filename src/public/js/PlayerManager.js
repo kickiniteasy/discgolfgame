@@ -14,7 +14,7 @@ class PlayerManager {
 
         // AI player names
         this.aiNames = [
-            'Sarah',
+            'Cindy',
             'Mike',
             'Alex'
         ];

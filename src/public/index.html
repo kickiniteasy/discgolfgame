@@ -12,12 +12,32 @@
     <script src="js/BagUI.js"></script>
     <script src="js/Player.js"></script>
     <script src="js/PlayerManager.js"></script>
+    <script src="js/Terrain.js"></script>
+    <script src="js/TerrainManager.js"></script>
+    <script src="js/SettingsUI.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/game.js"></script>
 </head>
 <body>
     <div id="container">
+        <button id="settings-button">
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1024 1024">
+                <title>Minimalist Settings Gear Icon</title>
+                <circle id="central-circle" class="central-circle" cx="512" cy="512" r="80" fill="white"/>
+                <g id="teeth-group" class="teeth-group" fill="white">
+                    <rect id="tooth-1" class="tooth" x="490" y="25" width="44" height="40" rx="10"/>
+                    <rect id="tooth-2" class="tooth" x="930" y="490" width="40" height="44" rx="10" transform="rotate(90 930 490)"/>
+                    <rect id="tooth-3" class="tooth" x="490" y="930" width="44" height="40" rx="10" transform="rotate(180 512 512)"/>
+                    <rect id="tooth-4" class="tooth" x="25" y="490" width="40" height="44" rx="10" transform="rotate(270 25 490)"/>
+                    <rect id="tooth-5" class="tooth" x="900" y="395" width="40" height="44" rx="10" transform="rotate(45 900 395)"/>
+                    <rect id="tooth-6" class="tooth" x="625" y="900" width="44" height="40" rx="10" transform="rotate(135 625 900)"/>
+                    <rect id="tooth-7" class="tooth" x="100" y="625" width="40" height="44" rx="10" transform="rotate(225 100 625)"/>
+                    <rect id="tooth-8" class="tooth" x="395" y="100" width="44" height="40" rx="10" transform="rotate(315 395 100)"/>
+                </g>
+            </svg>
+        </button>
+
         <div id="ui">
             <div>Score: <span id="score">0</span></div>
             <div>Throws: <span id="throws">0</span></div>
@@ -74,6 +94,28 @@
                 </div>
                 <div class="modal-body">
                     <div id="players-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="settings-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="settings-form">
+                        <div class="form-group">
+                            <label for="player-name">Player Name</label>
+                            <input type="text" id="player-name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="player-color">Player Color</label>
+                            <input type="color" id="player-color" required>
+                        </div>
+                        <button type="submit" class="save-button">Save Changes</button>
+                    </form>
                 </div>
             </div>
         </div>

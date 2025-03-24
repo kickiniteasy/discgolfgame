@@ -89,11 +89,18 @@ class UI {
     hidePowerMeter() {
         if (!this.throwButton) return;
         this.throwButton.classList.remove('throwing');
+        this.updatePowerMeter(0); // Reset the power meter visual to 0
     }
 
     showPowerMeter() {
         if (!this.throwButton) return;
         this.throwButton.classList.add('throwing');
+        this.updatePowerMeter(0); // Start with power at 0
+    }
+
+    resetPowerMeter() {
+        this.hidePowerMeter();
+        this.updatePowerMeter(0);
     }
 
     // Score and game state updates

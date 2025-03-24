@@ -29,6 +29,11 @@ class Course {
         return this.holes[this.currentHoleIndex];
     }
 
+    getCurrentHolePosition() {
+        const currentHole = this.getCurrentHole();
+        return currentHole.getPosition();
+    }
+
     getHoleNumber() {
         return this.currentHoleIndex + 1;
     }

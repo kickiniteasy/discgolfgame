@@ -54,27 +54,15 @@ function initGame() {
     ground.receiveShadow = true;
     scene.add(ground);
     
-    // Add terrain variation
-    function addTerrainVariation() {
-        for (let i = 0; i < 50; i++) {
-            const size = Math.random() * 5 + 1;
-            const height = Math.random() * 2 + 0.2;
-            const geometry = new THREE.BoxGeometry(size, height, size);
-            const material = new THREE.MeshStandardMaterial({
-                color: 0x2e6215, // Darker green for terrain
-                roughness: 0.9,
-                metalness: 0.1
-            });
-            const terrain = new THREE.Mesh(geometry, material);
-            terrain.position.x = Math.random() * 400 - 200;
-            terrain.position.y = height / 2;
-            terrain.position.z = Math.random() * 400 - 200;
-            terrain.receiveShadow = true;
-            terrain.castShadow = true;
-            scene.add(terrain);
-        }
-    }
-    addTerrainVariation();
+    // Initialize terrain
+    const terrainManager = new TerrainManager(scene);
+    terrainManager.generateRandomTerrain({
+        minX: -200,
+        maxX: 200,
+        minZ: -200,
+        maxZ: 200,
+        count: 50
+    });
 
     // Initialize UI
     const ui = new UI();
@@ -83,13 +71,21 @@ function initGame() {
     const playerManager = new PlayerManager(scene);
     playerManager.initializePlayers(playerName);
 
+    // Initialize SettingsUI
+    const settingsUI = new SettingsUI(playerManager);
+
+    // Initialize BagUI for the current player
+    const bagUI = new BagUI(playerManager.getCurrentPlayer().bag, (selectedDisc) => {
+        // Update the disc color when a new disc is selected
+        disc.material.color.setHex(playerManager.getCurrentPlayer().color);
+    });
+
     // Initialize course
     const courseData = Course.getCourseById('beginner');
     const course = new Course(scene, courseData);
 
     // Camera setup
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 5);
 
     // Renderer setup
     const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -191,6 +187,13 @@ function initGame() {
 
     function startThrow() {
         const currentPlayer = playerManager.getCurrentPlayer();
+        
+        // Check if player has already completed the hole
+        if (currentPlayer.hasCompletedHole) {
+            ui.showMessage(`${currentPlayer.name} has already completed this hole!`);
+            return;
+        }
+
         if (!currentPlayer.getSelectedDisc()) {
             ui.showMessage('Select a disc first!');
             return;
@@ -229,7 +232,6 @@ function initGame() {
         gameState.discInHand = false;
         currentPlayer.incrementThrows();
         throwButton.classList.remove('throwing');
-        ui.hidePowerMeter();
 
         // Reset landing state
         discHasLanded = false;
@@ -289,25 +291,137 @@ function initGame() {
 
     function nextTurn() {
         playerManager.nextTurn();
+        
+        // Find next player who hasn't completed the hole
+        let foundUnfinishedPlayer = false;
+        let loopCount = 0;
+        const maxLoops = playerManager.players.length;
+        
+        while (!foundUnfinishedPlayer && loopCount < maxLoops) {
+            const currentPlayer = playerManager.getCurrentPlayer();
+            if (!currentPlayer.hasCompletedHole) {
+                foundUnfinishedPlayer = true;
+                break;
+            }
+            playerManager.nextTurn();
+            loopCount++;
+        }
+        
+        // If no unfinished players found, all players have completed
+        if (!foundUnfinishedPlayer) {
+            return;
+        }
+
+        const currentPlayer = playerManager.getCurrentPlayer();
         resetDisc();
+        
+        // Get current player and hole positions
+        const holePosition = course.getCurrentHolePosition();
+        
+        // Calculate direction from player to hole
+        const directionToHole = new THREE.Vector3()
+            .subVectors(holePosition, currentPlayer.position)
+            .normalize();
+        
+        // Position camera behind player, facing hole
+        const cameraOffset = new THREE.Vector3()
+            .copy(directionToHole)
+            .multiplyScalar(-5); // 5 units behind player
+        cameraOffset.y = 2; // Height above ground
+        
+        // Update positions and orientations
+        currentPlayer.rotateToFacePosition(holePosition);
+        camera.position.copy(currentPlayer.position).add(cameraOffset);
+        controls.target.copy(currentPlayer.position);
+        
+        ui.resetPowerMeter();
         ui.updateScoreboard(playerManager.players);
+        
+        // Show whose turn it is
+        ui.showMessage(`${currentPlayer.name}'s turn`, 1500);
     }
 
     function completeHole() {
         const currentPlayer = playerManager.getCurrentPlayer();
-        ui.showMessage(`${currentPlayer.name} completed hole ${course.getHoleNumber()} in ${currentPlayer.throws} throws!`, 3000);
-
-        currentPlayer.updateScore(currentPlayer.score + currentPlayer.throws);
-        currentPlayer.resetThrows();
-
-        if (!course.nextHole()) {
-            endGame();
+        
+        // Prevent completing hole multiple times
+        if (currentPlayer.hasCompletedHole) {
             return;
         }
+        
+        // Mark current player as completed and update their score
+        currentPlayer.completeHole();
+        currentPlayer.updateScore(currentPlayer.score + currentPlayer.throws);
+        
+        // Show completion message for this player
+        ui.showMessage(`${currentPlayer.name} completed hole ${course.getHoleNumber()} in ${currentPlayer.throws} throws!`, 2000);
+        
+        // Check if all players have completed the hole
+        const allPlayersCompleted = playerManager.players.every(player => player.hasCompletedHole);
+        
+        if (allPlayersCompleted) {
+            // Show final scores for the hole
+            const scores = playerManager.players.map(p => `${p.name}: ${p.throws}`).join(', ');
+            ui.showMessage(`Hole ${course.getHoleNumber()} complete! Final scores - ${scores}`, 3000);
+            
+            // Use a single timeout for transitioning to next hole
+            setTimeout(() => {
+                const currentHoleNumber = course.getHoleNumber();
+                const isLastHole = !course.nextHole();
+                
+                // Reset completion status and throws for all players
+                playerManager.players.forEach(player => {
+                    player.resetHoleCompletion();
+                    player.resetThrows();
+                });
+                
+                // Only end game if we were on the last hole
+                if (isLastHole) {
+                    endGame();
+                    return;
+                }
 
-        ui.updateHole(course.getHoleNumber());
-        playerManager.resetPlayerPositions();
-        ui.updateScoreboard(playerManager.players);
+                // Set up next hole
+                ui.updateHole(course.getHoleNumber());
+                playerManager.resetPlayerPositions();
+                
+                // Set up camera for new hole
+                const holePosition = course.getCurrentHolePosition();
+                const firstPlayer = playerManager.players[0];
+                firstPlayer.rotateToFacePosition(holePosition);
+                
+                // Position camera behind first player
+                const directionToHole = new THREE.Vector3()
+                    .subVectors(holePosition, firstPlayer.position)
+                    .normalize();
+                const cameraOffset = new THREE.Vector3()
+                    .copy(directionToHole)
+                    .multiplyScalar(-5);
+                cameraOffset.y = 2;
+                
+                camera.position.copy(firstPlayer.position).add(cameraOffset);
+                controls.target.copy(firstPlayer.position);
+                
+                // Reset game state and UI elements
+                gameState.throwing = false;
+                gameState.power = 0;
+                gameState.powerIncreasing = true;
+                gameState.discInHand = true;
+                ui.hidePowerMeter();
+                throwButton.classList.remove('throwing');
+                
+                // Update UI for next hole
+                ui.updateScoreboard(playerManager.players);
+                resetDisc();
+            }, 3000);
+            return;
+        }
+        
+        // If not all players have completed, move to next player's turn after a short delay
+        setTimeout(() => {
+            nextTurn();
+            ui.updateScoreboard(playerManager.players);
+        }, 1500);
     }
 
     function endGame() {
@@ -402,6 +516,27 @@ function initGame() {
 
     // Start the game
     playerManager.resetPlayerPositions();
+    
+    // Get initial hole position and first player for proper orientation
+    const initialHolePosition = course.getCurrentHolePosition();
+    const firstPlayer = playerManager.players[0];
+    
+    // Calculate initial direction from player to hole
+    const initialDirectionToHole = new THREE.Vector3()
+        .subVectors(initialHolePosition, firstPlayer.position)
+        .normalize();
+    
+    // Position camera behind first player, facing hole
+    const initialCameraOffset = new THREE.Vector3()
+        .copy(initialDirectionToHole)
+        .multiplyScalar(-5);
+    initialCameraOffset.y = 2;
+    
+    // Set up initial positions and orientations
+    firstPlayer.rotateToFacePosition(initialHolePosition);
+    camera.position.copy(firstPlayer.position).add(initialCameraOffset);
+    controls.target.copy(firstPlayer.position);
+    
     resetDisc();
     animate();
 } 
