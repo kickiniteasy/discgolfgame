@@ -360,6 +360,7 @@ body {
     font-size: 16px;
 }
 
+/* Settings Button */
 #settings-button {
     position: fixed;
     top: 20px;
@@ -374,7 +375,6 @@ body {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
-    z-index: 1000;
 }
 
 #settings-button:hover {
@@ -382,14 +382,9 @@ body {
     border-color: rgba(255, 255, 255, 0.5);
 }
 
-#settings-button svg {
+#settings-button img {
     width: 24px;
     height: 24px;
-}
-
-#settings-button .central-circle,
-#settings-button .tooth {
-    fill: white;
 }
 
 /* Settings Form */
