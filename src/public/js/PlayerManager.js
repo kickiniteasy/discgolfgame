@@ -31,12 +31,24 @@ class PlayerManager {
         }
 
         // Create main player with user's name and saved color
-        this.addPlayer(username, playerColor);
+        this.addPlayer(username, playerColor, 'human');
         
-        // Add 3 AI players with unique names
-        this.aiNames.forEach((name, index) => {
-            this.addPlayer(name, this.playerColors[index + 1]);
-        });
+        // Get saved player count or default to 4
+        const savedPlayerCount = parseInt(localStorage.getItem('discGolfPlayerCount')) || 4;
+        const aiPlayerCount = Math.min(Math.max(savedPlayerCount - 1, 0), 3); // Ensure between 0 and 3 AI players
+        
+        // Load saved AI player data or use defaults
+        const savedAIPlayers = JSON.parse(localStorage.getItem('discGolfAIPlayers') || '[]');
+        
+        // Add AI players with saved or default names/colors
+        for (let i = 0; i < aiPlayerCount; i++) {
+            const savedAIPlayer = savedAIPlayers[i];
+            if (savedAIPlayer) {
+                this.addPlayer(savedAIPlayer.name, parseInt(savedAIPlayer.color, 16), savedAIPlayer.type || 'ai');
+            } else {
+                this.addPlayer(this.aiNames[i], this.playerColors[i + 1], 'ai');
+            }
+        }
         
         // Position players at tee
         if (window.courseManager && window.courseManager.getCurrentCourse()) {
@@ -69,14 +81,49 @@ class PlayerManager {
         }
     }
     
-    addPlayer(name, color) {
-        const player = new Player(this.players.length, name, color);
+    addPlayer(name, color, type = 'ai') {
+        const player = new Player(this.players.length, name, color, type);
         player.addToScene(this.scene);
         this.players.push(player);
+
+        // If we're adding a player mid-game, position them appropriately
+        if (window.courseManager && window.courseManager.getCurrentCourse()) {
+            const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
+            const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+            
+            // Position new player behind teebox with other non-active players
+            const backOffset = 2;
+            const sideSpread = 0.6;
+            const xPosition = teePosition.x + ((this.players.length - 2) * sideSpread - sideSpread);
+            const zPosition = teePosition.z + backOffset;
+            
+            player.moveToPosition(new THREE.Vector3(
+                xPosition,
+                0.25, // Lower height for waiting players
+                zPosition
+            ));
+
+            // Make them face the hole
+            if (holePosition) {
+                player.rotateToFacePosition(new THREE.Vector3(
+                    holePosition.x,
+                    holePosition.y || 0,
+                    holePosition.z
+                ));
+            }
+        }
+
         // Update the scoreboard whenever a player is added
         if (window.ui) {
             window.ui.updateScoreboard(this.getScorecard());
         }
+        
+        // Save AI player data when adding a new player (except for first player)
+        if (this.players.length > 1) {
+            this.saveAIPlayerData();
+            localStorage.setItem('discGolfPlayerCount', this.players.length.toString());
+        }
+        
         return player;
     }
     
@@ -391,5 +438,239 @@ class PlayerManager {
         const tolerance = 0.1; // Small distance tolerance
         return Math.abs(player.position.x - teePosition.x) < tolerance &&
                Math.abs(player.position.z - teePosition.z) < tolerance;
+    }
+
+    removePlayer(playerIndex) {
+        if (playerIndex <= 0 || playerIndex >= this.players.length) return false; // Can't remove player 1 or invalid index
+        
+        const player = this.players[playerIndex];
+        const wasCurrentPlayer = player.isCurrentTurn;
+        
+        // Remove player from scene
+        player.removeFromScene(this.scene);
+        
+        // Remove player from array
+        this.players.splice(playerIndex, 1);
+        
+        // Update player IDs
+        this.players.forEach((p, idx) => p.id = idx);
+        
+        // Check if all remaining players have completed the hole
+        const allPlayersCompleted = this.players.every(p => p.hasCompletedHole);
+        
+        // If all players have completed the hole, advance to next hole
+        if (allPlayersCompleted && window.courseManager && window.courseManager.getCurrentCourse()) {
+            const nextHoleSuccess = window.courseManager.getCurrentCourse().nextHole();
+            if (nextHoleSuccess) {
+                // Reset all players for next hole
+                this.players.forEach(p => {
+                    p.hasCompletedHole = false;
+                    p.throws = 0;
+                });
+                
+                // Reset to first player
+                this.currentPlayerIndex = 0;
+                const firstPlayer = this.getCurrentPlayer();
+                firstPlayer.setCurrentTurn(true);
+                
+                // Update hole number in UI
+                if (window.ui) {
+                    const totalHoles = window.courseManager.getCurrentCourse().holes.length;
+                    window.ui.updateHole(window.courseManager.getCurrentCourse().currentHoleIndex + 1, totalHoles);
+                }
+                
+                // Position players at new teebox
+                const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
+                const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                
+                // Position first player at teebox
+                firstPlayer.moveToPosition(new THREE.Vector3(
+                    teePosition.x,
+                    0.5,
+                    teePosition.z
+                ));
+                
+                // Make them face the hole
+                if (holePosition) {
+                    firstPlayer.rotateToFacePosition(new THREE.Vector3(
+                        holePosition.x,
+                        holePosition.y || 0,
+                        holePosition.z
+                    ));
+                }
+                
+                // Create new disc for first player
+                if (window.gameState) {
+                    if (window.gameState.currentDisc) {
+                        window.gameState.currentDisc.remove();
+                    }
+                    const selectedDisc = firstPlayer.bag.getSelectedDisc();
+                    window.gameState.currentDisc = new Disc(this.scene, selectedDisc);
+                    window.gameState.currentDisc.setPosition(firstPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
+                    window.gameState.discInHand = true;
+                }
+                
+                // Update camera to focus on first player and new hole
+                if (window.cameraController) {
+                    window.cameraController.focusOnPlayer(firstPlayer);
+                }
+                
+                // Update UI elements
+                if (window.ui) {
+                    const colorHex = firstPlayer.color.toString(16).padStart(6, '0');
+                    const bagButton = document.getElementById('bag-button');
+                    const playersButton = document.getElementById('players-button');
+                    if (bagButton) {
+                        bagButton.style.outline = `3px solid #${colorHex}`;
+                        bagButton.style.outlineOffset = '2px';
+                    }
+                    if (playersButton) {
+                        playersButton.style.outline = `3px solid #${colorHex}`;
+                        playersButton.style.outlineOffset = '2px';
+                    }
+                    if (window.ui.bagUI) {
+                        window.ui.bagUI.updateBagButtonStyle();
+                    }
+                    window.ui.updateScoreboard(this.getScorecard());
+                }
+                
+                // Notify of player change
+                if (this.onPlayerChange) {
+                    this.onPlayerChange(firstPlayer);
+                }
+                
+                // Save state
+                localStorage.setItem('discGolfPlayerCount', this.players.length.toString());
+                this.saveAIPlayerData();
+                return true;
+            }
+        }
+        
+        // If it was the current player's turn, advance to next player
+        if (wasCurrentPlayer) {
+            // Adjust currentPlayerIndex if needed
+            if (this.currentPlayerIndex >= this.players.length) {
+                this.currentPlayerIndex = 0;
+            }
+            const nextPlayer = this.getCurrentPlayer();
+            nextPlayer.setCurrentTurn(true);
+            
+            // Only reposition to teebox if:
+            // 1. The removed player was at the teebox (throws === 0)
+            // 2. The next player hasn't thrown yet (throws === 0)
+            // 3. We have course information
+            if (player.throws === 0 && nextPlayer.throws === 0 && 
+                window.courseManager && window.courseManager.getCurrentCourse()) {
+                const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
+                const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                
+                // Move other players back if they're on the tee
+                this.players.forEach((p, index) => {
+                    if (p !== nextPlayer && this.isPlayerOnTeebox(p, teePosition)) {
+                        const backOffset = 2;
+                        const sideSpread = 0.6;
+                        const xPosition = teePosition.x + ((index - 1) * sideSpread - sideSpread);
+                        const zPosition = teePosition.z + backOffset;
+                        
+                        p.moveToPosition(new THREE.Vector3(
+                            xPosition,
+                            0.25,
+                            zPosition
+                        ));
+                    }
+                });
+                
+                // Position next player at teebox
+                nextPlayer.moveToPosition(new THREE.Vector3(
+                    teePosition.x,
+                    0.5,
+                    teePosition.z
+                ));
+                
+                // Create new disc for next player
+                if (window.gameState) {
+                    if (window.gameState.currentDisc) {
+                        window.gameState.currentDisc.remove();
+                    }
+                    const selectedDisc = nextPlayer.bag.getSelectedDisc();
+                    window.gameState.currentDisc = new Disc(this.scene, selectedDisc);
+                    window.gameState.currentDisc.setPosition(nextPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
+                    window.gameState.discInHand = true;
+                }
+                
+                // Update distance to hole for new player
+                if (holePosition && window.ui) {
+                    const distance = Math.ceil(new THREE.Vector2(
+                        holePosition.x - teePosition.x,
+                        holePosition.z - teePosition.z
+                    ).length());
+                    window.ui.updateDistance(distance);
+                }
+            } else {
+                // If not repositioning to teebox, just adjust height and create new disc
+                const currentPos = nextPlayer.position.clone();
+                currentPos.y = 0.5; // Set to standard player height
+                nextPlayer.moveToPosition(currentPos);
+                
+                if (window.gameState) {
+                    if (window.gameState.currentDisc) {
+                        window.gameState.currentDisc.remove();
+                    }
+                    const selectedDisc = nextPlayer.bag.getSelectedDisc();
+                    window.gameState.currentDisc = new Disc(this.scene, selectedDisc);
+                    window.gameState.currentDisc.setPosition(nextPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
+                    window.gameState.discInHand = true;
+                }
+            }
+
+            // Update button outlines for next player
+            if (window.ui) {
+                const colorHex = nextPlayer.color.toString(16).padStart(6, '0');
+                const bagButton = document.getElementById('bag-button');
+                const playersButton = document.getElementById('players-button');
+                if (bagButton) {
+                    bagButton.style.outline = `3px solid #${colorHex}`;
+                    bagButton.style.outlineOffset = '2px';
+                }
+                if (playersButton) {
+                    playersButton.style.outline = `3px solid #${colorHex}`;
+                    playersButton.style.outlineOffset = '2px';
+                }
+                // Also update the bag button if BagUI exists
+                if (window.ui.bagUI) {
+                    window.ui.bagUI.updateBagButtonStyle();
+                }
+            }
+            
+            // Update camera to focus on new current player
+            if (window.cameraController) {
+                window.cameraController.focusOnPlayer(nextPlayer);
+            }
+
+            // Notify of player change
+            if (this.onPlayerChange) {
+                this.onPlayerChange(nextPlayer);
+            }
+        } else if (playerIndex < this.currentPlayerIndex) {
+            // Adjust currentPlayerIndex if we removed a player before the current player
+            this.currentPlayerIndex--;
+        }
+        
+        // Save new player count and AI player data
+        localStorage.setItem('discGolfPlayerCount', this.players.length.toString());
+        this.saveAIPlayerData();
+        
+        return true;
+    }
+
+    // Helper method to save AI player data
+    saveAIPlayerData() {
+        // Skip player 1 (human player) and save the rest
+        const aiPlayers = this.players.slice(1).map(player => ({
+            name: player.name,
+            color: player.color.toString(16).padStart(6, '0'),
+            type: player.type
+        }));
+        localStorage.setItem('discGolfAIPlayers', JSON.stringify(aiPlayers));
     }
 } 

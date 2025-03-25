@@ -10,6 +10,9 @@ class SettingsUI {
         this.playerSettingsList = document.getElementById('player-settings-list');
         this.savePlayersButton = document.getElementById('save-players-button');
         
+        // Create confirmation modal
+        this.createConfirmationModal();
+        
         // Course management elements
         this.courseSelect = document.getElementById('course-select');
         this.courseUrlInput = document.getElementById('course-url');
@@ -22,6 +25,118 @@ class SettingsUI {
         // Bind event listeners
         this.initializeEventListeners();
         this.initializeCourseSelect();
+        
+        // Create container for reset buttons
+        const resetButtonsContainer = document.createElement('div');
+        resetButtonsContainer.className = 'reset-buttons-container';
+        
+        // Add Reset Game button
+        const resetGameButton = document.createElement('button');
+        resetGameButton.className = 'reset-game-button';
+        resetGameButton.textContent = 'Reset Game';
+        resetGameButton.addEventListener('click', () => {
+            this.showConfirmModal(
+                'Reset Game',
+                'Are you sure you want to reset the current game? This will:\n\n' +
+                '• Reset back to Hole 1\n' +
+                '• Clear all scores and throws\n' +
+                '• Keep all player settings\n' +
+                '• Return everyone to the first tee',
+                () => this.resetGame()
+            );
+        });
+        
+        // Add Reset All Data button
+        const resetAllButton = document.createElement('button');
+        resetAllButton.className = 'reset-all-button';
+        resetAllButton.textContent = 'Reset All Data';
+        resetAllButton.addEventListener('click', () => {
+            this.showConfirmModal(
+                'Reset All Data',
+                'Are you sure you want to reset ALL data? This will:\n\n' +
+                '• Clear all player data and settings\n' +
+                '• Remove all added players\n' +
+                '• Reset all scores and throws\n' +
+                '• Reset game back to Hole 1',
+                () => this.resetAllData()
+            );
+        });
+        
+        // Add buttons to container
+        resetButtonsContainer.appendChild(resetGameButton);
+        resetButtonsContainer.appendChild(resetAllButton);
+        
+        // Add the reset buttons container after the player settings list
+        this.playerSettingsList.parentNode.insertBefore(resetButtonsContainer, this.playerSettingsList.nextSibling);
+    }
+
+    createConfirmationModal() {
+        // Create modal elements
+        const modal = document.createElement('div');
+        modal.className = 'confirm-modal';
+        
+        const content = document.createElement('div');
+        content.className = 'confirm-modal-content';
+        
+        const title = document.createElement('div');
+        title.className = 'confirm-modal-title';
+        
+        const message = document.createElement('div');
+        message.className = 'confirm-modal-message';
+        
+        const buttons = document.createElement('div');
+        buttons.className = 'confirm-modal-buttons';
+        
+        const confirmButton = document.createElement('button');
+        confirmButton.className = 'confirm-modal-button confirm';
+        confirmButton.textContent = 'Reset';
+        
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'confirm-modal-button cancel';
+        cancelButton.textContent = 'Cancel';
+        
+        // Add event listeners
+        cancelButton.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+        
+        // Assemble modal
+        buttons.appendChild(cancelButton);
+        buttons.appendChild(confirmButton);
+        content.appendChild(title);
+        content.appendChild(message);
+        content.appendChild(buttons);
+        modal.appendChild(content);
+        
+        // Add to document
+        document.body.appendChild(modal);
+        
+        // Store references
+        this.confirmModal = modal;
+        this.confirmModalTitle = title;
+        this.confirmModalMessage = message;
+        this.confirmModalConfirmButton = confirmButton;
+    }
+
+    showConfirmModal(titleText, messageText, onConfirm) {
+        this.confirmModalTitle.textContent = titleText;
+        this.confirmModalMessage.textContent = messageText;
+        
+        // Remove old confirm listener and add new one
+        const confirmButton = this.confirmModalConfirmButton;
+        const modal = this.confirmModal;
+        
+        const newConfirmButton = confirmButton.cloneNode(true);
+        confirmButton.parentNode.replaceChild(newConfirmButton, confirmButton);
+        this.confirmModalConfirmButton = newConfirmButton;
+        
+        newConfirmButton.addEventListener('click', () => {
+            onConfirm();
+            modal.classList.remove('show');
+        });
+        
+        // Show modal
+        modal.classList.add('show');
     }
 
     initializeEventListeners() {
@@ -128,11 +243,85 @@ class SettingsUI {
                     window.ui.updateScoreboard(this.playerManager.getScorecard());
                 }
             });
+
+            // Add player type selector for all players except Player 1
+            if (index > 0) {
+                const typeSelect = document.createElement('select');
+                typeSelect.className = 'type-select';
+                typeSelect.title = 'Choose player type';
+                typeSelect.dataset.playerIndex = index;
+
+                const aiOption = document.createElement('option');
+                aiOption.value = 'ai';
+                aiOption.textContent = 'AI';
+                typeSelect.appendChild(aiOption);
+
+                const humanOption = document.createElement('option');
+                humanOption.value = 'human';
+                humanOption.textContent = 'Human';
+                typeSelect.appendChild(humanOption);
+
+                typeSelect.value = player.type;
+
+                typeSelect.addEventListener('change', (e) => {
+                    player.type = e.target.value;
+                    this.playerManager.saveAIPlayerData();
+                });
+
+                row.appendChild(typeSelect);
+            }
+            
+            // Add remove button for all players except Player 1
+            if (index > 0) {
+                const removeButton = document.createElement('button');
+                removeButton.className = 'remove-player-button';
+                removeButton.innerHTML = '&times;';
+                removeButton.title = 'Remove player';
+                removeButton.dataset.playerIndex = index;
+                removeButton.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const playerIndex = parseInt(e.target.dataset.playerIndex);
+                    this.playerManager.removePlayer(playerIndex);
+                    this.updatePlayersList();
+                    if (window.ui) {
+                        window.ui.updateScoreboard(this.playerManager.getScorecard());
+                    }
+                });
+                row.appendChild(removeButton);
+            }
             
             row.appendChild(nameInput);
             row.appendChild(colorInput);
             this.playerSettingsList.appendChild(row);
         });
+
+        // Add "Add Player" button if we have less than max players
+        if (players.length < 4) {
+            const addPlayerRow = document.createElement('div');
+            addPlayerRow.className = 'add-player-row';
+            
+            const addPlayerButton = document.createElement('button');
+            addPlayerButton.className = 'add-player-button';
+            addPlayerButton.textContent = 'Add Player';
+            addPlayerButton.addEventListener('click', (e) => {
+                e.preventDefault();
+                const nextIndex = this.playerManager.players.length;
+                if (nextIndex < 4) {
+                    const nextColor = this.playerManager.playerColors[nextIndex];
+                    const nextName = this.playerManager.aiNames[nextIndex - 1] || `Player ${nextIndex + 1}`;
+                    this.playerManager.addPlayer(nextName, nextColor, 'ai');
+                    this.updatePlayersList();
+                    if (window.ui) {
+                        window.ui.updateScoreboard(this.playerManager.getScorecard());
+                    }
+                    // Save player count to localStorage
+                    localStorage.setItem('discGolfPlayerCount', this.playerManager.players.length.toString());
+                }
+            });
+            
+            addPlayerRow.appendChild(addPlayerButton);
+            this.playerSettingsList.appendChild(addPlayerRow);
+        }
     }
 
     savePlayerSettings() {
@@ -368,14 +557,151 @@ class SettingsUI {
         this.courseJsonInput.value = '';
     }
 
-    showMessage(message, type = 'info') {
-        const messageElement = document.getElementById('message');
-        messageElement.textContent = message;
-        messageElement.className = `message ${type}`;
-        messageElement.style.display = 'block';
+    showMessage(text, type = 'info') {
+        const message = document.createElement('div');
+        message.className = `message ${type}`;
+        message.textContent = text;
+        document.body.appendChild(message);
         
         setTimeout(() => {
-            messageElement.style.display = 'none';
+            message.style.opacity = '0';
+            setTimeout(() => message.remove(), 300);
         }, 3000);
+    }
+
+    resetGame() {
+        // Reset game state
+        window.gameState.throwing = false;
+        window.gameState.power = 0;
+        window.gameState.powerIncreasing = true;
+        window.gameState.discInHand = true;
+        window.gameState.celebrationInProgress = false;
+
+        // Clean up existing disc
+        if (window.gameState.currentDisc) {
+            window.gameState.currentDisc.remove();
+            window.gameState.currentDisc = null;
+        }
+
+        // Reset course state
+        const course = window.courseManager.getCurrentCourse();
+        if (course) {
+            course.currentHoleIndex = 0;
+            course.holes.forEach(hole => {
+                hole.hasBeenCompleted = false;
+            });
+
+            // Reset player states
+            this.playerManager.players.forEach(player => {
+                player.score = 0;
+                player.throws = 0;
+                player.hasCompletedHole = false;
+                player.lastDiscPosition = null;
+                player.setCurrentTurn(false);
+            });
+
+            // Get positions for first hole
+            const teePosition = course.getCurrentTeeboxPosition();
+            const holePosition = course.getCurrentHolePosition();
+
+            if (teePosition && holePosition) {
+                // Position all players at first tee
+                this.playerManager.positionPlayersAtTeebox(teePosition, holePosition, true);
+                
+                // Set up first player's turn
+                const firstPlayer = this.playerManager.players[0];
+                if (firstPlayer) {
+                    this.playerManager.currentPlayerIndex = 0;
+                    firstPlayer.setCurrentTurn(true);
+
+                    // Create new disc for first player
+                    const selectedDisc = firstPlayer.bag.getSelectedDisc();
+                    window.gameState.currentDisc = new Disc(window.courseManager.scene, selectedDisc);
+                    window.gameState.currentDisc.setPosition(firstPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
+                    window.gameState.discInHand = true;
+
+                    // Reset camera and focus on first player
+                    if (window.cameraController) {
+                        window.cameraController.focusOnPlayer(firstPlayer);
+                    }
+
+                    // Update UI elements
+                    if (window.ui) {
+                        window.ui.updateScoreboard(this.playerManager.getScorecard());
+                        window.ui.updateHole(1, course.holes.length);
+                        window.ui.updateThrows(0);
+                        window.ui.updateDistance(Math.ceil(new THREE.Vector2(
+                            holePosition.x - teePosition.x,
+                            holePosition.z - teePosition.z
+                        ).length()));
+
+                        // Update button outlines
+                        const colorHex = firstPlayer.color.toString(16).padStart(6, '0');
+                        const bagButton = document.getElementById('bag-button');
+                        const playersButton = document.getElementById('players-button');
+                        if (bagButton) {
+                            bagButton.style.outline = `3px solid #${colorHex}`;
+                            bagButton.style.outlineOffset = '2px';
+                        }
+                        if (playersButton) {
+                            playersButton.style.outline = `3px solid #${colorHex}`;
+                            playersButton.style.outlineOffset = '2px';
+                        }
+
+                        // Reset power meter
+                        const powerMeter = document.getElementById('power-meter');
+                        if (powerMeter) powerMeter.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        // Close modals
+        this.confirmModal.classList.remove('show');
+        this.settingsModal.style.display = 'none';
+        this.showMessage('Game reset successfully! Starting from Hole 1', 'success');
+    }
+
+    resetAllData() {
+        // Store current course data before clearing localStorage
+        const currentCourseId = localStorage.getItem('currentCourseId');
+        const courseData = localStorage.getItem('courseData');
+        
+        // Clear localStorage but preserve course data
+        localStorage.clear();
+        if (currentCourseId) localStorage.setItem('currentCourseId', currentCourseId);
+        if (courseData) localStorage.setItem('courseData', courseData);
+        
+        // Remove existing name labels and discs
+        this.playerManager.players.forEach(player => {
+            if (player.nameSprite && player.nameSprite.parent) {
+                player.nameSprite.parent.remove(player.nameSprite);
+                player.nameSprite.material.map.dispose();
+                player.nameSprite.material.dispose();
+                player.nameSprite.geometry.dispose();
+                player.nameSprite = null;
+            }
+            if (player.disc && player.disc.parent) {
+                player.disc.parent.remove(player.disc);
+                if (player.disc.geometry) player.disc.geometry.dispose();
+                if (player.disc.material) player.disc.material.dispose();
+                player.disc = null;
+            }
+        });
+        
+        // Clear players and reinitialize
+        while (this.playerManager.players.length > 0) {
+            this.playerManager.players.pop();
+        }
+        this.playerManager.initializePlayers();
+        
+        // Reset game state (reuse resetGame function)
+        this.resetGame();
+        
+        // Update UI
+        this.updatePlayersList();
+        
+        // Show success message
+        this.showMessage('All data reset successfully!', 'success');
     }
 } 

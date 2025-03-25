@@ -1,8 +1,9 @@
 class Player {
-    constructor(id, name, color) {
+    constructor(id, name, color, type = 'ai') {
         this.id = id;
         this.name = name;
         this.color = color;
+        this.type = type; // 'human' or 'ai'
         this.bag = new Bag(); // Each player has their own bag
         this.score = 0;
         this.throws = 0;
