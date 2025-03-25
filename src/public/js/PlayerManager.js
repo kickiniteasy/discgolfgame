@@ -37,13 +37,29 @@ class PlayerManager {
             
             if (teePosition) {
                 this.players.forEach((player, index) => {
-                    // Position player at or behind tee
-                    const playerPosition = new THREE.Vector3(
-                        teePosition.x,
-                        0.5, // Fixed player height
-                        teePosition.z + (index * 1) // Space players 1 unit apart
-                    );
-                    player.moveToPosition(playerPosition);
+                    if (index === 0) {
+                        // First player stays on the tee
+                        player.moveToPosition(new THREE.Vector3(
+                            teePosition.x,
+                            0.5, // Standard height
+                            teePosition.z
+                        ));
+                    } else {
+                        // Position other players in a relaxed formation behind the tee
+                        // They are lower to the ground as if sitting/crouching
+                        const backOffset = 2; // Fixed distance behind the tee
+                        const sideSpread = 0.6; // Gentler side spread
+                        
+                        // Spread players slightly side to side behind the tee
+                        const xPosition = teePosition.x + ((index - 1) * sideSpread - sideSpread);
+                        const zPosition = teePosition.z + backOffset;
+                        
+                        player.moveToPosition(new THREE.Vector3(
+                            xPosition,
+                            0.25, // Lower height to simulate sitting/crouching
+                            zPosition
+                        ));
+                    }
                     
                     // Rotate player to face the hole
                     if (holePosition) {

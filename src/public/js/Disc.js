@@ -64,7 +64,42 @@ class Disc {
         this.isFlying = false;
         this.position = new THREE.Vector3();
         
-        scene.add(this.mesh);
+        // Store scene reference and add mesh to scene
+        this.scene = scene;
+        this.scene.add(this.mesh);
+        
+        // Set initial rotation based on basket direction
+        this.updateRotationToBasket();
+    }
+    
+    setPosition(position) {
+        this.position.copy(position);
+        this.mesh.position.copy(position);
+        
+        // Update rotation when not flying
+        if (!this.isFlying) {
+            this.updateRotationToBasket();
+        }
+    }
+    
+    updateRotationToBasket() {
+        if (window.courseManager && window.courseManager.getCurrentCourse()) {
+            const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+            if (holePosition) {
+                // Calculate direction to basket
+                const direction = new THREE.Vector3()
+                    .subVectors(new THREE.Vector3(holePosition.x, 0, holePosition.z), this.position)
+                    .normalize();
+                
+                // Calculate rotation to face basket
+                this.mesh.rotation.y = Math.atan2(direction.x, direction.z);
+                
+                // Calculate tilt to stand disc up
+                const tiltAxis = new THREE.Vector3(-direction.z, 0, direction.x).normalize();
+                this.mesh.rotation.x = Math.PI/2;
+                this.mesh.rotateOnAxis(tiltAxis, -Math.PI/2);
+            }
+        }
     }
     
     throw(direction, power) {
@@ -175,14 +210,15 @@ class Disc {
         
         // Rotate disc based on movement
         if (speed > 0.1) {
-            this.mesh.rotation.y = Math.atan2(this.velocity.x, this.velocity.z);
-            this.mesh.rotation.x = -Math.PI/2;
+            // Use velocity direction instead of basket direction
+            const direction = this.velocity.clone().normalize();
+            
+            // Same rotation logic as updateRotationToBasket, but using velocity direction
+            this.mesh.rotation.y = Math.atan2(direction.x, direction.z);
+            const tiltAxis = new THREE.Vector3(-direction.z, 0, direction.x).normalize();
+            this.mesh.rotation.x = Math.PI/2;
+            this.mesh.rotateOnAxis(tiltAxis, -Math.PI/2);
         }
-    }
-    
-    setPosition(position) {
-        this.position.copy(position);
-        this.mesh.position.copy(position);
     }
     
     getPosition() {
@@ -192,8 +228,9 @@ class Disc {
     remove() {
         if (this.mesh && this.scene) {
             this.scene.remove(this.mesh);
-            this.mesh.geometry.dispose();
-            this.mesh.material.dispose();
+            if (this.mesh.geometry) this.mesh.geometry.dispose();
+            if (this.mesh.material) this.mesh.material.dispose();
+            this.mesh = null;
         }
     }
 } 

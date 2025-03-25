@@ -78,6 +78,19 @@ async function initGame() {
             window.gameState.currentDisc.remove();
             window.gameState.currentDisc = null;
         }
+        
+        // Create new disc with selected properties
+        if (window.gameState) {
+            const currentPlayer = window.playerManager.getCurrentPlayer();
+            if (currentPlayer) {
+                // Create new disc with the scene reference
+                window.gameState.currentDisc = new Disc(scene, selectedDisc);
+                // Position disc above player
+                const discPosition = currentPlayer.position.clone().add(new THREE.Vector3(0, 1, 0));
+                window.gameState.currentDisc.setPosition(discPosition);
+                window.gameState.discInHand = true;
+            }
+        }
     });
     
     // Update BagUI when player changes
@@ -127,9 +140,23 @@ async function initGame() {
         () => window.gameState.discInHand
     );
 
-    // Initialize player
+    // Load initial course through course manager
+    await window.courseManager.loadCourseFromFile('beginner');
+
+    // Initialize player after course is loaded
     window.playerManager.initializePlayers(playerName);
     const firstPlayer = window.playerManager.getCurrentPlayer();
+
+    // Create initial disc for first player
+    if (firstPlayer && firstPlayer.bag) {
+        const initialDisc = firstPlayer.bag.discs[0];
+        if (initialDisc) {
+            window.gameState.currentDisc = new Disc(scene, initialDisc);
+            const discPosition = firstPlayer.position.clone().add(new THREE.Vector3(0, 1, 0));
+            window.gameState.currentDisc.setPosition(discPosition);
+            window.gameState.discInHand = true;
+        }
+    }
 
     // Initialize camera controller after renderer is created
     window.cameraController = new CameraController(scene, camera, renderer.domElement);
@@ -141,9 +168,6 @@ async function initGame() {
             window.cameraController.focusOnPlayer(firstPlayer);
         }
     });
-
-    // Load initial course through course manager
-    await window.courseManager.loadCourseFromFile('beginner');
 
     // Animation loop
     function animate() {
