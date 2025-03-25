@@ -19,7 +19,8 @@ async function initGame() {
         power: 0,
         powerIncreasing: true,
         discInHand: true,
-        currentDisc: null
+        currentDisc: null,
+        celebrationInProgress: false
     };
 
     // Initialize scene
@@ -126,6 +127,7 @@ async function initGame() {
             
             // Throw the disc
             window.gameState.currentDisc.throw(throwDirection, throwPower);
+            window.gameState.discInHand = false;  // Set disc as not in hand
             
             // Reset throw state
             window.gameState.throwing = false;

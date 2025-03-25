@@ -49,7 +49,9 @@ class UI {
     initializeThrowControls() {
         // Space bar controls
         document.addEventListener('keydown', (e) => {
-            if (e.code === 'Space' && !this.throwTouchActive && this.canThrow()) {
+            if (e.code === 'Space' && !this.throwTouchActive && this.canThrow() && 
+                window.gameState && !window.gameState.celebrationInProgress &&
+                window.gameState.discInHand && !window.gameState.throwing) {
                 this.throwTouchActive = true;
                 this.onStartThrow?.();
             }
@@ -65,7 +67,9 @@ class UI {
         // Touch controls
         this.throwButton.addEventListener('touchstart', (e) => {
             e.preventDefault();
-            if (!this.throwTouchActive && this.canThrow()) {
+            if (!this.throwTouchActive && this.canThrow() && 
+                window.gameState && !window.gameState.celebrationInProgress &&
+                window.gameState.discInHand && !window.gameState.throwing) {
                 this.throwTouchActive = true;
                 this.onStartThrow?.();
             }
@@ -81,7 +85,9 @@ class UI {
 
         // Mouse controls
         this.throwButton.addEventListener('mousedown', (e) => {
-            if (!this.throwTouchActive && this.canThrow()) {
+            if (!this.throwTouchActive && this.canThrow() && 
+                window.gameState && !window.gameState.celebrationInProgress &&
+                window.gameState.discInHand && !window.gameState.throwing) {
                 this.throwTouchActive = true;
                 this.onStartThrow?.();
             }

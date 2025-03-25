@@ -5,9 +5,14 @@ class CelebrationEffects {
     }
 
     celebrate(player, strokesOverPar, onComplete) {
+        // Set celebration state
+        if (window.gameState) {
+            window.gameState.celebrationInProgress = true;
+        }
+
         const startY = player.position.y;
         const startTime = Date.now();
-        const celebrationDuration = 1500;
+        const celebrationDuration = 2000;
 
         // Create particle systems for fireworks
         const particles = [];
@@ -19,12 +24,12 @@ class CelebrationEffects {
 
             if (progress < 1) {
                 if (strokesOverPar === -3) { // Hole in One!
-                    // Dramatic double jump with fireworks
-                    const jumpProgress = (progress * 2) % 1; // Two jumps in the duration
-                    const jumpHeight = Math.sin(jumpProgress * Math.PI) * 3; // Higher jump
+                    // Dramatic double jump with rainbow fireworks
+                    const jumpProgress = (progress * 2) % 1;
+                    const jumpHeight = Math.sin(jumpProgress * Math.PI) * 3;
                     player.position.y = startY + jumpHeight;
 
-                    // Create firework bursts
+                    // Create multicolor firework bursts
                     if (Math.random() < 0.3) {
                         const color = colors[Math.floor(Math.random() * colors.length)];
                         this.createFireworkBurst(
@@ -34,52 +39,46 @@ class CelebrationEffects {
                                 (Math.random() - 0.5) * 4
                             )),
                             color,
-                            15 // More particles per burst
+                            15
                         );
                     }
                 } else if (strokesOverPar <= -2) { // Eagle
-                    // Single high jump with sparkles
+                    // Single high jump with gold fireworks
                     const jumpHeight = Math.sin(progress * Math.PI) * 2;
                     player.position.y = startY + jumpHeight;
 
-                    // Create gold sparkles
+                    // Create gold firework bursts
                     if (Math.random() < 0.2) {
-                        for (let i = 0; i < 3; i++) {
-                            const sparkle = this.createSparkle(0xFFD700);
-                            sparkle.position.copy(player.position).add(new THREE.Vector3(
-                                (Math.random() - 0.5) * 2,
-                                Math.random() * 2,
-                                (Math.random() - 0.5) * 2
-                            ));
-                            this.scene.add(sparkle);
-                            particles.push({
-                                mesh: sparkle,
-                                created: Date.now()
-                            });
-                        }
+                        this.createFireworkBurst(
+                            player.position.clone().add(new THREE.Vector3(
+                                (Math.random() - 0.5) * 3,
+                                2 + Math.random() * 2,
+                                (Math.random() - 0.5) * 3
+                            )),
+                            0xFFD700, // Gold color
+                            12
+                        );
                     }
                 } else if (strokesOverPar <= 0) { // Birdie or Par
-                    // Happy hop
+                    // Happy hop with white fireworks
                     const jumpHeight = Math.sin(progress * Math.PI) * 1;
                     player.position.y = startY + jumpHeight;
 
-                    // Create white stars
+                    // Create white firework bursts
                     if (Math.random() < 0.2) {
-                        const star = this.createStar(0xFFFFFF);
-                        star.position.copy(player.position).add(new THREE.Vector3(
-                            (Math.random() - 0.5) * 1.5,
-                            1 + Math.random(),
-                            (Math.random() - 0.5) * 1.5
-                        ));
-                        this.scene.add(star);
-                        particles.push({
-                            mesh: star,
-                            created: Date.now()
-                        });
+                        this.createFireworkBurst(
+                            player.position.clone().add(new THREE.Vector3(
+                                (Math.random() - 0.5) * 2,
+                                1.5 + Math.random() * 1.5,
+                                (Math.random() - 0.5) * 2
+                            )),
+                            0xFFFFFF, // White color
+                            10
+                        );
                     }
                 } else { // Over par
                     // Single sad squish
-                    const squishProgress = Math.sin(progress * Math.PI); // Only one squish cycle
+                    const squishProgress = Math.sin(progress * Math.PI);
                     const squishFactor = 1 - squishProgress * 0.2;
                     player.model.scale.y = squishFactor;
                     player.model.scale.x = 1 + (1 - squishFactor) * 0.5;
@@ -103,7 +102,7 @@ class CelebrationEffects {
                 // Clean up old particles
                 const now = Date.now();
                 for (let i = particles.length - 1; i >= 0; i--) {
-                    if (now - particles[i].created > 500) {
+                    if (now - particles[i].created > 800) {
                         this.scene.remove(particles[i].mesh);
                         particles.splice(i, 1);
                     }
@@ -118,6 +117,11 @@ class CelebrationEffects {
                 // Clean up remaining particles
                 particles.forEach(p => this.scene.remove(p.mesh));
                 particles.length = 0;
+
+                // Reset celebration state
+                if (window.gameState) {
+                    window.gameState.celebrationInProgress = false;
+                }
 
                 // Call completion callback
                 if (onComplete) onComplete();

@@ -30,48 +30,11 @@ class PlayerManager {
             this.addPlayer(name, this.playerColors[index + 1]);
         });
         
-        // Position first player at tee, others slightly behind
+        // Position players at tee
         if (window.courseManager && window.courseManager.getCurrentCourse()) {
             const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
             const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
-            
-            if (teePosition) {
-                this.players.forEach((player, index) => {
-                    if (index === 0) {
-                        // First player stays on the tee
-                        player.moveToPosition(new THREE.Vector3(
-                            teePosition.x,
-                            0.5, // Standard height
-                            teePosition.z
-                        ));
-                    } else {
-                        // Position other players in a relaxed formation behind the tee
-                        // They are lower to the ground as if sitting/crouching
-                        const backOffset = 2; // Fixed distance behind the tee
-                        const sideSpread = 0.6; // Gentler side spread
-                        
-                        // Spread players slightly side to side behind the tee
-                        const xPosition = teePosition.x + ((index - 1) * sideSpread - sideSpread);
-                        const zPosition = teePosition.z + backOffset;
-                        
-                        player.moveToPosition(new THREE.Vector3(
-                            xPosition,
-                            0.25, // Lower height to simulate sitting/crouching
-                            zPosition
-                        ));
-                    }
-                    
-                    // Rotate player to face the hole
-                    if (holePosition) {
-                        const holePos = new THREE.Vector3(
-                            holePosition.x,
-                            holePosition.y || 0,
-                            holePosition.z
-                        );
-                        player.rotateToFacePosition(holePos);
-                    }
-                });
-            }
+            this.positionPlayersAtTeebox(teePosition, holePosition);
         }
         
         // Set first player as current and notify
@@ -99,7 +62,44 @@ class PlayerManager {
     
     nextTurn() {
         // Remove current player highlight
-        this.getCurrentPlayer().setCurrentTurn(false);
+        const currentPlayer = this.getCurrentPlayer();
+        currentPlayer.setCurrentTurn(false);
+        
+        // If current player just completed the hole, position them behind next tee
+        if (currentPlayer.hasCompletedHole && window.courseManager && window.courseManager.getCurrentCourse()) {
+            // Peek at next hole's teebox position
+            const nextHoleSuccess = window.courseManager.getCurrentCourse().nextHole();
+            if (nextHoleSuccess) {
+                // Get next hole positions
+                const nextTeebox = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
+                const nextHole = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                
+                // Go back to current hole
+                window.courseManager.getCurrentCourse().currentHoleIndex--;
+                
+                // Calculate their position behind the next tee based on how many players have finished
+                const completedCount = this.players.filter(p => p.hasCompletedHole).length;
+                const backOffset = 2;
+                const sideSpread = 0.6;
+                const xPosition = nextTeebox.x + ((completedCount - 1) * sideSpread - sideSpread);
+                const zPosition = nextTeebox.z + backOffset;
+                
+                currentPlayer.moveToPosition(new THREE.Vector3(
+                    xPosition,
+                    0.25, // Lower height for waiting players
+                    zPosition
+                ));
+                
+                // Rotate to face next hole
+                if (nextHole) {
+                    currentPlayer.rotateToFacePosition(new THREE.Vector3(
+                        nextHole.x,
+                        nextHole.y || 0,
+                        nextHole.z
+                    ));
+                }
+            }
+        }
         
         // Check if all players have completed the hole
         const allPlayersCompleted = this.players.every(player => player.hasCompletedHole);
@@ -113,18 +113,23 @@ class PlayerManager {
                         player.hasCompletedHole = false;
                         player.throws = 0;
                     });
+                    
+                    // Reset to first player
+                    this.currentPlayerIndex = 0;
+                    
                     // Update hole number in UI
                     if (window.ui) {
                         window.ui.updateHole(window.courseManager.getCurrentCourse().currentHoleIndex + 1);
                     }
-                    // Position all players at the new tee
-                    const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
-                    if (teePosition) {
-                        this.players.forEach((player, index) => {
-                            player.moveToPosition(new THREE.Vector3(
-                                teePosition.x,
-                                0.5, // Fixed player height
-                                teePosition.z + (index * 1)
+                    
+                    // Make sure everyone is facing the new hole
+                    const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                    if (holePosition) {
+                        this.players.forEach(player => {
+                            player.rotateToFacePosition(new THREE.Vector3(
+                                holePosition.x,
+                                holePosition.y || 0,
+                                holePosition.z
                             ));
                         });
                     }
@@ -188,6 +193,23 @@ class PlayerManager {
             if (window.courseManager && window.courseManager.getCurrentCourse()) {
                 const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
                 if (teePosition) {
+                    // Move other players back if they're somehow on the tee
+                    this.players.forEach((player, index) => {
+                        if (player !== nextPlayer && this.isPlayerOnTeebox(player, teePosition)) {
+                            const backOffset = 2;
+                            const sideSpread = 0.6;
+                            const xPosition = teePosition.x + ((index - 1) * sideSpread - sideSpread);
+                            const zPosition = teePosition.z + backOffset;
+                            
+                            player.moveToPosition(new THREE.Vector3(
+                                xPosition,
+                                0.25,
+                                zPosition
+                            ));
+                        }
+                    });
+                    
+                    // Move next player to tee
                     nextPlayer.moveToPosition(new THREE.Vector3(
                         teePosition.x,
                         0.5,
@@ -200,12 +222,6 @@ class PlayerManager {
             const discPos = nextPlayer.lastDiscPosition.clone();
             discPos.y = 0.5; // Keep player at consistent height above ground
             nextPlayer.moveToPosition(discPos);
-        }
-        
-        // Update distance to hole
-        if (window.courseManager && window.courseManager.getCurrentCourse() && window.ui) {
-            const collision = window.courseManager.getCurrentCourse().checkDiscCollision(nextPlayer.position);
-            window.ui.updateDistance(collision.distance);
         }
         
         // Position the disc at the player's position
@@ -261,5 +277,54 @@ class PlayerManager {
             hasCompletedHole: player.hasCompletedHole,
             color: player.color
         }));
+    }
+
+    // Helper method to position players at teebox in a consistent formation
+    positionPlayersAtTeebox(teePosition, holePosition, isNewHole = false) {
+        if (!teePosition) return;
+
+        const activePlayer = isNewHole ? this.players[0] : this.getCurrentPlayer();
+        
+        this.players.forEach((player, index) => {
+            if (player === activePlayer) {
+                // Active player stays on the tee
+                player.moveToPosition(new THREE.Vector3(
+                    teePosition.x,
+                    0.5, // Standard height
+                    teePosition.z
+                ));
+            } else {
+                // Position other players in a relaxed formation behind the tee
+                const backOffset = 2; // Fixed distance behind the tee
+                const sideSpread = 0.6; // Gentler side spread
+                
+                // Spread players slightly side to side behind the tee
+                const xPosition = teePosition.x + ((index - 1) * sideSpread - sideSpread);
+                const zPosition = teePosition.z + backOffset;
+                
+                player.moveToPosition(new THREE.Vector3(
+                    xPosition,
+                    0.25, // Lower height to simulate sitting/crouching
+                    zPosition
+                ));
+            }
+            
+            // Rotate player to face the hole if hole position is provided
+            if (holePosition) {
+                const holePos = new THREE.Vector3(
+                    holePosition.x,
+                    holePosition.y || 0,
+                    holePosition.z
+                );
+                player.rotateToFacePosition(holePos);
+            }
+        });
+    }
+
+    // Helper to check if a player is on the teebox
+    isPlayerOnTeebox(player, teePosition) {
+        const tolerance = 0.1; // Small distance tolerance
+        return Math.abs(player.position.x - teePosition.x) < tolerance &&
+               Math.abs(player.position.z - teePosition.z) < tolerance;
     }
 } 

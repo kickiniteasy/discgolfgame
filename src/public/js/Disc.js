@@ -217,18 +217,39 @@ class Disc {
                     const par = window.courseManager.getCurrentCourse().getCurrentHolePar();
                     const strokesOverPar = currentPlayer.throws - par;
                     currentPlayer.score += strokesOverPar;
-                    const parText = strokesOverPar === 0 ? "Par" :
-                                  strokesOverPar > 0 ? `+${strokesOverPar}` :
-                                  strokesOverPar;
-                    window.ui.showMessage(`Hole complete in ${currentPlayer.throws} throws! (${parText})`);
+
+                    // Create completion message
+                    let message;
+                    if (currentPlayer.throws === 1) {
+                        message = "🌟 HOLE IN ONE! 🌟";
+                    } else if (strokesOverPar === -2) {
+                        message = "🦅 EAGLE! 🦅";
+                    } else if (strokesOverPar === -1) {
+                        message = "🐦 BIRDIE! 🐦";
+                    } else if (strokesOverPar === 0) {
+                        message = "PAR";
+                    } else if (strokesOverPar === 1) {
+                        message = "BOGEY";
+                    } else if (strokesOverPar === 2) {
+                        message = "DOUBLE";
+                    } else if (strokesOverPar === 3) {
+                        message = "TRIPLE";
+                    } else {
+                        message = `+${strokesOverPar}`;
+                    }
+
+                    window.ui.showMessage(message);
                     window.ui.updateScore(currentPlayer.score);
                     
-                    // Trigger celebration effects
+                    // Trigger celebration effects and wait for completion before moving to next turn
                     if (window.celebrationEffects) {
-                        window.celebrationEffects.celebrate(currentPlayer, strokesOverPar);
+                        window.celebrationEffects.celebrate(currentPlayer, strokesOverPar, () => {
+                            // Only move to next turn after celebration is complete
+                            window.playerManager.nextTurn();
+                        });
+                    } else {
+                        window.playerManager.nextTurn();
                     }
-                    
-                    window.playerManager.nextTurn();
                 }
             } else if (this.position.y <= 0.1) {
                 this.isFlying = false;
