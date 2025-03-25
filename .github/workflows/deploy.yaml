@@ -22,6 +22,15 @@ jobs:
       #  run: |
       #    echo "VERSION=$(php -r 'echo json_decode(file_get_contents("composer.json"))->version;')" >> $GITHUB_ENV
       
+      - name: Create version.json with commit hash
+        run: |
+          echo "{\"version\":\"${GITHUB_SHA::12}\"}" > ./src/public/version.json
+
+      - name: Inject version into index.html
+        run: |
+          sed -i '/<meta name="viewport"/a \    <meta name="app-version" content="'"${GITHUB_SHA::12}"'">' ./src/public/index.html
+          sed -i '/<\/head>/i \    <script>window.APP_VERSION = "'"${GITHUB_SHA::12}"'";</script>' ./src/public/index.html
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v3
         with:

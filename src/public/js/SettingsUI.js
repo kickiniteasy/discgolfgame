@@ -17,6 +17,17 @@ class SettingsUI {
         this.loadJsonButton = document.getElementById('load-course-json');
         this.copyCourseButton = document.getElementById('copy-course');
         this.saveCourseButton = document.getElementById('save-course');
+
+        // Add version element to settings modal
+        const modalBody = this.settingsModal.querySelector('.modal-body');
+        const versionSection = document.createElement('div');
+        versionSection.className = 'settings-section version-section';
+        versionSection.style.marginTop = '20px';
+        versionSection.style.textAlign = 'center';
+        versionSection.style.color = '#666';
+        versionSection.style.fontSize = '0.8em';
+        versionSection.innerHTML = `<div>Version: <span id="app-version"></span></div>`;
+        modalBody.appendChild(versionSection);
         
         // Bind event listeners
         this.initializeEventListeners();
@@ -137,6 +148,12 @@ class SettingsUI {
         // Set current values
         document.getElementById('player-name').value = currentPlayer.name;
         document.getElementById('player-color').value = '#' + currentPlayer.color.toString(16).padStart(6, '0');
+        
+        // Update version display
+        const versionElement = document.getElementById('app-version');
+        if (versionElement && window.APP_VERSION) {
+            versionElement.textContent = window.APP_VERSION;
+        }
         
         this.settingsModal.style.display = 'block';
     }
