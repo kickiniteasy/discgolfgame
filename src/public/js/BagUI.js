@@ -16,9 +16,24 @@ class BagUI {
         this.initializeEventListeners();
     }
 
+    setBag(bag) {
+        this.bag = bag;
+        this.renderContents();
+    }
+
     initializeEventListeners() {
         // Bag button
-        this.bagButton.addEventListener('click', () => this.showModal());
+        this.bagButton.addEventListener('click', () => {
+            // Update to current player's bag before showing
+            if (window.playerManager) {
+                const currentPlayer = window.playerManager.getCurrentPlayer();
+                if (currentPlayer) {
+                    this.setBag(currentPlayer.bag);
+                }
+            }
+            this.showModal();
+        });
+        
         this.closeButton.addEventListener('click', () => this.hideModal());
         this.bagModal.addEventListener('click', e => {
             if (e.target === this.bagModal) this.hideModal();
@@ -35,8 +50,34 @@ class BagUI {
             if (!gridItem) return;
 
             const discId = gridItem.dataset.discId;
-            if (this.bag.selectDisc(discId)) {
-                this.onDiscSelect(this.bag.getSelectedDisc());
+            if (this.bag && this.bag.selectDisc(discId)) {
+                const selectedDisc = this.bag.getSelectedDisc();
+                console.log('Selected disc data:', selectedDisc);
+                
+                // Remove the old disc from the scene if it exists
+                if (window.gameState && window.gameState.currentDisc) {
+                    window.gameState.currentDisc.remove();
+                }
+                
+                // Create a new disc with the selected properties
+                if (window.gameState && window.scene) {
+                    console.log('Creating new disc with color:', selectedDisc.color);
+                    window.gameState.currentDisc = new Disc(window.scene, selectedDisc);
+                    
+                    // Position the disc at the current player's position
+                    const currentPlayer = window.playerManager.getCurrentPlayer();
+                    if (currentPlayer) {
+                        const playerPos = currentPlayer.position.clone();
+                        playerPos.y += 1; // Lift disc slightly above player
+                        window.gameState.currentDisc.setPosition(playerPos);
+                        window.gameState.discInHand = true;
+                    }
+                }
+                
+                if (this.onDiscSelect) {
+                    this.onDiscSelect(selectedDisc);
+                }
+                
                 this.renderContents();
                 this.hideModal();
             }

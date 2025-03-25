@@ -160,13 +160,8 @@ class Player {
         this.color = newColor;
         this.model.material.color.setHex(newColor);
         
-        // Update the player's current disc color if they have one
-        if (this.bag && this.bag.selectedDisc) {
-            const disc = document.querySelector('.disc');
-            if (disc) {
-                disc.material.color.setHex(newColor);
-            }
-        }
+        // Remove the disc color update since discs should keep their own colors
+        // regardless of player color
     }
 
     createPlayerMarker() {

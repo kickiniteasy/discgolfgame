@@ -9,7 +9,7 @@ class Bag {
                 glide: 5,
                 turn: -1,
                 fade: 3,
-                color: '#ff7043',
+                color: '#ff7043',  // Orange
                 image: 'img/icons/discs/driver.svg'
             },
             {
@@ -20,7 +20,7 @@ class Bag {
                 glide: 5,
                 turn: 0,
                 fade: 1,
-                color: '#42a5f5',
+                color: '#42a5f5',  // Blue
                 image: 'img/icons/discs/midrange.svg'
             },
             {
@@ -31,7 +31,7 @@ class Bag {
                 glide: 3,
                 turn: 0,
                 fade: 1,
-                color: '#ffd54f',
+                color: '#ffd54f',  // Yellow
                 image: 'img/icons/discs/putter.svg'
             }
         ];

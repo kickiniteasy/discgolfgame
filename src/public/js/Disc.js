@@ -2,10 +2,59 @@ class Disc {
     constructor(scene, discData) {
         this.scene = scene;
         this.discData = discData;
+        console.log('Disc constructor - Input data:', discData); // Debug log
         
-        // Create disc mesh
-        const geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.02, 32);
-        const material = new THREE.MeshPhongMaterial({ color: discData.color });
+        // Create disc mesh based on type
+        let geometry;
+        switch(discData.type) {
+            case 'driver':
+                // Drivers are thinner and have a sharper edge
+                geometry = new THREE.CylinderGeometry(0.11, 0.1, 0.015, 32);
+                break;
+            case 'midrange':
+                // Midranges have a more rounded edge
+                geometry = new THREE.CylinderGeometry(0.105, 0.1, 0.02, 32);
+                break;
+            case 'putter':
+                // Putters are thicker and more blunt
+                geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.025, 32);
+                break;
+            default:
+                // Fallback to default disc shape
+                geometry = new THREE.CylinderGeometry(0.1, 0.1, 0.02, 32);
+        }
+        
+        // Ensure we have a valid color
+        let discColor;
+        try {
+            // Try to create a THREE.Color from the hex string
+            console.log('Attempting to create color from:', discData.color); // Debug log
+            discColor = new THREE.Color(discData.color);
+            console.log('Created color:', discColor); // Debug log
+        } catch (e) {
+            console.log('Color creation failed:', e); // Debug log
+            // If that fails, use a default color based on disc type
+            switch(discData.type) {
+                case 'driver':
+                    discColor = new THREE.Color('#ff7043');
+                    break;
+                case 'midrange':
+                    discColor = new THREE.Color('#42a5f5');
+                    break;
+                case 'putter':
+                    discColor = new THREE.Color('#ffd54f');
+                    break;
+                default:
+                    discColor = new THREE.Color('#ffffff');
+            }
+            console.log('Using fallback color:', discColor); // Debug log
+        }
+        
+        const material = new THREE.MeshPhongMaterial({ 
+            color: discColor,
+            shininess: 30
+        });
+        
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.castShadow = true;
         this.mesh.receiveShadow = true;
@@ -23,9 +72,15 @@ class Disc {
         this.isFlying = true;
         
         // Calculate initial velocity based on power and direction
-        const speed = (power / 100) * this.discData.speed * 2.0;
+        // Scale velocity based on disc speed rating
+        // Speed 10 disc should go ~120m, Speed 5 should go ~60m
+        const maxVelocity = 65; // Max velocity for a Speed 10 disc
+        const speedRatio = this.discData.speed / 10; // Scale based on speed rating
+        const baseVelocity = maxVelocity * speedRatio; // Scale velocity by disc speed
+        const speed = (power / 100) * baseVelocity;
+        
         this.velocity.copy(direction).multiplyScalar(speed);
-        this.velocity.y = speed * 0.4;
+        this.velocity.y = speed * 0.2; // Initial upward velocity
         
         // Store initial throw power to scale effects
         this.initialSpeed = speed;
@@ -43,25 +98,31 @@ class Disc {
             // Scale turn and fade based on how much speed has been lost
             const speedRatio = speed / this.initialSpeed;
             
+            // Adjust speed based on disc speed rating (faster discs maintain speed better)
+            const speedMultiplier = 0.7 + (this.discData.speed * 0.03);  // Range from 0.7 to 1.0 based on speed
+            const adjustedSpeedRatio = speedRatio * speedMultiplier;
+            
             // Turn only happens at high speeds (early in flight)
-            if (speedRatio > 0.5) {
-                const turnFactor = this.discData.turn * deltaTime * 0.012;
+            if (adjustedSpeedRatio > 0.6) {
+                const turnFactor = this.discData.turn * deltaTime * 0.02;
                 this.velocity.applyAxisAngle(new THREE.Vector3(0, 1, 0), turnFactor);
             }
             
             // Fade happens more as disc slows down
-            if (speedRatio < 0.7) {
-                const fadeFactor = this.discData.fade * deltaTime * 0.012 * (1 - speedRatio);
+            if (adjustedSpeedRatio < 0.4) {
+                const fadeFactor = this.discData.fade * deltaTime * 0.025 * (1 - adjustedSpeedRatio);
                 this.velocity.applyAxisAngle(new THREE.Vector3(0, 1, 0), fadeFactor);
             }
             
-            // Glide (reduces downward velocity based on glide rating)
-            const glideEffect = this.discData.glide * 0.05;
+            // Improved glide calculation based on speed and glide rating
+            // More lift at higher speeds, tapering off as the disc slows
+            const glideEffect = (this.discData.glide * 0.12) * Math.pow(adjustedSpeedRatio, 1.5);
             this.velocity.y += glideEffect * deltaTime;
             
-            // Add air resistance
-            const drag = 0.998;
-            this.velocity.multiplyScalar(drag);
+            // Dynamic air resistance that varies with speed and disc characteristics
+            const dragBase = 0.9975; // Less drag (0.25% per frame instead of 0.5%)
+            const dragCoefficient = dragBase - (1 - adjustedSpeedRatio) * 0.001;
+            this.velocity.multiplyScalar(dragCoefficient);
         }
         
         // Update position

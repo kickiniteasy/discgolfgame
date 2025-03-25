@@ -3,6 +3,7 @@ class PlayerManager {
         this.scene = scene;
         this.players = [];
         this.currentPlayerIndex = 0;
+        this.onPlayerChange = null; // Callback for player changes
         
         // Default player colors
         this.playerColors = [
@@ -57,8 +58,12 @@ class PlayerManager {
             }
         }
         
-        // Set first player as current
-        this.getCurrentPlayer().setCurrentTurn(true);
+        // Set first player as current and notify
+        const firstPlayer = this.getCurrentPlayer();
+        firstPlayer.setCurrentTurn(true);
+        if (this.onPlayerChange) {
+            this.onPlayerChange(firstPlayer);
+        }
     }
     
     addPlayer(name, color) {
@@ -155,6 +160,11 @@ class PlayerManager {
         
         // Highlight new current player
         nextPlayer.setCurrentTurn(true);
+        
+        // Notify of player change
+        if (this.onPlayerChange) {
+            this.onPlayerChange(nextPlayer);
+        }
         
         // Position player based on their state
         if (nextPlayer.throws === 0) {

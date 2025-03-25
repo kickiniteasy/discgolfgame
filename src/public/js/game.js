@@ -70,14 +70,20 @@ async function initGame() {
     // Initialize UI components
     window.ui = new UI();
     const settingsUI = new SettingsUI(window.playerManager);
-    window.bag = new Bag(); // Create bag instance
-    const bagUI = new BagUI(window.bag, (selectedDisc) => {
+    
+    // Create BagUI with current player's bag
+    const bagUI = new BagUI(null, (selectedDisc) => {
         // Handle disc selection
         if (window.gameState && window.gameState.currentDisc) {
             window.gameState.currentDisc.remove();
             window.gameState.currentDisc = null;
         }
     });
+    
+    // Update BagUI when player changes
+    window.playerManager.onPlayerChange = (player) => {
+        bagUI.setBag(player.bag);
+    };
 
     // Set up throw handlers
     window.ui.setThrowHandlers(

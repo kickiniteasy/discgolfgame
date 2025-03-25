@@ -2,7 +2,7 @@ class CourseManager {
     constructor(scene) {
         this.scene = scene;
         this.currentCourse = null;
-        this.prebuiltCourses = ['beginner', 'forest_valley'];
+        this.prebuiltCourses = ['beginner', 'forest_valley', 'whispering_pines'];
     }
 
     async loadCourseFromJSON(courseData) {
