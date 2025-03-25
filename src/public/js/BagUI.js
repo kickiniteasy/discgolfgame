@@ -72,7 +72,6 @@ class BagUI {
             // Only allow disc selection for current player
             if (currentPlayer && currentPlayer.bag === this.bag && this.bag.selectDisc(discId)) {
                 const selectedDisc = this.bag.getSelectedDisc();
-                console.log('Selected disc data:', selectedDisc);
                 
                 // Remove the old disc from the scene if it exists
                 if (window.gameState && window.gameState.currentDisc) {
@@ -81,14 +80,14 @@ class BagUI {
                 
                 // Create a new disc with the selected properties
                 if (window.gameState && window.scene) {
-                    console.log('Creating new disc with color:', selectedDisc.color);
-                    window.gameState.currentDisc = new Disc(window.scene, selectedDisc);
+                    const newDisc = new Disc(window.scene, selectedDisc);
                     
                     // Position the disc at the current player's position
                     if (currentPlayer) {
                         const playerPos = currentPlayer.position.clone();
                         playerPos.y += 1; // Lift disc slightly above player
-                        window.gameState.currentDisc.setPosition(playerPos);
+                        newDisc.setPosition(playerPos);
+                        window.gameState.currentDisc = newDisc;
                         window.gameState.discInHand = true;
                     }
                 }

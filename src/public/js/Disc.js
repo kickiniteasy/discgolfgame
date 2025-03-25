@@ -2,7 +2,6 @@ class Disc {
     constructor(scene, discData) {
         this.scene = scene;
         this.discData = discData;
-        console.log('Disc constructor - Input data:', discData); // Debug log
         
         // Create disc mesh based on type
         let geometry;
@@ -27,27 +26,9 @@ class Disc {
         // Ensure we have a valid color
         let discColor;
         try {
-            // Try to create a THREE.Color from the hex string
-            console.log('Attempting to create color from:', discData.color); // Debug log
             discColor = new THREE.Color(discData.color);
-            console.log('Created color:', discColor); // Debug log
         } catch (e) {
-            console.log('Color creation failed:', e); // Debug log
-            // If that fails, use a default color based on disc type
-            switch(discData.type) {
-                case 'driver':
-                    discColor = new THREE.Color('#ff7043');
-                    break;
-                case 'midrange':
-                    discColor = new THREE.Color('#42a5f5');
-                    break;
-                case 'putter':
-                    discColor = new THREE.Color('#ffd54f');
-                    break;
-                default:
-                    discColor = new THREE.Color('#ffffff');
-            }
-            console.log('Using fallback color:', discColor); // Debug log
+            discColor = new THREE.Color(0xff0000); // Default to red if color creation fails
         }
         
         const material = new THREE.MeshPhongMaterial({ 
