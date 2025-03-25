@@ -10,6 +10,20 @@ class CameraController {
         this.controls.maxDistance = 50;
         this.controls.maxPolarAngle = Math.PI / 2;
 
+        // Animation state
+        this.isAnimating = false;
+        this.animationStartTime = 0;
+        this.animationDuration = 1500; // 1.5 seconds for each direction
+        this.startPosition = new THREE.Vector3();
+        this.startTarget = new THREE.Vector3();
+        this.endPosition = new THREE.Vector3();
+        this.endTarget = new THREE.Vector3();
+        this.originalPosition = new THREE.Vector3();
+        this.originalTarget = new THREE.Vector3();
+        this.animationPhase = 'none'; // 'none', 'going', 'pausing', 'returning'
+        this.pauseStartTime = 0;
+        this.pauseDuration = 750; // 0.75 second pause at hole
+
         // Handle window resizing
         window.addEventListener('resize', () => {
             this.camera.aspect = window.innerWidth / window.innerHeight;
@@ -77,8 +91,97 @@ class CameraController {
         this.controls.target.copy(position);
     }
 
+    // Animate camera to show hole and return
+    showHole() {
+        if (this.isAnimating || !window.courseManager || !window.courseManager.getCurrentCourse()) return;
+
+        const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+        if (!holePosition) return;
+
+        // Store original position and target for return journey
+        this.originalPosition.copy(this.camera.position);
+        this.originalTarget.copy(this.controls.target);
+
+        // Set up initial animation to hole
+        this.startPosition.copy(this.camera.position);
+        this.startTarget.copy(this.controls.target);
+
+        // Calculate end position for viewing hole
+        const holePos = new THREE.Vector3(holePosition.x, holePosition.y || 0, holePosition.z);
+        const viewDistance = 15; // Distance to view hole from
+        const viewHeight = 10;   // Height to view hole from
+        
+        // Position camera at an angle to the hole
+        this.endPosition.set(
+            holePos.x - viewDistance,
+            holePos.y + viewHeight,
+            holePos.z - viewDistance
+        );
+        this.endTarget.copy(holePos);
+
+        // Start animation
+        this.isAnimating = true;
+        this.animationStartTime = Date.now();
+        this.animationPhase = 'going';
+        this.controls.enabled = false;
+    }
+
+    // Update animation
+    updateAnimation() {
+        if (!this.isAnimating) return;
+
+        const currentTime = Date.now();
+        
+        switch (this.animationPhase) {
+            case 'going':
+                const goingElapsed = currentTime - this.animationStartTime;
+                const goingProgress = Math.min(goingElapsed / this.animationDuration, 1);
+                const goingEased = 1 - Math.pow(1 - goingProgress, 3); // Cubic ease-out
+
+                this.camera.position.lerpVectors(this.startPosition, this.endPosition, goingEased);
+                this.controls.target.lerpVectors(this.startTarget, this.endTarget, goingEased);
+
+                if (goingProgress >= 1) {
+                    this.animationPhase = 'pausing';
+                    this.pauseStartTime = currentTime;
+                }
+                break;
+
+            case 'pausing':
+                const pauseElapsed = currentTime - this.pauseStartTime;
+                if (pauseElapsed >= this.pauseDuration) {
+                    // Set up return journey
+                    this.startPosition.copy(this.camera.position);
+                    this.startTarget.copy(this.controls.target);
+                    this.endPosition.copy(this.originalPosition);
+                    this.endTarget.copy(this.originalTarget);
+                    this.animationStartTime = currentTime;
+                    this.animationPhase = 'returning';
+                }
+                break;
+
+            case 'returning':
+                const returnElapsed = currentTime - this.animationStartTime;
+                const returnProgress = Math.min(returnElapsed / this.animationDuration, 1);
+                const returnEased = 1 - Math.pow(1 - returnProgress, 3); // Cubic ease-out
+
+                this.camera.position.lerpVectors(this.startPosition, this.endPosition, returnEased);
+                this.controls.target.lerpVectors(this.startTarget, this.endTarget, returnEased);
+
+                if (returnProgress >= 1) {
+                    this.isAnimating = false;
+                    this.animationPhase = 'none';
+                    this.controls.enabled = true;
+                }
+                break;
+        }
+    }
+
     // Update controls (called in animation loop)
     update() {
+        if (this.isAnimating) {
+            this.updateAnimation();
+        }
         this.controls.update();
     }
 

@@ -15,6 +15,10 @@ class UI {
         this.playersModal = document.getElementById('players-modal');
         this.playersList = document.getElementById('players-list');
         
+        // Camera control elements
+        this.resetCameraButton = document.getElementById('reset-camera-button');
+        this.showHoleButton = document.getElementById('show-hole-button');
+        
         // Throw button state
         this.throwTouchActive = false;
         this.onStartThrow = null;
@@ -24,6 +28,7 @@ class UI {
         // Initialize modals and controls
         this.initializePlayersModal();
         this.initializeThrowControls();
+        this.initializeCameraControls();
     }
 
     initializePlayersModal() {
@@ -97,6 +102,23 @@ class UI {
             if (this.throwTouchActive) {
                 this.throwTouchActive = false;
                 this.onThrow?.();
+            }
+        });
+    }
+
+    initializeCameraControls() {
+        // Reset camera button
+        this.resetCameraButton.addEventListener('click', () => {
+            const currentPlayer = window.playerManager.getCurrentPlayer();
+            if (currentPlayer && window.cameraController) {
+                window.cameraController.focusOnPlayer(currentPlayer);
+            }
+        });
+
+        // Show hole button
+        this.showHoleButton.addEventListener('click', () => {
+            if (window.cameraController && !window.cameraController.isAnimating) {
+                window.cameraController.showHole();
             }
         });
     }
