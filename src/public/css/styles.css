@@ -227,6 +227,15 @@ body {
     font-size: 18px;
     display: none;
     z-index: 3000;
+    text-align: center;
+    min-width: 200px;
+    opacity: 0;
+    transition: opacity 0.2s ease-out;
+    pointer-events: none;
+}
+
+#message.visible {
+    opacity: 1;
 }
 
 /* Throw Button */

@@ -224,8 +224,13 @@ class PlayerManager {
             nextPlayer.moveToPosition(discPos);
         }
         
-        // Position the disc at the player's position
-        if (window.gameState && window.gameState.currentDisc) {
+        // Create a new disc instance with the next player's selected disc
+        if (window.gameState) {
+            if (window.gameState.currentDisc) {
+                window.gameState.currentDisc.remove();
+            }
+            const selectedDisc = nextPlayer.bag.getSelectedDisc();
+            window.gameState.currentDisc = new Disc(this.scene, selectedDisc);
             window.gameState.currentDisc.setPosition(nextPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
             window.gameState.discInHand = true;
         }
@@ -238,6 +243,10 @@ class PlayerManager {
         // Update the scoreboard
         if (window.ui) {
             window.ui.updateScoreboard(this.getScorecard());
+            // Update bag button style if BagUI exists
+            if (window.ui.bagUI) {
+                window.ui.bagUI.updateBagButtonStyle();
+            }
         }
         
         return nextPlayer;

@@ -151,8 +151,17 @@ class UI {
         if (!this.messageDisplay) return;
         this.messageDisplay.textContent = text;
         this.messageDisplay.style.display = 'block';
+        // Use requestAnimationFrame to ensure display: block is processed before adding visible class
+        requestAnimationFrame(() => {
+            this.messageDisplay.classList.add('visible');
+        });
+        
         setTimeout(() => {
-            this.messageDisplay.style.display = 'none';
+            this.messageDisplay.classList.remove('visible');
+            // Wait for transition to complete before hiding
+            setTimeout(() => {
+                this.messageDisplay.style.display = 'none';
+            }, 200); // Match the transition duration
         }, duration);
     }
 

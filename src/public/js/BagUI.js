@@ -14,11 +14,28 @@ class BagUI {
 
         // Bind event listeners
         this.initializeEventListeners();
+        
+        // Update bag button style for current player
+        this.updateBagButtonStyle();
     }
 
     setBag(bag) {
         this.bag = bag;
         this.renderContents();
+        this.updateBagButtonStyle();
+    }
+
+    updateBagButtonStyle() {
+        // Get current player
+        if (window.playerManager) {
+            const currentPlayer = window.playerManager.getCurrentPlayer();
+            if (currentPlayer) {
+                // Convert player color to CSS color
+                const color = '#' + currentPlayer.color.toString(16).padStart(6, '0');
+                this.bagButton.style.outline = `3px solid ${color}`;
+                this.bagButton.style.outlineOffset = '2px';
+            }
+        }
     }
 
     initializeEventListeners() {
@@ -50,7 +67,10 @@ class BagUI {
             if (!gridItem) return;
 
             const discId = gridItem.dataset.discId;
-            if (this.bag && this.bag.selectDisc(discId)) {
+            const currentPlayer = window.playerManager.getCurrentPlayer();
+            
+            // Only allow disc selection for current player
+            if (currentPlayer && currentPlayer.bag === this.bag && this.bag.selectDisc(discId)) {
                 const selectedDisc = this.bag.getSelectedDisc();
                 console.log('Selected disc data:', selectedDisc);
                 
@@ -65,7 +85,6 @@ class BagUI {
                     window.gameState.currentDisc = new Disc(window.scene, selectedDisc);
                     
                     // Position the disc at the current player's position
-                    const currentPlayer = window.playerManager.getCurrentPlayer();
                     if (currentPlayer) {
                         const playerPos = currentPlayer.position.clone();
                         playerPos.y += 1; // Lift disc slightly above player
