@@ -22,8 +22,16 @@ class PlayerManager {
     }
     
     initializePlayers(username = 'You') {
-        // Create main player with user's name
-        this.addPlayer(username, this.playerColors[0]);
+        // Get saved color from localStorage or use default
+        let playerColor = this.playerColors[0];
+        const savedColor = localStorage.getItem('discGolfPlayerColor');
+        if (savedColor) {
+            // Parse the hex color string directly
+            playerColor = parseInt(savedColor, 16);
+        }
+
+        // Create main player with user's name and saved color
+        this.addPlayer(username, playerColor);
         
         // Add 3 AI players with unique names
         this.aiNames.forEach((name, index) => {

@@ -161,7 +161,10 @@ class UI {
                 currentPlayer.color.toString(16).padStart(6, '0') : 
                 currentPlayer.color.replace('#', '')
             ) : '000000'; // Default to black if no color
-            this.playersButton.style.borderColor = `#${colorHex}`;
+            
+            // Update button outline to match bag button style
+            this.playersButton.style.outline = `3px solid #${colorHex}`;
+            this.playersButton.style.outlineOffset = '2px';
             
             // Update main score display for current player
             this.updateScore(currentPlayer.score);
