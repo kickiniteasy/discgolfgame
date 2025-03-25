@@ -11,9 +11,13 @@ class Teebox {
         });
         
         this.mesh = new THREE.Mesh(teeboxGeometry, teeboxMaterial);
-        this.mesh.position.set(position.x, 0.1, position.z); // Slightly raised above ground
+        this.mesh.position.set(position.x, 0.1, position.z); // Fixed height above ground
         this.mesh.receiveShadow = true;
         this.mesh.castShadow = true;
+
+        // Mark this mesh as a physical obstacle
+        this.mesh.userData.isObstacle = true;
+        this.mesh.userData.type = 'teebox';
         
         // Add teebox to scene
         this.scene.add(this.mesh);
@@ -29,13 +33,15 @@ class Teebox {
             minX: this.mesh.position.x - 1, // Half width
             maxX: this.mesh.position.x + 1,
             minZ: this.mesh.position.z - 1.5, // Half length
-            maxZ: this.mesh.position.z + 1.5
+            maxZ: this.mesh.position.z + 1.5,
+            y: this.mesh.position.y // Use actual teebox height
         };
         
         return position.x >= bounds.minX && 
                position.x <= bounds.maxX && 
                position.z >= bounds.minZ && 
-               position.z <= bounds.maxZ;
+               position.z <= bounds.maxZ &&
+               Math.abs(position.y - bounds.y) < 0.5; // Check height is close to teebox
     }
     
     remove() {

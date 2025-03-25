@@ -82,10 +82,11 @@ class Hole {
     }
 
     checkDiscCollision(discPosition) {
-        const distance = discPosition.distanceTo(this.getPosition());
+        const holePos = this.getPosition();
+        const distance = new THREE.Vector2(discPosition.x - holePos.x, discPosition.z - holePos.z).length();
         return {
             distance: distance,
-            isInHole: distance < 1 && discPosition.y < 0.5
+            isInHole: distance < 1.5 && discPosition.y < 1.0
         };
     }
 

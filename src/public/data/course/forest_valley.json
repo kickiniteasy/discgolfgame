@@ -1,0 +1,285 @@
+{
+    "course_id": "forest_valley",
+    "name": "Forest Valley",
+    "metadata": {
+        "description": "A challenging 4-hole course set in a wooded valley. Features elevation changes, water hazards, and technical shots through dense forest.",
+        "location": {
+            "latitude": 45.5255,
+            "longitude": -122.7189,
+            "address": "456 Forest Valley Road, Portland, OR 97221"
+        },
+        "difficulty": 3,
+        "source": "Disc Golf Game",
+        "author": "Joey",
+        "version": "1.0.0",
+        "creationDate": "2024-03-20T12:00:00Z"
+    },
+    "courseSize": {
+        "width": 400,
+        "length": 600
+    },
+    "holes": [
+        {
+            "holeNumber": 1,
+            "par": 3,
+            "description": "Downhill shot through a wooded corridor. Watch out for the water hazard on the right.",
+            "teeboxes": [
+                {
+                    "position": { "x": 0, "y": 5, "z": -130 },
+                    "rotation": { "x": 0, "y": 0, "z": 0 },
+                    "type": "pro"
+                }
+            ],
+            "basket": {
+                "position": { "x": 0, "y": 0, "z": -150 }
+            },
+            "mandatories": [
+                {
+                    "terrainId": "tree-group-1",
+                    "direction": "left"
+                }
+            ],
+            "outOfBounds": [
+                {
+                    "type": "polygon",
+                    "points": [
+                        { "x": 10, "z": -135 },
+                        { "x": 20, "z": -145 },
+                        { "x": 20, "z": -155 },
+                        { "x": 10, "z": -165 }
+                    ]
+                }
+            ],
+            "fairway": {
+                "shape": [
+                    { "x": 0, "z": -130 },
+                    { "x": 0, "z": -150 }
+                ],
+                "width": 12
+            }
+        },
+        {
+            "holeNumber": 2,
+            "par": 4,
+            "description": "Long dogleg right through dense forest. Requires precise shot placement and course management.",
+            "teeboxes": [
+                {
+                    "position": { "x": 100, "y": 0, "z": -80 },
+                    "rotation": { "x": 0, "y": 0, "z": 0 },
+                    "type": "pro"
+                }
+            ],
+            "basket": {
+                "position": { "x": 120, "y": 0, "z": -80 }
+            },
+            "mandatories": [],
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": 100, "z": -80 },
+                    { "x": 110, "z": -80 },
+                    { "x": 120, "z": -80 }
+                ],
+                "width": 10
+            }
+        },
+        {
+            "holeNumber": 3,
+            "par": 3,
+            "description": "Elevated tee shot over a small valley. Dense rough on both sides punishes errant throws.",
+            "teeboxes": [
+                {
+                    "position": { "x": -80, "y": 3, "z": -200 },
+                    "rotation": { "x": 0, "y": 0, "z": 0 },
+                    "type": "pro"
+                }
+            ],
+            "basket": {
+                "position": { "x": -100, "y": 0, "z": -200 }
+            },
+            "mandatories": [],
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": -80, "z": -200 },
+                    { "x": -100, "z": -200 }
+                ],
+                "width": 10
+            }
+        },
+        {
+            "holeNumber": 4,
+            "par": 4,
+            "description": "Challenging uphill finish with multiple elevation changes and strategic tree placement.",
+            "teeboxes": [
+                {
+                    "position": { "x": 30, "y": 0, "z": -250 },
+                    "rotation": { "x": 0, "y": 0, "z": 0 },
+                    "type": "pro"
+                }
+            ],
+            "basket": {
+                "position": { "x": 50, "y": 5, "z": -250 }
+            },
+            "mandatories": [],
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": 30, "z": -250 },
+                    { "x": 50, "z": -250 }
+                ],
+                "width": 12
+            }
+        }
+    ],
+    "terrain": [
+        {
+            "id": "fairway-1",
+            "type": "fairway",
+            "position": { "x": 0, "y": 0.1, "z": -140 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 15, "y": 1, "z": 30 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "fairway-2",
+            "type": "fairway",
+            "position": { "x": 110, "y": 0.1, "z": -80 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 15 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "fairway-3",
+            "type": "fairway",
+            "position": { "x": -90, "y": 0.1, "z": -200 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 15 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "fairway-4",
+            "type": "fairway",
+            "position": { "x": 40, "y": 0.1, "z": -250 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 15 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "water-1",
+            "type": "water",
+            "position": { "x": 15, "y": 0.1, "z": -150 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 15, "y": 1, "z": 40 },
+            "properties": {
+                "depth": 2,
+                "hazardType": "penalty"
+            },
+            "visualProperties": {
+                "color": "#4169E1",
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            }
+        },
+        {
+            "id": "tree-group-1",
+            "type": "treeGroup",
+            "position": { "x": -10, "y": 0, "z": -140 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "variant": "dense",
+            "tags": ["obstacle", "mandatory"]
+        },
+        {
+            "id": "tree-group-2",
+            "type": "treeGroup",
+            "position": { "x": 105, "y": 0, "z": -90 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "variant": "dense",
+            "tags": ["obstacle"]
+        },
+        {
+            "id": "tree-group-3",
+            "type": "treeGroup",
+            "position": { "x": 115, "y": 0, "z": -70 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "variant": "dense",
+            "tags": ["obstacle"]
+        },
+        {
+            "id": "tree-group-4",
+            "type": "treeGroup",
+            "position": { "x": -95, "y": 0, "z": -190 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "variant": "dense",
+            "tags": ["obstacle"]
+        },
+        {
+            "id": "tree-group-5",
+            "type": "treeGroup",
+            "position": { "x": 35, "y": 0, "z": -245 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "variant": "dense",
+            "tags": ["obstacle"]
+        },
+        {
+            "id": "heavy-rough-1",
+            "type": "heavyRough",
+            "position": { "x": -95, "y": 0.1, "z": -200 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 40, "y": 1, "z": 30 },
+            "properties": {
+                "density": 0.8,
+                "hazardType": "casual"
+            },
+            "visualProperties": {
+                "color": "#0B2B1D",
+                "roughness": 1.0,
+                "metalness": 0.0,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "rough-1",
+            "type": "rough",
+            "position": { "x": 110, "y": 0.1, "z": -80 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 50, "y": 1, "z": 40 },
+            "properties": {
+                "density": 0.5,
+                "hazardType": "casual"
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0,
+                "opacity": 1.0
+            }
+        }
+    ]
+} 

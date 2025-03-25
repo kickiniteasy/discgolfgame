@@ -9,6 +9,13 @@ class Player {
         this.position = new THREE.Vector3(0, 0.5, 0);
         this.isCurrentTurn = false;
         this.hasCompletedHole = false;
+        this.lastDiscPosition = null; // Track where their disc landed
+        this.selectedDiscIndex = 0;
+        this.discs = [
+            { name: 'Driver', speed: 11, glide: 5, turn: -1, fade: 3 },
+            { name: 'Mid-Range', speed: 5, glide: 5, turn: -1, fade: 1 },
+            { name: 'Putter', speed: 2, glide: 3, turn: 0, fade: 1 }
+        ];
         
         // Create player model
         const geometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32);
@@ -85,6 +92,9 @@ class Player {
         this.group.add(this.model);
         this.group.add(this.nameSprite);
         this.updatePosition();
+
+        // Create player marker
+        this.createPlayerMarker();
     }
     
     updatePosition() {
@@ -93,6 +103,10 @@ class Player {
     
     moveToPosition(position) {
         this.position.copy(position);
+        this.lastDiscPosition = position.clone();  // Store last disc position
+        if (this.marker) {
+            this.marker.position.copy(this.position);
+        }
         this.updatePosition();
     }
     
@@ -153,5 +167,9 @@ class Player {
                 disc.material.color.setHex(newColor);
             }
         }
+    }
+
+    createPlayerMarker() {
+        // Implementation of createPlayerMarker method
     }
 } 

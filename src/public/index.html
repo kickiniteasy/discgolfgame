@@ -6,6 +6,7 @@
     <title>Disc Golf Game</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="js/UI.js"></script>
+    <script src="js/Disc.js"></script>
     <script src="js/Hole.js"></script>
     <script src="js/Teebox.js"></script>
     <script src="js/Course.js"></script>
@@ -15,8 +16,10 @@
     <script src="js/PlayerManager.js"></script>
     <script src="js/Terrain.js"></script>
     <script src="js/TerrainManager.js"></script>
+    <script src="js/CourseManager.js"></script>
     <script src="js/SettingsUI.js"></script>
     <script src="js/CameraController.js"></script>
+    <script src="js/CelebrationEffects.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/game.js"></script>
@@ -105,7 +108,47 @@
                         </div>
                         <button type="submit" class="save-button">Save Changes</button>
                     </form>
+
+                    <div class="settings-section">
+                        <h3>Course Management</h3>
+                        <div class="form-group">
+                            <label for="course-select">Load Pre-built Course</label>
+                            <select id="course-select">
+                                <option value="">Select a course...</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course-url">Load Course from URL</label>
+                            <div class="input-group">
+                                <input type="url" id="course-url" placeholder="Enter course JSON URL">
+                                <button id="load-course-url">Load</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="course-json">Load Course from JSON</label>
+                            <textarea id="course-json" rows="4" placeholder="Paste course JSON here"></textarea>
+                            <button id="load-course-json">Load JSON</button>
+                        </div>
+
+                        <div class="course-actions">
+                            <button id="copy-course" class="secondary-button">Copy Course to Clipboard</button>
+                            <button id="save-course" class="secondary-button">Save Course</button>
+                        </div>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <div id="game-complete-modal" class="modal">
+            <div class="modal-content">
+                <h2>🏆 Game Complete!</h2>
+                <div id="winner-display"></div>
+                <div id="final-scores" class="final-scores"></div>
+                <button id="play-again-button" class="primary-button">
+                    🔄 Play Again
+                </button>
             </div>
         </div>
 

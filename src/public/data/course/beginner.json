@@ -1,0 +1,181 @@
+{
+    "course_id": "beginner",
+    "name": "Beginner Course",
+    "metadata": {
+        "description": "A beginner-friendly 3-hole course perfect for learning the basics of disc golf. Features wide fairways, minimal hazards, and clear sight lines to each basket.",
+        "location": {
+            "latitude": 45.5155,
+            "longitude": -122.6789,
+            "address": "123 Disc Golf Way, Portland, OR 97201"
+        },
+        "difficulty": 1,
+        "source": "Disc Golf Game",
+        "author": "Joey",
+        "version": "1.0.0",
+        "creationDate": "2024-03-20T12:00:00Z"
+    },
+    "courseSize": {
+        "width": 300,
+        "length": 400
+    },
+    "holes": [
+        {
+            "holeNumber": 1,
+            "par": 3,
+            "description": "Straight shot with a gentle downhill slope. Perfect for learning proper form.",
+            "teeboxes": [
+                {
+                    "position": { "x": 0, "y": 0, "z": -80 },
+                    "rotation": { "x": 0, "y": 0, "z": 0 },
+                    "type": "recreational"
+                }
+            ],
+            "basket": {
+                "position": { "x": 0, "y": -2, "z": -100 }
+            },
+            "mandatories": [],
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": 0, "z": -80 },
+                    { "x": 0, "z": -100 }
+                ],
+                "width": 15
+            }
+        },
+        {
+            "holeNumber": 2,
+            "par": 3,
+            "description": "Gentle right turn with scattered trees. Teaches controlled throws around obstacles.",
+            "teeboxes": [
+                {
+                    "position": { "x": 80, "y": 0, "z": -50 },
+                    "rotation": { "x": 0, "y": 1.5708, "z": 0 },
+                    "type": "recreational"
+                }
+            ],
+            "basket": {
+                "position": { "x": 100, "y": 0, "z": -50 }
+            },
+            "mandatories": [],
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": 80, "z": -50 },
+                    { "x": 100, "z": -50 }
+                ],
+                "width": 15
+            }
+        },
+        {
+            "holeNumber": 3,
+            "par": 3,
+            "description": "Slight left turn with a small elevation change. Introduces uphill putting.",
+            "teeboxes": [
+                {
+                    "position": { "x": -60, "y": 0, "z": -120 },
+                    "rotation": { "x": 0, "y": -1.5708, "z": 0 },
+                    "type": "recreational"
+                }
+            ],
+            "basket": {
+                "position": { "x": -80, "y": 1, "z": -120 }
+            },
+            "mandatories": [],
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": -60, "z": -120 },
+                    { "x": -80, "z": -120 }
+                ],
+                "width": 15
+            }
+        }
+    ],
+    "terrain": [
+        {
+            "id": "fairway-1",
+            "type": "fairway",
+            "position": { "x": 0, "y": 0.1, "z": -90 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 20, "y": 1, "z": 30 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "fairway-2",
+            "type": "fairway",
+            "position": { "x": 90, "y": 0.1, "z": -50 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 20 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "fairway-3",
+            "type": "fairway",
+            "position": { "x": -70, "y": 0.1, "z": -120 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 20 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "rough-1",
+            "type": "rough",
+            "position": { "x": 0, "y": 0.1, "z": -90 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 40, "y": 1, "z": 50 },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0,
+                "opacity": 1.0
+            }
+        },
+        {
+            "id": "tree-group-1",
+            "type": "treeGroup",
+            "position": { "x": 85, "y": 0, "z": -60 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "variant": "sparse",
+            "tags": ["obstacle"]
+        },
+        {
+            "id": "tree-group-2",
+            "type": "treeGroup",
+            "position": { "x": 95, "y": 0, "z": -40 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "variant": "sparse",
+            "tags": ["obstacle"]
+        },
+        {
+            "id": "bush-1",
+            "type": "bush",
+            "position": { "x": -5, "y": 0, "z": -85 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+        },
+        {
+            "id": "bush-2",
+            "type": "bush",
+            "position": { "x": 5, "y": 0, "z": -95 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+        }
+    ]
+} 

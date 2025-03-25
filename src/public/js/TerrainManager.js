@@ -1,9 +1,113 @@
 class TerrainManager {
     constructor(scene) {
         this.scene = scene;
-        this.terrainObjects = [];
+        this.terrainObjects = new Map(); // Using Map to store terrain by ID
+        this.groundPlane = null;
     }
 
+    // Create the base ground plane that covers the entire level
+    createGroundPlane(courseSize) {
+        // Default size if not specified
+        const width = courseSize?.width || 300;
+        const length = courseSize?.length || 400;
+
+        const geometry = new THREE.PlaneGeometry(width, length);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x355E3B, // Dark green base
+            roughness: 1.0,
+            metalness: 0.0
+        });
+
+        this.groundPlane = new THREE.Mesh(geometry, material);
+        this.groundPlane.rotation.x = -Math.PI / 2; // Lay flat
+        this.groundPlane.receiveShadow = true;
+        this.scene.add(this.groundPlane);
+    }
+
+    // Load terrain from course JSON data
+    loadFromCourseData(courseData) {
+        this.clearTerrain();
+        
+        // Create the base ground plane first
+        this.createGroundPlane(courseData.courseSize);
+
+        if (!courseData.terrain || !Array.isArray(courseData.terrain)) {
+            console.warn('No terrain data found in course data');
+            return;
+        }
+
+        // Sort terrain by type to ensure proper rendering order
+        const sortedTerrain = [...courseData.terrain].sort((a, b) => {
+            const order = {
+                'elevation': 1,
+                'water': 2,
+                'fairway': 3,
+                'path': 4,
+                'rough': 5,
+                'heavyRough': 6,
+                'sand': 7,
+                'rock': 8,
+                'bush': 9,
+                'tree': 10,
+                'treeGroup': 11
+            };
+            return (order[a.type] || 99) - (order[b.type] || 99);
+        });
+
+        // Adjust the y-position of terrain to prevent z-fighting
+        sortedTerrain.forEach((terrainData, index) => {
+            // Small y-offset for each layer to prevent z-fighting
+            if (!terrainData.position) terrainData.position = { x: 0, y: 0, z: 0 };
+            terrainData.position.y += index * 0.01;
+            this.createTerrainFromData(terrainData);
+        });
+    }
+
+    // Create a single terrain object from JSON data
+    createTerrainFromData(terrainData) {
+        const TerrainClass = Terrain.typeMap[terrainData.type];
+        if (!TerrainClass) {
+            console.warn(`Unknown terrain type: ${terrainData.type}`);
+            return;
+        }
+
+        // Create position, rotation, and scale vectors
+        const position = new THREE.Vector3(
+            terrainData.position?.x || 0,
+            terrainData.position?.y || 0,
+            terrainData.position?.z || 0
+        );
+
+        const rotation = new THREE.Vector3(
+            terrainData.rotation?.x || 0,
+            terrainData.rotation?.y || 0,
+            terrainData.rotation?.z || 0
+        );
+
+        const scale = new THREE.Vector3(
+            terrainData.scale?.x || 1,
+            terrainData.scale?.y || 1,
+            terrainData.scale?.z || 1
+        );
+
+        const options = {
+            id: terrainData.id,
+            position: position,
+            rotation: rotation,
+            scale: scale,
+            visualProperties: terrainData.visualProperties || {},
+            variant: terrainData.variant || 'default',
+            tags: terrainData.tags || [],
+            properties: terrainData.properties || {},
+            customProperties: terrainData.customProperties || {}
+        };
+
+        const terrain = new TerrainClass(this.scene, options);
+        this.addTerrainObject(terrain);
+        return terrain;
+    }
+
+    // Generate random terrain (keeping for backwards compatibility and testing)
     generateRandomTerrain(bounds = {
         minX: -200,
         maxX: 200,
@@ -11,98 +115,118 @@ class TerrainManager {
         maxZ: 200,
         count: 50
     }) {
-        // Clear existing terrain
         this.clearTerrain();
 
-        // Generate hills
-        for (let i = 0; i < bounds.count * 0.6; i++) {
-            const size = {
-                width: Math.random() * 5 + 1,
-                height: Math.random() * 2 + 0.2,
-                depth: Math.random() * 5 + 1
-            };
-            
-            const position = new THREE.Vector3(
-                Math.random() * (bounds.maxX - bounds.minX) + bounds.minX,
-                0,
-                Math.random() * (bounds.maxZ - bounds.minZ) + bounds.minZ
-            );
+        // Helper function to get random position
+        const getRandomPosition = () => ({
+            x: Math.random() * (bounds.maxX - bounds.minX) + bounds.minX,
+            y: 0,
+            z: Math.random() * (bounds.maxZ - bounds.minZ) + bounds.minZ
+        });
 
-            const hill = new HillTerrain(this.scene, {
-                position,
-                size,
-                color: 0x2e6215
-            });
-            
-            hill.addToScene();
-            this.terrainObjects.push(hill);
-        }
+        // Helper function to get random scale
+        const getRandomScale = (baseScale = 1, variation = 0.5) => ({
+            x: baseScale + Math.random() * variation,
+            y: baseScale + Math.random() * variation,
+            z: baseScale + Math.random() * variation
+        });
 
-        // Generate rocks
-        for (let i = 0; i < bounds.count * 0.2; i++) {
-            const size = {
-                width: Math.random() * 2 + 0.5,
-                height: Math.random() * 2 + 0.5,
-                depth: Math.random() * 2 + 0.5
-            };
-            
-            const position = new THREE.Vector3(
-                Math.random() * (bounds.maxX - bounds.minX) + bounds.minX,
-                0,
-                Math.random() * (bounds.maxZ - bounds.minZ) + bounds.minZ
-            );
+        // Generate terrain objects with proper scaling
+        const terrainDistribution = [
+            { type: 'tree', count: Math.floor(bounds.count * 0.3), baseScale: 1 },
+            { type: 'rock', count: Math.floor(bounds.count * 0.2), baseScale: 0.5 },
+            { type: 'bush', count: Math.floor(bounds.count * 0.2), baseScale: 0.7 },
+            { type: 'treeGroup', count: Math.floor(bounds.count * 0.1), baseScale: 1.2 },
+            { type: 'elevation', count: Math.floor(bounds.count * 0.2), baseScale: 2 }
+        ];
 
-            const rock = new RockTerrain(this.scene, {
-                position,
-                size
-            });
-            
-            rock.addToScene();
-            this.terrainObjects.push(rock);
-        }
+        terrainDistribution.forEach(({ type, count, baseScale }) => {
+            for (let i = 0; i < count; i++) {
+                const terrainData = {
+                    id: crypto.randomUUID(),
+                    type: type,
+                    position: getRandomPosition(),
+                    rotation: { x: 0, y: Math.random() * Math.PI * 2, z: 0 },
+                    scale: getRandomScale(baseScale),
+                    properties: type === 'elevation' ? { height: 1 + Math.random() * 3 } : {},
+                    visualProperties: {
+                        roughness: 0.8 + Math.random() * 0.2,
+                        metalness: 0.1,
+                        opacity: 1.0
+                    },
+                    variant: 'default',
+                    tags: [type]
+                };
 
-        // Generate bushes
-        for (let i = 0; i < bounds.count * 0.2; i++) {
-            const size = {
-                width: Math.random() * 1.5 + 0.5,
-                height: Math.random() * 1.5 + 0.5,
-                depth: Math.random() * 1.5 + 0.5
-            };
-            
-            const position = new THREE.Vector3(
-                Math.random() * (bounds.maxX - bounds.minX) + bounds.minX,
-                0,
-                Math.random() * (bounds.maxZ - bounds.minZ) + bounds.minZ
-            );
-
-            const bush = new BushTerrain(this.scene, {
-                position,
-                size
-            });
-            
-            bush.addToScene();
-            this.terrainObjects.push(bush);
-        }
+                this.createTerrainFromData(terrainData);
+            }
+        });
     }
 
     addTerrainObject(terrainObject) {
         terrainObject.addToScene();
-        this.terrainObjects.push(terrainObject);
+        this.terrainObjects.set(terrainObject.id, terrainObject);
     }
 
     removeTerrainObject(terrainObject) {
-        const index = this.terrainObjects.indexOf(terrainObject);
-        if (index !== -1) {
+        if (this.terrainObjects.has(terrainObject.id)) {
             terrainObject.removeFromScene();
-            this.terrainObjects.splice(index, 1);
+            this.terrainObjects.delete(terrainObject.id);
         }
     }
 
     clearTerrain() {
+        // Remove all terrain objects
         this.terrainObjects.forEach(terrain => {
             terrain.removeFromScene();
         });
-        this.terrainObjects = [];
+        this.terrainObjects.clear();
+
+        // Remove ground plane if it exists
+        if (this.groundPlane) {
+            this.scene.remove(this.groundPlane);
+            if (this.groundPlane.geometry) this.groundPlane.geometry.dispose();
+            if (this.groundPlane.material) this.groundPlane.material.dispose();
+            this.groundPlane = null;
+        }
+    }
+
+    // Convert current terrain to JSON format
+    toJSON() {
+        return Array.from(this.terrainObjects.values()).map(terrain => terrain.toJSON());
+    }
+
+    // Save course terrain to file
+    async saveTerrain(filename) {
+        const terrainData = this.toJSON();
+        try {
+            const response = await fetch(`/api/courses/${filename}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(terrainData)
+            });
+            if (!response.ok) throw new Error('Failed to save terrain data');
+            return true;
+        } catch (error) {
+            console.error('Error saving terrain:', error);
+            return false;
+        }
+    }
+
+    // Load course terrain from file
+    async loadTerrain(filename) {
+        try {
+            const response = await fetch(`/api/courses/${filename}`);
+            if (!response.ok) throw new Error('Failed to load terrain data');
+            const terrainData = await response.json();
+            this.loadFromCourseData({ terrain: terrainData });
+            return true;
+        } catch (error) {
+            console.error('Error loading terrain:', error);
+            return false;
+        }
     }
 
     update(deltaTime) {

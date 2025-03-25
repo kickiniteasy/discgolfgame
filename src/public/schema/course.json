@@ -1,0 +1,380 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Disc Golf Course Schema",
+  "description": "Schema for defining disc golf courses including metadata, holes, and terrain features",
+  "type": "object",
+  "required": [
+    "course_id",
+    "name",
+    "metadata",
+    "courseSize",
+    "holes",
+    "terrain"
+  ],
+  "properties": {
+    "course_id": {
+      "type": "string",
+      "description": "Unique identifier for the course"
+    },
+    "name": {
+      "type": "string",
+      "description": "Name of the disc golf course"
+    },
+    "metadata": {
+      "type": "object",
+      "required": [
+        "description",
+        "location",
+        "difficulty",
+        "source",
+        "author",
+        "version",
+        "creationDate"
+      ],
+      "properties": {
+        "description": {
+          "type": "string",
+          "description": "Detailed description of the course"
+        },
+        "location": {
+          "type": "object",
+          "required": ["latitude", "longitude", "address"],
+          "properties": {
+            "latitude": {
+              "type": "number"
+            },
+            "longitude": {
+              "type": "number"
+            },
+            "address": {
+              "type": "string"
+            }
+          }
+        },
+        "difficulty": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "Course difficulty rating from 1 to 5"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source of the course data"
+        },
+        "author": {
+          "type": "string",
+          "description": "Creator of the course"
+        },
+        "authorUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to the author's website or profile"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version of the course data"
+        },
+        "creationDate": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Date when the course was created"
+        },
+        "dataUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to additional course data if available"
+        }
+      }
+    },
+    "courseSize": {
+      "type": "object",
+      "required": ["width", "length"],
+      "properties": {
+        "width": {
+          "type": "number",
+          "description": "Width of the course in meters"
+        },
+        "length": {
+          "type": "number",
+          "description": "Length of the course in meters"
+        }
+      }
+    },
+    "holes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["holeNumber", "par", "teeboxes", "basket", "mandatories", "outOfBounds", "fairway"],
+        "properties": {
+          "holeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Number of the hole"
+          },
+          "par": {
+            "type": "integer",
+            "minimum": 2,
+            "description": "Par for the hole"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the hole including any notable features or challenges"
+          },
+          "teeboxes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["position", "rotation", "type"],
+              "properties": {
+                "position": {
+                  "type": "object",
+                  "required": ["x", "y", "z"],
+                  "properties": {
+                    "x": { "type": "number" },
+                    "y": { "type": "number" },
+                    "z": { "type": "number" }
+                  }
+                },
+                "rotation": {
+                  "type": "object",
+                  "required": ["x", "y", "z"],
+                  "properties": {
+                    "x": { "type": "number" },
+                    "y": { "type": "number" },
+                    "z": { "type": "number" }
+                  }
+                },
+                "type": {
+                  "type": "string",
+                  "enum": ["pro", "amateur", "recreational"],
+                  "description": "Type/difficulty of the tee position"
+                }
+              }
+            }
+          },
+          "basket": {
+            "type": "object",
+            "required": ["position"],
+            "properties": {
+              "position": {
+                "type": "object",
+                "required": ["x", "y", "z"],
+                "properties": {
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "z": { "type": "number" }
+                }
+              }
+            }
+          },
+          "mandatories": {
+            "type": "array",
+            "description": "List of mandatory passages that must be navigated",
+            "items": {
+              "type": "object",
+              "required": ["terrainId", "direction"],
+              "properties": {
+                "terrainId": {
+                  "type": "string",
+                  "description": "ID of the terrain object that serves as the mandatory"
+                },
+                "direction": {
+                  "type": "string",
+                  "enum": ["left", "right", "above", "below"],
+                  "description": "Direction the disc must pass relative to the mandatory"
+                }
+              }
+            }
+          },
+          "outOfBounds": {
+            "type": "array",
+            "description": "Areas designated as out of bounds",
+            "items": {
+              "type": "object",
+              "required": ["type", "points"],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": ["polygon", "circle"],
+                  "description": "Shape type of the OB area"
+                },
+                "points": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["x", "z"],
+                    "properties": {
+                      "x": { "type": "number" },
+                      "z": { "type": "number" }
+                    }
+                  },
+                  "description": "For polygon: array of points defining the OB area. For circle: single point as center"
+                },
+                "radius": {
+                  "type": "number",
+                  "description": "Required for circle type OB areas - defines the radius"
+                }
+              }
+            }
+          },
+          "fairway": {
+            "type": "object",
+            "required": ["shape", "width"],
+            "properties": {
+              "shape": {
+                "type": "array",
+                "description": "Array of points defining the centerline of the fairway",
+                "items": {
+                  "type": "object",
+                  "required": ["x", "z"],
+                  "properties": {
+                    "x": { "type": "number" },
+                    "z": { "type": "number" }
+                  }
+                }
+              },
+              "width": {
+                "type": "number",
+                "description": "Width of the fairway in meters"
+              }
+            }
+          }
+        }
+      }
+    },
+    "terrain": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "type", "position", "scale"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the terrain object"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "fairway",
+              "rough",
+              "heavyRough",
+              "water",
+              "sand",
+              "tree",
+              "treeGroup",
+              "bush",
+              "rock",
+              "path",
+              "custom"
+            ],
+            "description": "Type of terrain feature"
+          },
+          "position": {
+            "type": "object",
+            "required": ["x", "y", "z"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "z": { "type": "number" }
+            }
+          },
+          "scale": {
+            "type": "object",
+            "required": ["x", "y", "z"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "z": { "type": "number" }
+            }
+          },
+          "rotation": {
+            "type": "object",
+            "required": ["x", "y", "z"],
+            "properties": {
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "z": { "type": "number" }
+            }
+          },
+          "visualProperties": {
+            "type": "object",
+            "description": "Visual appearance properties for the terrain",
+            "properties": {
+              "color": {
+                "type": "string",
+                "pattern": "^#[0-9A-Fa-f]{6}$",
+                "description": "Hex color code for the terrain"
+              },
+              "roughness": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Material roughness (0 = smooth, 1 = rough)"
+              },
+              "metalness": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Material metalness (0 = non-metallic, 1 = metallic)"
+              },
+              "opacity": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Material opacity (0 = transparent, 1 = opaque)"
+              }
+            }
+          },
+          "variant": {
+            "type": "string",
+            "enum": ["default", "tall", "wide", "dense", "sparse"],
+            "default": "default",
+            "description": "Visual variant of the terrain type"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Custom tags for categorizing and filtering terrain objects"
+          },
+          "properties": {
+            "type": "object",
+            "description": "Additional properties specific to terrain type",
+            "properties": {
+              "height": {
+                "type": "number",
+                "description": "Height for terrain features that need it"
+              },
+              "depth": {
+                "type": "number",
+                "description": "Depth for water features"
+              },
+              "density": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1,
+                "description": "Density for vegetation (rough, trees, bushes)"
+              },
+              "hazardType": {
+                "type": "string",
+                "enum": ["none", "casual", "penalty"],
+                "default": "none",
+                "description": "Whether the terrain is a hazard and its type"
+              }
+            }
+          },
+          "customProperties": {
+            "type": "object",
+            "description": "Additional properties for custom terrain types"
+          },
+          "assetUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to the 3D asset if applicable"
+          }
+        }
+      }
+    }
+  }
+} 

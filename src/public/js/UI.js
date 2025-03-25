@@ -104,20 +104,40 @@ class UI {
     updateScoreboard(players) {
         if (!this.playersList) return;
 
-        this.playersList.innerHTML = players.map(player => `
-            <div class="player-score ${player.isCurrentTurn ? 'current-turn' : ''}">
-                <div class="player-name" style="color: #${player.color.toString(16).padStart(6, '0')}">${player.name}</div>
-                <div class="player-stats">
-                    <span>Score: ${player.score}</span>
-                    <span>Throws: ${player.throws}</span>
+        this.playersList.innerHTML = players.map(player => {
+            const colorHex = player.color ? (
+                typeof player.color === 'number' ? 
+                player.color.toString(16).padStart(6, '0') : 
+                player.color.replace('#', '')
+            ) : '000000'; // Default to black if no color
+            
+            return `
+                <div class="player-score ${player.isCurrentTurn ? 'current-turn' : ''} ${player.hasCompletedHole ? 'completed' : ''}">
+                    <div class="player-name" style="color: #${colorHex}">
+                        ${player.name} ${player.isCurrentTurn ? '(Current Turn)' : ''}
+                    </div>
+                    <div class="player-stats">
+                        <span>Score: ${player.score}</span>
+                        <span>Throws: ${player.throws}</span>
+                        ${player.hasCompletedHole ? '<span class="completed-text">Completed Hole!</span>' : ''}
+                    </div>
                 </div>
-            </div>
-        `).join('');
+            `;
+        }).join('');
 
         // Update current player indicator on button
         const currentPlayer = players.find(p => p.isCurrentTurn);
         if (currentPlayer) {
-            this.playersButton.style.borderColor = `#${currentPlayer.color.toString(16).padStart(6, '0')}`;
+            const colorHex = currentPlayer.color ? (
+                typeof currentPlayer.color === 'number' ? 
+                currentPlayer.color.toString(16).padStart(6, '0') : 
+                currentPlayer.color.replace('#', '')
+            ) : '000000'; // Default to black if no color
+            this.playersButton.style.borderColor = `#${colorHex}`;
+            
+            // Update main score display for current player
+            this.updateScore(currentPlayer.score);
+            this.updateThrows(currentPlayer.throws);
         }
     }
 

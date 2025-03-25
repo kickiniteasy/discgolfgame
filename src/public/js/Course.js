@@ -1,16 +1,33 @@
 class Course {
     constructor(scene, courseData) {
+        if (!scene || !courseData) {
+            throw new Error('Scene and course data are required');
+        }
+
         this.scene = scene;
         this.holes = [];
         this.teeboxes = [];
         this.currentHoleIndex = 0;
+        
+        // Course metadata
+        this.id = courseData.id;
         this.name = courseData.name;
-        this.par = courseData.par;
+        this.metadata = courseData.metadata || {};
+        this.courseSize = courseData.courseSize || { width: 300, length: 400 };
+        
+        // Calculate total par from hole data
+        this.holePars = courseData.holes.map(hole => hole.par);
+        this.par = this.holePars.reduce((total, par) => total + par, 0);
         
         this.initCourse(courseData.holes);
     }
 
     initCourse(holesData) {
+        if (!Array.isArray(holesData)) {
+            console.error('Invalid holes data:', holesData);
+            return;
+        }
+
         // Clear any existing holes and teeboxes
         this.holes.forEach(hole => hole.remove());
         this.teeboxes.forEach(teebox => teebox.remove());
@@ -19,21 +36,28 @@ class Course {
 
         // Create new holes and teeboxes
         holesData.forEach((holeData, index) => {
+            if (!holeData.basket || !holeData.basket.position || !holeData.teeboxes || !holeData.teeboxes[0]) {
+                console.error(`Invalid hole data for hole ${index + 1}:`, holeData);
+                return;
+            }
+
             const hole = new Hole(
                 this.scene,
-                { x: holeData.x, z: holeData.z },
+                { 
+                    x: holeData.basket.position.x || 0, 
+                    z: holeData.basket.position.z || 0 
+                },
                 index + 1
             );
             this.holes.push(hole);
 
-            // Create teebox 20 units away from hole in opposite direction
-            const teeboxOffset = 20;
-            const teeboxPosition = {
-                x: holeData.teeX !== undefined ? holeData.teeX : holeData.x + teeboxOffset,
-                z: holeData.teeZ !== undefined ? holeData.teeZ : holeData.z + teeboxOffset
-            };
-            
-            const teebox = new Teebox(this.scene, teeboxPosition);
+            const teebox = new Teebox(
+                this.scene, 
+                {
+                    x: holeData.teeboxes[0].position.x || 0,
+                    z: holeData.teeboxes[0].position.z || 0
+                }
+            );
             this.teeboxes.push(teebox);
         });
     }
@@ -51,11 +75,13 @@ class Course {
     }
 
     getCurrentHolePosition() {
-        return this.getCurrentHole().getPosition();
+        const hole = this.getCurrentHole();
+        return hole ? hole.getPosition() : null;
     }
 
     getCurrentTeeboxPosition() {
-        return this.getCurrentTeebox().getPosition();
+        const teebox = this.getCurrentTeebox();
+        return teebox ? teebox.getPosition() : null;
     }
 
     nextHole() {
@@ -74,9 +100,33 @@ class Course {
         return this.getCurrentHole().checkDiscCollision(discPosition);
     }
 
-    // Check if a position is on the current teebox
     isOnCurrentTeebox(position) {
         return this.getCurrentTeebox().isOnTeebox(position);
+    }
+
+    getCurrentHolePar() {
+        return this.holePars[this.currentHoleIndex];
+    }
+
+    toJSON() {
+        return {
+            id: this.id,
+            name: this.name,
+            metadata: this.metadata,
+            courseSize: this.courseSize,
+            holes: this.holes.map((hole, index) => ({
+                holeNumber: index + 1,
+                par: this.holePars[index],
+                basket: {
+                    position: hole.getPosition()
+                },
+                teeboxes: [{
+                    position: this.teeboxes[index].getPosition(),
+                    rotation: { x: 0, y: 0, z: 0 },
+                    type: "recreational"
+                }]
+            }))
+        };
     }
 
     // Static method to define available courses
