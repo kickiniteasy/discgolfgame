@@ -5,11 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Game initialization
 async function initGame() {
-    // Get or prompt for player name
+    // Set default player name
     let playerName = localStorage.getItem('discGolfPlayerName');
     if (!playerName) {
-        playerName = prompt('Enter your name:', 'Player 1');
-        if (!playerName) playerName = 'Player 1';
+        playerName = 'Alice';
         localStorage.setItem('discGolfPlayerName', playerName);
     }
 
