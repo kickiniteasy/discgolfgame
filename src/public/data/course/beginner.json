@@ -50,7 +50,7 @@
             "teeboxes": [
                 {
                     "position": { "x": 80, "y": 0, "z": -50 },
-                    "rotation": { "x": 0, "y": 1.5708, "z": 0 },
+                    "rotation": { "x": 0, "y": 90, "z": 0 },
                     "type": "recreational"
                 }
             ],
@@ -74,7 +74,7 @@
             "teeboxes": [
                 {
                     "position": { "x": -60, "y": 0, "z": -120 },
-                    "rotation": { "x": 0, "y": -1.5708, "z": 0 },
+                    "rotation": { "x": 0, "y": 270, "z": 0 },
                     "type": "recreational"
                 }
             ],

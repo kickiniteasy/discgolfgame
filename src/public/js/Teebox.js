@@ -1,5 +1,18 @@
 class Teebox {
-    constructor(scene, position) {
+    /**
+     * Creates a new teebox in the scene
+     * @param {THREE.Scene} scene - The Three.js scene to add the teebox to
+     * @param {Object} position - Position coordinates {x, z}
+     * @param {Object} rotation - Rotation angles in degrees
+     *                           y: Primary rotation that determines which direction teebox faces (0-360)
+     *                           x, z: Should be 0 unless special case needed
+     *                           Examples: 
+     *                           - { x: 0, y: 0, z: 0 } = Faces positive Z (forward)
+     *                           - { x: 0, y: 90, z: 0 } = Faces positive X (right)
+     *                           - { x: 0, y: 180, z: 0 } = Faces negative Z (backward)
+     *                           - { x: 0, y: 270, z: 0 } = Faces negative X (left)
+     */
+    constructor(scene, position, rotation = { x: 0, y: 0, z: 0 }) {
         this.scene = scene;
         
         // Create teebox platform
@@ -12,6 +25,14 @@ class Teebox {
         
         this.mesh = new THREE.Mesh(teeboxGeometry, teeboxMaterial);
         this.mesh.position.set(position.x, 0.1, position.z); // Fixed height above ground
+        
+        // Convert rotation from degrees to radians (THREE.js uses radians internally)
+        this.mesh.rotation.set(
+            rotation.x * Math.PI / 180,
+            rotation.y * Math.PI / 180,
+            rotation.z * Math.PI / 180
+        );
+        
         this.mesh.receiveShadow = true;
         this.mesh.castShadow = true;
 

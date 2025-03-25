@@ -56,7 +56,8 @@ class Course {
                 {
                     x: holeData.teeboxes[0].position.x || 0,
                     z: holeData.teeboxes[0].position.z || 0
-                }
+                },
+                holeData.teeboxes[0].rotation || { x: 0, y: 0, z: 0 }
             );
             this.teeboxes.push(teebox);
         });

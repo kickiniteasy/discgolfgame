@@ -138,10 +138,20 @@
                 "rotation": {
                   "type": "object",
                   "required": ["x", "y", "z"],
+                  "description": "Rotation angles in degrees. Y rotation is most important, determining which direction the teebox faces. X and Z typically remain 0.",
                   "properties": {
-                    "x": { "type": "number" },
-                    "y": { "type": "number" },
-                    "z": { "type": "number" }
+                    "x": { 
+                      "type": "number",
+                      "description": "Rotation around X axis in degrees (typically 0)"
+                    },
+                    "y": { 
+                      "type": "number",
+                      "description": "Rotation around Y axis in degrees (0-360, determines which direction teebox faces)"
+                    },
+                    "z": { 
+                      "type": "number",
+                      "description": "Rotation around Z axis in degrees (typically 0)"
+                    }
                   }
                 },
                 "type": {
@@ -290,10 +300,20 @@
           "rotation": {
             "type": "object",
             "required": ["x", "y", "z"],
+            "description": "Rotation angles in degrees. Y rotation is most important, determining which direction the teebox faces. X and Z typically remain 0.",
             "properties": {
-              "x": { "type": "number" },
-              "y": { "type": "number" },
-              "z": { "type": "number" }
+              "x": { 
+                "type": "number",
+                "description": "Rotation around X axis in degrees (typically 0)"
+              },
+              "y": { 
+                "type": "number",
+                "description": "Rotation around Y axis in degrees (0-360, determines which direction teebox faces)"
+              },
+              "z": { 
+                "type": "number",
+                "description": "Rotation around Z axis in degrees (typically 0)"
+              }
             }
           },
           "visualProperties": {
