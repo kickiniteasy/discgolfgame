@@ -567,8 +567,8 @@ body {
 /* Camera Controls */
 .camera-controls {
     position: fixed;
-    bottom: 160px;
-    right: 20px;
+    bottom: 150px;
+    right: 30px;
     display: flex;
     flex-direction: row;
     gap: 10px;
