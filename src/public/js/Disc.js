@@ -103,7 +103,7 @@ class Disc {
     }
     
     update(deltaTime) {
-        if (!this.isFlying) return;
+        if (!this.isFlying || !this.mesh) return;
         
         // Store previous position for collision detection
         const previousPosition = this.position.clone();
@@ -176,7 +176,9 @@ class Disc {
         }
         
         // Update mesh position
-        this.mesh.position.copy(this.position);
+        if (this.mesh) {
+            this.mesh.position.copy(this.position);
+        }
         
         // Ground collision check
         const course = window.courseManager.getCurrentCourse();
@@ -244,7 +246,7 @@ class Disc {
         }
         
         // Rotate disc based on movement
-        if (speed > 0.1) {
+        if (speed > 0.1 && this.mesh) {
             // Use velocity direction instead of basket direction
             const direction = this.velocity.clone().normalize();
             

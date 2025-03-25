@@ -4,6 +4,7 @@ class UI {
         this.scoreElement = document.getElementById('score');
         this.throwsElement = document.getElementById('throws');
         this.holeElement = document.getElementById('hole');
+        this.totalHolesElement = document.getElementById('total-holes');
         this.distanceEl = document.getElementById('distance');
         this.powerFill = document.querySelector('.throw-progress-fill');
         this.messageDisplay = document.getElementById('message');
@@ -195,9 +196,12 @@ class UI {
         this.distanceEl.textContent = Math.round(distance * 10) / 10;
     }
 
-    updateHole(holeNumber) {
+    updateHole(holeNumber, totalHoles) {
         if (!this.holeElement) return;
         this.holeElement.textContent = holeNumber;
+        if (totalHoles && this.totalHolesElement) {
+            this.totalHolesElement.textContent = totalHoles;
+        }
     }
 
     // Power meter methods

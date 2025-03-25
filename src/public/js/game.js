@@ -143,6 +143,13 @@ async function initGame() {
 
     // Load initial course through course manager
     await window.courseManager.loadCourseFromFile('beginner');
+    
+    // Update UI with total holes
+    if (window.courseManager.getCurrentCourse()) {
+        const course = window.courseManager.getCurrentCourse();
+        const totalHoles = course.holes.length;
+        window.ui.updateHole(course.currentHoleIndex + 1, totalHoles);
+    }
 
     // Initialize player after course is loaded
     window.playerManager.initializePlayers(playerName);

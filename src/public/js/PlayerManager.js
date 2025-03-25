@@ -127,7 +127,8 @@ class PlayerManager {
                     
                     // Update hole number in UI
                     if (window.ui) {
-                        window.ui.updateHole(window.courseManager.getCurrentCourse().currentHoleIndex + 1);
+                        const totalHoles = window.courseManager.getCurrentCourse().holes.length;
+                        window.ui.updateHole(window.courseManager.getCurrentCourse().currentHoleIndex + 1, totalHoles);
                     }
                     
                     // Make sure everyone is facing the new hole
@@ -200,6 +201,7 @@ class PlayerManager {
             // First throw - position at tee
             if (window.courseManager && window.courseManager.getCurrentCourse()) {
                 const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
+                const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
                 if (teePosition) {
                     // Move other players back if they're somehow on the tee
                     this.players.forEach((player, index) => {
@@ -223,6 +225,15 @@ class PlayerManager {
                         0.5,
                         teePosition.z
                     ));
+
+                    // Update distance to hole for new player at tee
+                    if (holePosition && window.ui) {
+                        const distance = new THREE.Vector2(
+                            holePosition.x - teePosition.x,
+                            holePosition.z - teePosition.z
+                        ).length();
+                        window.ui.updateDistance(distance);
+                    }
                 }
             }
         } else if (nextPlayer.lastDiscPosition) {
@@ -230,6 +241,18 @@ class PlayerManager {
             const discPos = nextPlayer.lastDiscPosition.clone();
             discPos.y = 0.5; // Keep player at consistent height above ground
             nextPlayer.moveToPosition(discPos);
+
+            // Update distance from last disc position
+            if (window.courseManager && window.courseManager.getCurrentCourse()) {
+                const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                if (holePosition && window.ui) {
+                    const distance = new THREE.Vector2(
+                        holePosition.x - discPos.x,
+                        holePosition.z - discPos.z
+                    ).length();
+                    window.ui.updateDistance(distance);
+                }
+            }
         }
         
         // Create a new disc instance with the next player's selected disc
@@ -310,6 +333,15 @@ class PlayerManager {
                     0.5, // Standard height
                     teePosition.z
                 ));
+
+                // Update initial distance to hole for active player
+                if (holePosition && window.ui) {
+                    const distance = new THREE.Vector2(
+                        holePosition.x - teePosition.x,
+                        holePosition.z - teePosition.z
+                    ).length();
+                    window.ui.updateDistance(distance);
+                }
             } else {
                 // Position other players in a relaxed formation behind the tee
                 const backOffset = 2; // Fixed distance behind the tee

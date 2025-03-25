@@ -49,6 +49,12 @@ class CourseManager {
             // Reset game state
             this.resetGameState();
 
+            // Update UI with new hole count
+            if (window.ui && this.currentCourse) {
+                const totalHoles = this.currentCourse.holes.length;
+                window.ui.updateHole(this.currentCourse.currentHoleIndex + 1, totalHoles);
+            }
+
             return true;
         } catch (error) {
             console.error('Error loading course:', error);
@@ -221,11 +227,9 @@ class CourseManager {
         // Reset UI elements
         const scoreElement = document.getElementById('score');
         const throwsElement = document.getElementById('throws');
-        const holeElement = document.getElementById('hole');
         
         if (scoreElement) scoreElement.textContent = '0';
         if (throwsElement) throwsElement.textContent = '0';
-        if (holeElement) holeElement.textContent = '1';
 
         // Reset game state object
         window.gameState = {

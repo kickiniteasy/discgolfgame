@@ -336,6 +336,7 @@ canvas {
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.1);
     transition: background-color 0.3s;
+    color: white;
 }
 
 .player-score.current-turn {
@@ -346,16 +347,22 @@ canvas {
 .player-name {
     font-weight: bold;
     margin-bottom: 5px;
+    color: inherit;
 }
 
 .player-stats {
     display: flex;
     justify-content: space-between;
     font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .player-stats span {
     margin-right: 10px;
+}
+
+.completed-text {
+    color: #4CAF50;
 }
 
 /* Player list styles */
@@ -365,6 +372,7 @@ canvas {
     padding: 15px;
     margin-bottom: 10px;
     transition: all 0.3s ease;
+    color: white;
 }
 
 #players-list .player-score.current-turn {
@@ -382,6 +390,7 @@ canvas {
     display: flex;
     gap: 20px;
     font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 /* Settings Button */
