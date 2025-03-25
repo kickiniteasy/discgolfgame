@@ -124,6 +124,9 @@ class Disc {
     update(deltaTime) {
         if (!this.isFlying) return;
         
+        // Store previous position for collision detection
+        const previousPosition = this.position.clone();
+        
         // Apply gravity
         this.velocity.y -= 9.8 * deltaTime;
         
@@ -150,18 +153,48 @@ class Disc {
             }
             
             // Improved glide calculation based on speed and glide rating
-            // More lift at higher speeds, tapering off as the disc slows
             const glideEffect = (this.discData.glide * 0.12) * Math.pow(adjustedSpeedRatio, 1.5);
             this.velocity.y += glideEffect * deltaTime;
             
-            // Dynamic air resistance that varies with speed and disc characteristics
-            const dragBase = 0.9975; // Less drag (0.25% per frame instead of 0.5%)
+            // Dynamic air resistance
+            const dragBase = 0.9975;
             const dragCoefficient = dragBase - (1 - adjustedSpeedRatio) * 0.001;
             this.velocity.multiplyScalar(dragCoefficient);
         }
         
         // Update position
         this.position.addScaledVector(this.velocity, deltaTime);
+        
+        // Check for terrain collisions
+        if (window.terrainManager) {
+            const collision = window.terrainManager.checkCollision(this.position);
+            if (collision.collided) {
+                // Move back to previous position
+                this.position.copy(previousPosition);
+                
+                // Calculate bounce
+                const bounceReduction = 0.3; // Reduce velocity on bounce
+                this.velocity.multiplyScalar(-bounceReduction); // Reverse and reduce velocity
+                
+                // Add some randomness to the bounce direction
+                const randomness = 0.2;
+                this.velocity.x += (Math.random() - 0.5) * randomness;
+                this.velocity.z += (Math.random() - 0.5) * randomness;
+                
+                // If speed is too low after bounce, stop the disc
+                if (this.velocity.length() < 2.0) {
+                    this.isFlying = false;
+                    window.gameState.discInHand = true;
+                    const currentPlayer = window.playerManager.getCurrentPlayer();
+                    if (currentPlayer) {
+                        currentPlayer.moveToPosition(this.position.clone());
+                        window.playerManager.nextTurn();
+                    }
+                }
+            }
+        }
+        
+        // Update mesh position
         this.mesh.position.copy(this.position);
         
         // Ground collision check

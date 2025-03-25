@@ -234,4 +234,129 @@ class TerrainManager {
             terrain.update(deltaTime);
         });
     }
+
+    // Check for collisions between a point and terrain objects
+    checkCollision(position) {
+        for (const terrain of this.terrainObjects.values()) {
+            if (!terrain.mesh) continue;
+
+            // Skip ground-type terrain (fairway, rough, etc)
+            if (['fairway', 'rough', 'heavyRough', 'path'].includes(terrain.constructor.type)) {
+                continue;
+            }
+
+            // Handle different terrain types
+            switch(terrain.constructor.type) {
+                case 'tree':
+                    // Only check collision with the trunk
+                    if (terrain.mesh.children && terrain.mesh.children[0]) { // First child is trunk
+                        const trunk = terrain.mesh.children[0];
+                        const trunkBox = new THREE.Box3().setFromObject(trunk);
+                        // Scale down trunk collision to be more forgiving
+                        const trunkCenter = trunkBox.getCenter(new THREE.Vector3());
+                        const trunkSize = trunkBox.getSize(new THREE.Vector3());
+                        const scaledTrunkBox = new THREE.Box3(
+                            new THREE.Vector3(
+                                trunkCenter.x - trunkSize.x * 0.3,
+                                trunkBox.min.y,
+                                trunkCenter.z - trunkSize.z * 0.3
+                            ),
+                            new THREE.Vector3(
+                                trunkCenter.x + trunkSize.x * 0.3,
+                                trunkBox.max.y,
+                                trunkCenter.z + trunkSize.z * 0.3
+                            )
+                        );
+                        if (scaledTrunkBox.containsPoint(position)) {
+                            return { collided: true, terrain: terrain, point: position.clone() };
+                        }
+                    }
+                    break;
+
+                case 'treeGroup':
+                    // Check each tree's trunk individually
+                    for (const treeGroup of terrain.mesh.children) {
+                        if (treeGroup.children && treeGroup.children[0]) { // First child is trunk
+                            const trunk = treeGroup.children[0];
+                            const trunkBox = new THREE.Box3().setFromObject(trunk);
+                            // Scale down trunk collision
+                            const trunkCenter = trunkBox.getCenter(new THREE.Vector3());
+                            const trunkSize = trunkBox.getSize(new THREE.Vector3());
+                            const scaledTrunkBox = new THREE.Box3(
+                                new THREE.Vector3(
+                                    trunkCenter.x - trunkSize.x * 0.3,
+                                    trunkBox.min.y,
+                                    trunkCenter.z - trunkSize.z * 0.3
+                                ),
+                                new THREE.Vector3(
+                                    trunkCenter.x + trunkSize.x * 0.3,
+                                    trunkBox.max.y,
+                                    trunkCenter.z + trunkSize.z * 0.3
+                                )
+                            );
+                            if (scaledTrunkBox.containsPoint(position)) {
+                                return { collided: true, terrain: terrain, point: position.clone() };
+                            }
+                        }
+                    }
+                    break;
+
+                case 'rock':
+                    // Rocks are solid but use a slightly reduced collision box
+                    const rockBox = new THREE.Box3().setFromObject(terrain.mesh);
+                    const rockCenter = rockBox.getCenter(new THREE.Vector3());
+                    const rockSize = rockBox.getSize(new THREE.Vector3());
+                    const scaledRockBox = new THREE.Box3(
+                        new THREE.Vector3(
+                            rockCenter.x - rockSize.x * 0.7,
+                            rockBox.min.y,
+                            rockCenter.z - rockSize.z * 0.7
+                        ),
+                        new THREE.Vector3(
+                            rockCenter.x + rockSize.x * 0.7,
+                            rockBox.max.y,
+                            rockCenter.z + rockSize.z * 0.7
+                        )
+                    );
+                    if (scaledRockBox.containsPoint(position)) {
+                        return { collided: true, terrain: terrain, point: position.clone() };
+                    }
+                    break;
+
+                case 'elevation':
+                    // Elevations need full collision boxes
+                    const elevBox = new THREE.Box3().setFromObject(terrain.mesh);
+                    if (elevBox.containsPoint(position)) {
+                        return { collided: true, terrain: terrain, point: position.clone() };
+                    }
+                    break;
+
+                case 'bush':
+                    // Bushes should have very minimal collision unless disc is very low
+                    if (position.y < 0.3) { // Only check if disc is very low
+                        const bushBox = new THREE.Box3().setFromObject(terrain.mesh);
+                        const bushCenter = bushBox.getCenter(new THREE.Vector3());
+                        const bushSize = bushBox.getSize(new THREE.Vector3());
+                        const scaledBushBox = new THREE.Box3(
+                            new THREE.Vector3(
+                                bushCenter.x - bushSize.x * 0.4,
+                                bushBox.min.y,
+                                bushCenter.z - bushSize.z * 0.4
+                            ),
+                            new THREE.Vector3(
+                                bushCenter.x + bushSize.x * 0.4,
+                                bushBox.max.y,
+                                bushCenter.z + bushSize.z * 0.4
+                            )
+                        );
+                        if (scaledBushBox.containsPoint(position)) {
+                            return { collided: true, terrain: terrain, point: position.clone() };
+                        }
+                    }
+                    break;
+            }
+        }
+
+        return { collided: false };
+    }
 } 
