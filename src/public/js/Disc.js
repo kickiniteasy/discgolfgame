@@ -49,13 +49,55 @@ class Disc {
         this.scene = scene;
         this.scene.add(this.mesh);
         
+        // Initialize trail
+        this.trailPoints = [];
+        const trailMaterial = new THREE.MeshBasicMaterial({
+            color: discColor,
+            transparent: true,
+            opacity: 0.7,
+            side: THREE.DoubleSide
+        });
+        this.trail = new THREE.Mesh();
+        this.trail.material = trailMaterial;
+        this.trail.visible = false; // Hide trail initially
+        this.scene.add(this.trail);
+        
         // Set initial rotation based on basket direction
         this.updateRotationToBasket();
+    }
+    
+    updateTrailGeometry() {
+        if (this.trailPoints.length < 2) {
+            // Not enough points for a trail yet
+            if (this.trail) {
+                this.trail.visible = false;
+            }
+            return;
+        }
+
+        try {
+            const curve = new THREE.CatmullRomCurve3(this.trailPoints);
+            const tubeGeometry = new THREE.TubeGeometry(curve, Math.max(1, this.trailPoints.length - 1), 0.02, 8, false);
+            if (this.trail.geometry) {
+                this.trail.geometry.dispose();
+            }
+            this.trail.geometry = tubeGeometry;
+            this.trail.visible = true;
+        } catch (error) {
+            console.warn('Error updating trail geometry:', error);
+            this.trail.visible = false;
+        }
     }
     
     setPosition(position) {
         this.position.copy(position);
         this.mesh.position.copy(position);
+        
+        // Clear trail when disc position is manually set
+        if (this.trail) {
+            this.trailPoints = [];
+            this.trail.visible = false;
+        }
         
         // Update rotation when not flying
         if (!this.isFlying) {
@@ -84,6 +126,10 @@ class Disc {
     }
     
     throw(direction, power) {
+        // Start new trail from current position
+        this.trailPoints = [this.position.clone()];
+        this.trail.visible = false;
+        
         // Reset state
         this.isFlying = true;
         
@@ -110,6 +156,16 @@ class Disc {
         
         // Apply gravity
         this.velocity.y -= 9.8 * deltaTime;
+        
+        // Update trail
+        if (this.trail && this.isFlying) {
+            this.trailPoints.push(this.position.clone());
+            // Keep only last 30 points to limit trail length
+            if (this.trailPoints.length > 30) {
+                this.trailPoints.shift();
+            }
+            this.updateTrailGeometry();
+        }
         
         // Apply disc characteristics
         const speed = this.velocity.length();
@@ -268,6 +324,13 @@ class Disc {
             if (this.mesh.geometry) this.mesh.geometry.dispose();
             if (this.mesh.material) this.mesh.material.dispose();
             this.mesh = null;
+        }
+        // Clean up trail
+        if (this.trail && this.scene) {
+            this.scene.remove(this.trail);
+            if (this.trail.geometry) this.trail.geometry.dispose();
+            if (this.trail.material) this.trail.material.dispose();
+            this.trail = null;
         }
     }
 } 
