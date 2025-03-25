@@ -33,8 +33,15 @@
         </button>
 
         <div id="ui">
-            <div>Hole: <span id="hole">1</span> / <span id="total-holes">3</span></div>
-            <div>Distance to Hole: <span id="distance">0</span>m</div>
+            <div class="game-stats">
+                <div class="stat-box hole-stat">
+                    <span class="hole-number" id="hole">1</span>
+                    <span class="hole-par">Par <span id="par">3</span></span>
+                </div>
+                <div class="stat-box distance-stat">
+                    <div class="distance-value"><span id="distance">0</span>m</div>
+                </div>
+            </div>
         </div>
         
         <button id="bag-button">

@@ -206,6 +206,15 @@ class CourseManager {
                         firstHolePosition.z
                     );
                     currentPlayer.rotateToFacePosition(holePos);
+
+                    // Calculate and update distance to hole
+                    if (window.ui) {
+                        const distance = new THREE.Vector2(
+                            firstHolePosition.x - firstTeePosition.x,
+                            firstHolePosition.z - firstTeePosition.z
+                        ).length();
+                        window.ui.updateDistance(distance);
+                    }
                 }
             }
         }

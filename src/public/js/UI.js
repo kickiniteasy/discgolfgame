@@ -192,8 +192,10 @@ class UI {
     }
 
     updateDistance(distance) {
-        if (!this.distanceEl) return;
-        this.distanceEl.textContent = Math.round(distance * 10) / 10;
+        const distanceSpan = document.getElementById('distance');
+        if (distanceSpan) {
+            distanceSpan.textContent = Math.ceil(distance);
+        }
     }
 
     updateHole(holeNumber, totalHoles) {

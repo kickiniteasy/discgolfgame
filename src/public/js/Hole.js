@@ -129,20 +129,20 @@ class Hole {
 
     checkDiscCollision(discPosition) {
         const holePos = this.getPosition();
-        const distance = new THREE.Vector2(discPosition.x - holePos.x, discPosition.z - holePos.z).length();
+        const exactDistance = new THREE.Vector2(discPosition.x - holePos.x, discPosition.z - holePos.z).length();
         
         // Check for chain collision (if disc is at chain height)
         const isAtChainHeight = discPosition.y >= 1.0 && discPosition.y <= 2.5;
-        const isInChainRange = distance < 0.65; // Slightly larger chain radius for more forgiving hits
+        const isInChainRange = exactDistance < 0.65; // Slightly larger chain radius for more forgiving hits
         const hitChains = isAtChainHeight && isInChainRange;
 
         // Check if disc is in basket
         const isInBasketHeight = discPosition.y < 1.2; // Slightly above basket height
-        const isInBasketRange = distance < 0.7; // Basket radius
+        const isInBasketRange = exactDistance < 0.7; // Basket radius
         const inBasket = isInBasketHeight && isInBasketRange;
 
         return {
-            distance: distance,
+            distance: Math.floor(exactDistance), // Round down for display
             hitChains: hitChains,
             // Count it as in if either it's in the basket OR it hit the chains (removed height requirement for chains)
             isInHole: inBasket || hitChains

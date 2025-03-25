@@ -51,6 +51,22 @@ class PlayerManager {
         if (this.onPlayerChange) {
             this.onPlayerChange(firstPlayer);
         }
+
+        // Set initial button outlines for first player
+        if (window.ui) {
+            const colorHex = firstPlayer.color.toString(16).padStart(6, '0');
+            const playersButton = document.getElementById('players-button');
+            if (playersButton) {
+                playersButton.style.outline = `3px solid #${colorHex}`;
+                playersButton.style.outlineOffset = '2px';
+            }
+            // Also update the bag button if BagUI exists
+            if (window.ui.bagUI) {
+                window.ui.bagUI.updateBagButtonStyle();
+            }
+            // Update scoreboard to ensure everything is in sync
+            window.ui.updateScoreboard(this.getScorecard());
+        }
     }
     
     addPlayer(name, color) {
@@ -228,10 +244,10 @@ class PlayerManager {
 
                     // Update distance to hole for new player at tee
                     if (holePosition && window.ui) {
-                        const distance = new THREE.Vector2(
+                        const distance = Math.ceil(new THREE.Vector2(
                             holePosition.x - teePosition.x,
                             holePosition.z - teePosition.z
-                        ).length();
+                        ).length());
                         window.ui.updateDistance(distance);
                     }
                 }
@@ -246,10 +262,10 @@ class PlayerManager {
             if (window.courseManager && window.courseManager.getCurrentCourse()) {
                 const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
                 if (holePosition && window.ui) {
-                    const distance = new THREE.Vector2(
+                    const distance = Math.ceil(new THREE.Vector2(
                         holePosition.x - discPos.x,
                         holePosition.z - discPos.z
-                    ).length();
+                    ).length());
                     window.ui.updateDistance(distance);
                 }
             }
@@ -336,10 +352,10 @@ class PlayerManager {
 
                 // Update initial distance to hole for active player
                 if (holePosition && window.ui) {
-                    const distance = new THREE.Vector2(
+                    const distance = Math.ceil(new THREE.Vector2(
                         holePosition.x - teePosition.x,
                         holePosition.z - teePosition.z
-                    ).length();
+                    ).length());
                     window.ui.updateDistance(distance);
                 }
             } else {

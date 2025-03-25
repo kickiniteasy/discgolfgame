@@ -29,12 +29,80 @@ canvas {
 /* UI Elements */
 #ui {
     position: fixed;
-    top: 20px;
-    left: 20px;
+    top: 10px;
+    left: 10px;
     color: white;
     font-family: Arial, sans-serif;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     z-index: 1000;
+}
+
+.game-stats {
+    display: flex;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 8px 12px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.stat-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.hole-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 50px;
+    padding: 4px 8px;
+}
+
+.hole-number {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1;
+}
+
+.hole-par {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: normal;
+    margin-top: 2px;
+}
+
+.distance-stat {
+    display: flex;
+    align-items: center;
+    min-width: 60px;
+}
+
+.distance-icon {
+    width: 20px;
+    height: 20px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.distance-value {
+    font-size: 14px;
+    font-weight: 500;
+    color: white;
+    text-align: right;
+    width: 100%;
+}
+
+.measurement-tick {
+    opacity: 0.7;
 }
 
 /* Bag Button */
@@ -61,11 +129,11 @@ canvas {
 }
 
 #bag-button {
-    bottom: 100px;
+    bottom: 80px;
 }
 
 #players-button {
-    bottom: 40px;
+    bottom: 20px;
 }
 
 #bag-button img,
@@ -256,8 +324,8 @@ canvas {
 /* Throw Button */
 #throw-button {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 15px;
+    right: 15px;
     width: 120px;
     height: 120px;
     border-radius: 50%;
@@ -396,8 +464,8 @@ canvas {
 /* Settings Button */
 #settings-button {
     position: fixed;
-    top: 20px;
-    right: 20px;
+    top: 10px;
+    right: 10px;
     background: rgba(0, 0, 0, 0.8);
     color: white;
     border: 2px solid rgba(255, 255, 255, 0.3);
@@ -408,6 +476,7 @@ canvas {
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
+    z-index: 1000;
 }
 
 #settings-button:hover {
@@ -744,8 +813,8 @@ canvas {
 /* Camera Controls */
 .camera-controls {
     position: fixed;
-    bottom: 150px;
-    right: 30px;
+    bottom: 145px;
+    right: 25px;
     display: flex;
     flex-direction: row;
     gap: 10px;
