@@ -38,6 +38,9 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_ACCESS_KEY_SECRET }}
           aws-region: us-west-2  # Your AWS region
 
-      - name: Sync to S3
+      - name: Sync to S3 (1-minute cache)
         run: |
-          aws s3 cp ./src/public/ s3://calculator.tools/discgolfgame/ --recursive --acl public-read --cache-control max-age=3600
+          aws s3 sync ./src/public/ s3://calculator.tools/discgolfgame/ \
+            --cache-control "public, max-age=60" \
+            --expires "$(date -u +"%Y-%m-%dT%H:%M:%SZ" -d "+1 minute")" \
+            --acl public-read
