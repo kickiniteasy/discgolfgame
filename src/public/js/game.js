@@ -25,7 +25,9 @@ async function initGame() {
         discInHand: true,
         currentDisc: null,
         celebrationInProgress: false,
-        showHitboxes: false // Add hitbox visibility state
+        showHitboxes: false, // Add hitbox visibility state
+        disableGrass: false, // Add grass texture toggle state
+        disableSkyWalls: false // Add sky walls toggle state
     };
 
     // Initialize scene

@@ -809,6 +809,8 @@ class SettingsUI {
         // Get the checkboxes
         const hitboxCheckbox = document.getElementById('show-hitboxes');
         const fpsCheckbox = document.getElementById('show-fps');
+        const disableGrassCheckbox = document.getElementById('disable-grass');
+        const disableSkyWallsCheckbox = document.getElementById('disable-sky-walls');
 
         // Set initial state and add event listener for hitboxes
         if (hitboxCheckbox) {
@@ -826,6 +828,28 @@ class SettingsUI {
                 const statsPanel = document.getElementById('stats-panel');
                 if (statsPanel) {
                     statsPanel.style.display = e.target.checked ? 'block' : 'none';
+                }
+            });
+        }
+
+        // Set initial state and add event listener for grass textures
+        if (disableGrassCheckbox) {
+            disableGrassCheckbox.checked = window.gameState.disableGrass || false;
+            disableGrassCheckbox.addEventListener('change', (e) => {
+                window.gameState.disableGrass = e.target.checked;
+                if (window.terrainManager) {
+                    window.terrainManager.setGrassTexturesEnabled(!e.target.checked);
+                }
+            });
+        }
+
+        // Set initial state and add event listener for sky walls
+        if (disableSkyWallsCheckbox) {
+            disableSkyWallsCheckbox.checked = window.gameState.disableSkyWalls || false;
+            disableSkyWallsCheckbox.addEventListener('change', (e) => {
+                window.gameState.disableSkyWalls = e.target.checked;
+                if (window.sky) {
+                    window.sky.setWallsVisible(!e.target.checked);
                 }
             });
         }

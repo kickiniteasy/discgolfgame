@@ -679,4 +679,49 @@ class TerrainManager {
             return await this.createTerrainFromData(terrainData);
         }
     }
+
+    setGrassTexturesEnabled(enabled) {
+        // Update ground plane
+        if (this.groundPlane && this.groundPlane.material) {
+            if (!enabled) {
+                // Store original textures
+                this._originalGroundTextures = {
+                    map: this.groundPlane.material.map,
+                    normalMap: this.groundPlane.material.normalMap
+                };
+                // Remove textures
+                this.groundPlane.material.map = null;
+                this.groundPlane.material.normalMap = null;
+            } else if (this._originalGroundTextures) {
+                // Restore original textures
+                this.groundPlane.material.map = this._originalGroundTextures.map;
+                this.groundPlane.material.normalMap = this._originalGroundTextures.normalMap;
+            }
+            this.groundPlane.material.needsUpdate = true;
+        }
+
+        // Update all terrain objects that use grass textures
+        this.terrainObjects.forEach(terrain => {
+            if (terrain instanceof FairwayTerrain) {
+                const material = terrain.mesh?.material;
+                if (material) {
+                    if (!enabled) {
+                        // Store original textures
+                        terrain._originalTextures = {
+                            map: material.map,
+                            normalMap: material.normalMap
+                        };
+                        // Remove textures
+                        material.map = null;
+                        material.normalMap = null;
+                    } else if (terrain._originalTextures) {
+                        // Restore original textures
+                        material.map = terrain._originalTextures.map;
+                        material.normalMap = terrain._originalTextures.normalMap;
+                    }
+                    material.needsUpdate = true;
+                }
+            }
+        });
+    }
 } 

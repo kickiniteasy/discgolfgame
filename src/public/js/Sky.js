@@ -150,4 +150,10 @@ class Sky {
             this.walls = null;
         }
     }
+
+    setWallsVisible(visible) {
+        this.walls.forEach(wall => {
+            wall.visible = visible;
+        });
+    }
 } 
