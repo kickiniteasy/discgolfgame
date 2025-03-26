@@ -1,191 +1,483 @@
 {
-    "course_id": "beginner",
-    "name": "Beginner Course",
-    "metadata": {
-        "description": "A beginner-friendly 3-hole course perfect for learning the basics of disc golf. Features wide fairways, minimal hazards, and clear sight lines to each basket.",
-        "location": {
-            "latitude": 45.5155,
-            "longitude": -122.6789,
-            "address": "123 Disc Golf Way, Portland, OR 97201"
-        },
-        "difficulty": 1,
-        "source": "Disc Golf Game",
-        "author": "Joey",
-        "version": "1.0.0",
-        "creationDate": "2024-03-20T12:00:00Z"
+  "course_id": "my-disc-golf-course",
+  "name": "My Disc Golf Course",
+  "metadata": {
+    "description": "A custom disc golf course",
+    "location": {
+      "latitude": 45.5231,
+      "longitude": -122.6765,
+      "address": "Custom location, Portland, OR"
     },
-    "courseSize": {
-        "width": 300,
-        "length": 400
+    "difficulty": 3,
+    "source": "Custom",
+    "author": "Course Creator",
+    "version": "1.0.0",
+    "creationDate": "2025-03-26T06:39:03.877Z"
+  },
+  "visualSettings": {
+    "skyImageUrl": "https://example.com/textures/clear_sky.jpg",
+    "backgroundColor": "#87CEEB"
+  },
+  "defaultTextures": {
+    "fairwayTexture": "https://example.com/textures/short_grass.jpg",
+    "roughTexture": "https://example.com/textures/tall_grass.jpg",
+    "heavyRoughTexture": "https://example.com/textures/thick_vegetation.jpg",
+    "waterTexture": "https://example.com/textures/water.jpg",
+    "sandTexture": "https://example.com/textures/sand.jpg",
+    "teepadTexture": "https://example.com/textures/concrete.jpg",
+    "groundTexture": "https://example.com/textures/dirt.jpg"
+  },
+  "courseSize": {
+    "width": 157,
+    "length": 316
+  },
+  "holes": [
+    {
+      "holeNumber": 1,
+      "par": 3,
+      "description": "A new hole",
+      "teebox": {
+        "position": {
+          "x": 76,
+          "y": 2467,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "type": "amateur"
+      },
+      "basket": {
+        "position": {
+          "x": 114,
+          "y": 1924,
+          "z": 0
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 76,
+            "z": 0
+          },
+          {
+            "x": 114,
+            "z": 0
+          }
+        ],
+        "width": 15
+      }
+    }
+  ],
+  "terrain": [
+    {
+      "id": "tree-1742971156108",
+      "type": "tree",
+      "position": {
+        "x": 96,
+        "y": 0,
+        "z": 2577
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
     },
-    "holes": [
-        {
-            "holeNumber": 1,
-            "par": 3,
-            "description": "Straight shot with a gentle downhill slope. Perfect for learning proper form.",
-            "teeboxes": [
-                {
-                    "position": { "x": 0, "y": 0, "z": -80 },
-                    "rotation": { "x": 0, "y": 0, "z": 0 },
-                    "type": "recreational"
-                }
-            ],
-            "basket": {
-                "position": { "x": 0, "y": -2, "z": -100 }
-            },
-            "mandatories": [],
-            "outOfBounds": [],
-            "fairway": {
-                "shape": [
-                    { "x": 0, "z": -80 },
-                    { "x": 0, "z": -100 }
-                ],
-                "width": 15
-            }
-        },
-        {
-            "holeNumber": 2,
-            "par": 3,
-            "description": "Gentle right turn with scattered trees. Teaches controlled throws around obstacles.",
-            "teeboxes": [
-                {
-                    "position": { "x": 80, "y": 0, "z": -50 },
-                    "rotation": { "x": 0, "y": 1.5708, "z": 0 },
-                    "type": "recreational"
-                }
-            ],
-            "basket": {
-                "position": { "x": 100, "y": 0, "z": -50 }
-            },
-            "mandatories": [],
-            "outOfBounds": [],
-            "fairway": {
-                "shape": [
-                    { "x": 80, "z": -50 },
-                    { "x": 100, "z": -50 }
-                ],
-                "width": 15
-            }
-        },
-        {
-            "holeNumber": 3,
-            "par": 3,
-            "description": "Slight left turn with a small elevation change. Introduces uphill putting.",
-            "teeboxes": [
-                {
-                    "position": { "x": -60, "y": 0, "z": -120 },
-                    "rotation": { "x": 0, "y": -1.5708, "z": 0 },
-                    "type": "recreational"
-                }
-            ],
-            "basket": {
-                "position": { "x": -80, "y": 1, "z": -120 }
-            },
-            "mandatories": [],
-            "outOfBounds": [],
-            "fairway": {
-                "shape": [
-                    { "x": -60, "z": -120 },
-                    { "x": -80, "z": -120 }
-                ],
-                "width": 15
-            }
-        }
-    ],
-    "terrain": [
-        {
-            "id": "fairway-1",
-            "type": "fairway",
-            "position": { "x": 0, "y": 0, "z": -90 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 20, "y": 1, "z": 30 },
-            "visualProperties": {
-                "color": "#90EE90",
-                "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0
-            }
-        },
-        {
-            "id": "fairway-2",
-            "type": "fairway",
-            "position": { "x": 90, "y": 0, "z": -50 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 30, "y": 1, "z": 20 },
-            "visualProperties": {
-                "color": "#90EE90",
-                "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0
-            }
-        },
-        {
-            "id": "fairway-3",
-            "type": "fairway",
-            "position": { "x": -70, "y": 0, "z": -120 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 30, "y": 1, "z": 20 },
-            "visualProperties": {
-                "color": "#90EE90",
-                "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0
-            }
-        },
-        {
-            "id": "rough-1",
-            "type": "rough",
-            "position": { "x": 0, "y": 0, "z": -90 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 40, "y": 1, "z": 50 },
-            "visualProperties": {
-                "color": "#355E3B",
-                "roughness": 1.0,
-                "metalness": 0.0,
-                "opacity": 1.0
-            }
-        },
-        {
-            "id": "elevation-1",
-            "type": "elevation",
-            "position": { "x": -75, "y": 0, "z": -120 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 15, "y": 1, "z": 15 },
-            "properties": {
-                "height": 2
-            }
-        },
-        {
-            "id": "tree-group-1",
-            "type": "treeGroup",
-            "position": { "x": 85, "y": 0, "z": -60 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 },
-            "variant": "sparse",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "tree-group-2",
-            "type": "treeGroup",
-            "position": { "x": 95, "y": 0, "z": -40 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 },
-            "variant": "sparse",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "bush-1",
-            "type": "bush",
-            "position": { "x": -5, "y": 0, "z": -85 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
-        },
-        {
-            "id": "bush-2",
-            "type": "bush",
-            "position": { "x": 5, "y": 0, "z": -95 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
-        }
-    ]
-} 
+    {
+      "id": "tree-1742971156461",
+      "type": "tree",
+      "position": {
+        "x": 98,
+        "y": 0,
+        "z": 2485
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971156885",
+      "type": "tree",
+      "position": {
+        "x": 103,
+        "y": 0,
+        "z": 2367
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971157771",
+      "type": "tree",
+      "position": {
+        "x": 112,
+        "y": 0,
+        "z": 2235
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971158422",
+      "type": "tree",
+      "position": {
+        "x": 130,
+        "y": 0,
+        "z": 2042
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971158957",
+      "type": "tree",
+      "position": {
+        "x": 133,
+        "y": 0,
+        "z": 1828
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971159407",
+      "type": "tree",
+      "position": {
+        "x": 100,
+        "y": 0,
+        "z": 1793
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971159950",
+      "type": "tree",
+      "position": {
+        "x": 90,
+        "y": 0,
+        "z": 1858
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971160399",
+      "type": "tree",
+      "position": {
+        "x": 76,
+        "y": 0,
+        "z": 2003
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971160734",
+      "type": "tree",
+      "position": {
+        "x": 66,
+        "y": 0,
+        "z": 2178
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971161057",
+      "type": "tree",
+      "position": {
+        "x": 56,
+        "y": 0,
+        "z": 2384
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971161418",
+      "type": "tree",
+      "position": {
+        "x": 58,
+        "y": 0,
+        "z": 2581
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971162176",
+      "type": "tree",
+      "position": {
+        "x": 77,
+        "y": 0,
+        "z": 2726
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    },
+    {
+      "id": "tree-1742971162722",
+      "type": "tree",
+      "position": {
+        "x": 94,
+        "y": 0,
+        "z": 2687
+      },
+      "scale": {
+        "x": 1,
+        "y": 1,
+        "z": 1
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "visualProperties": {
+        "color": "#228B22",
+        "roughness": 0.8,
+        "metalness": 0.1,
+        "opacity": 1
+      },
+      "variant": "default",
+      "tags": [
+        "tree"
+      ]
+    }
+  ]
+}
