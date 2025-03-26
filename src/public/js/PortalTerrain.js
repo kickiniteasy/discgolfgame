@@ -107,7 +107,7 @@ class PortalTerrain extends Terrain {
             wireframe: true,
             transparent: true,
             opacity: 0.3,
-            visible: true // Always create visible for debugging
+            visible: this.options.showHitboxes
         });
         this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
         this.mesh.add(this.hitboxMesh);
