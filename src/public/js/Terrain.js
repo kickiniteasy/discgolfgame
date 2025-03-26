@@ -34,12 +34,22 @@ class Terrain {
             this.mesh.castShadow = true;
             this.mesh.receiveShadow = true;
             this.applyTransforms();
+            
+            // Only create automatic hitbox if the terrain type needs one and doesn't already have a custom hitbox
+            if (!['fairway', 'rough', 'heavyRough', 'path', 'tree', 'treeGroup', 'bush'].includes(this.constructor.type) 
+                && !this.hitboxMesh) {
+                this.createHitboxFromBounds();
+            }
+            
             this.scene.add(this.mesh);
         }
     }
 
     applyTransforms() {
         if (!this.mesh) return;
+
+        // Reset scale before applying new scale
+        this.mesh.scale.set(1, 1, 1);
 
         // Apply position
         this.mesh.position.copy(this.options.position);
@@ -60,6 +70,15 @@ class Terrain {
         
         // Apply scale
         this.mesh.scale.copy(this.options.scale);
+
+        // Update hitbox scale if it exists
+        if (this.hitboxMesh) {
+            // For custom hitboxes (like trees and bushes), we want to scale them proportionally
+            if (['tree', 'bush'].includes(this.constructor.type)) {
+                const scale = Math.max(this.options.scale.x, this.options.scale.y, this.options.scale.z);
+                this.hitboxMesh.scale.multiplyScalar(scale);
+            }
+        }
     }
 
     removeFromScene() {
@@ -198,6 +217,54 @@ class Terrain {
         if (this.mesh) {
             this.mesh.add(this.hitboxMesh);
         }
+    }
+
+    createHitboxFromBounds() {
+        // Remove any existing hitbox
+        if (this.hitboxMesh) {
+            this.mesh.remove(this.hitboxMesh);
+            this.hitboxMesh = null;
+        }
+
+        // Skip if mesh doesn't exist
+        if (!this.mesh) return;
+
+        // Get the bounding box in local space
+        const boundingBox = new THREE.Box3();
+        this.mesh.traverse((child) => {
+            if (child.isMesh && child !== this.hitboxMesh) {
+                child.geometry.computeBoundingBox();
+                const childBox = child.geometry.boundingBox.clone();
+                childBox.applyMatrix4(child.matrixWorld);
+                boundingBox.union(childBox);
+            }
+        });
+
+        const size = new THREE.Vector3();
+        boundingBox.getSize(size);
+
+        // Create hitbox with computed size
+        const hitboxGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const hitboxMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3,
+            visible: this.options.showHitboxes
+        });
+
+        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+        
+        // Scale the hitbox to match the bounding box size
+        this.hitboxMesh.scale.copy(size);
+        
+        // Position the hitbox at the center
+        const center = new THREE.Vector3();
+        boundingBox.getCenter(center);
+        this.hitboxMesh.position.copy(center);
+
+        // Add hitbox to mesh
+        this.mesh.add(this.hitboxMesh);
     }
 }
 
@@ -374,6 +441,20 @@ class TreeTerrain extends Terrain {
         this.mesh = new THREE.Group();
         this.mesh.add(trunk);
         this.mesh.add(foliage);
+
+        // Create hitbox just for the trunk with fixed size
+        const hitboxGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
+        const hitboxMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3,
+            visible: this.options.showHitboxes
+        });
+
+        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+        this.hitboxMesh.position.y = 1; // Center vertically on trunk
+        this.mesh.add(this.hitboxMesh);
     }
 }
 
@@ -422,10 +503,16 @@ class TreeGroupTerrain extends Terrain {
                     0.7 + Math.random() * 0.6,
                     0.7 + Math.random() * 0.6
                 ),
-                visualProperties: this.options.visualProperties
+                visualProperties: this.options.visualProperties,
+                showHitboxes: this.options.showHitboxes
             });
             this.mesh.add(tree.mesh);
         }
+    }
+
+    // Override createHitboxFromBounds to prevent creating a group hitbox
+    createHitboxFromBounds() {
+        // Do nothing - individual trees have their own hitboxes
     }
 }
 
@@ -441,8 +528,22 @@ class BushTerrain extends Terrain {
         });
         
         this.mesh = new THREE.Mesh(geometry, material);
+
+        // Create a small hitbox at the base of the bush
+        const hitboxGeometry = new THREE.BoxGeometry(0.8, 0.3, 0.8);
+        const hitboxMaterial = new THREE.MeshBasicMaterial({
+            color: 0xffff00,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3,
+            visible: this.options.showHitboxes
+        });
+
+        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+        this.hitboxMesh.position.y = -0.25; // Position at the base
+        this.mesh.add(this.hitboxMesh);
         
-        // Scale slightly differently in each axis for natural look
+        // Apply random scale after creating hitbox
         const randomScale = 0.3;
         this.mesh.scale.x *= 1 + (Math.random() * randomScale - randomScale/2);
         this.mesh.scale.y *= 0.8 + (Math.random() * 0.2);

@@ -54,16 +54,14 @@ class Disc {
         const trailMaterial = new THREE.MeshBasicMaterial({
             color: discColor,
             transparent: true,
-            opacity: 0.7,
-            side: THREE.DoubleSide
+            opacity: 0.6,
+            side: THREE.DoubleSide,
+            depthWrite: false
         });
         this.trail = new THREE.Mesh();
         this.trail.material = trailMaterial;
-        this.trail.visible = false; // Hide trail initially
+        this.trail.visible = false;
         this.scene.add(this.trail);
-        
-        // Set initial rotation based on basket direction
-        this.updateRotationToBasket();
     }
     
     updateTrailGeometry() {
@@ -77,7 +75,13 @@ class Disc {
 
         try {
             const curve = new THREE.CatmullRomCurve3(this.trailPoints);
-            const tubeGeometry = new THREE.TubeGeometry(curve, Math.max(1, this.trailPoints.length - 1), 0.02, 8, false);
+            const tubeGeometry = new THREE.TubeGeometry(
+                curve, 
+                Math.max(1, this.trailPoints.length - 1), 
+                0.12,  // Wider trail, close to disc width (disc is ~0.1)
+                2,     // Keep flat ribbon effect
+                false
+            );
             if (this.trail.geometry) {
                 this.trail.geometry.dispose();
             }
@@ -99,29 +103,17 @@ class Disc {
             this.trail.visible = false;
         }
         
-        // Update rotation when not flying
-        if (!this.isFlying) {
-            this.updateRotationToBasket();
-        }
-    }
-    
-    updateRotationToBasket() {
-        if (window.courseManager && window.courseManager.getCurrentCourse()) {
-            const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
-            if (holePosition) {
-                // Calculate direction to basket
-                const direction = new THREE.Vector3()
-                    .subVectors(new THREE.Vector3(holePosition.x, 0, holePosition.z), this.position)
-                    .normalize();
-                
-                // Calculate rotation to face basket
-                this.mesh.rotation.y = Math.atan2(direction.x, direction.z);
-                
-                // Calculate tilt to stand disc up
-                const tiltAxis = new THREE.Vector3(-direction.z, 0, direction.x).normalize();
-                this.mesh.rotation.x = Math.PI/2;
-                this.mesh.rotateOnAxis(tiltAxis, -Math.PI/2);
-            }
+        // When not flying, keep disc upright like a shield and facing camera direction
+        if (!this.isFlying && window.cameraController) {
+            // Get camera's forward direction
+            const direction = new THREE.Vector3();
+            window.cameraController.camera.getWorldDirection(direction);
+            direction.y = 0;  // Remove any up/down tilt
+            direction.normalize();
+            
+            // Set disc upright (like a shield) and facing camera direction
+            const angle = Math.atan2(direction.x, direction.z);
+            this.mesh.rotation.set(0, angle, 0);
         }
     }
     
@@ -303,14 +295,12 @@ class Disc {
         
         // Rotate disc based on movement
         if (speed > 0.1 && this.mesh) {
-            // Use velocity direction instead of basket direction
+            // Use velocity direction
             const direction = this.velocity.clone().normalize();
             
-            // Same rotation logic as updateRotationToBasket, but using velocity direction
-            this.mesh.rotation.y = Math.atan2(direction.x, direction.z);
-            const tiltAxis = new THREE.Vector3(-direction.z, 0, direction.x).normalize();
-            this.mesh.rotation.x = Math.PI/2;
-            this.mesh.rotateOnAxis(tiltAxis, -Math.PI/2);
+            // Keep disc upright like a shield during flight, just rotate to face direction
+            const angle = Math.atan2(direction.x, direction.z);
+            this.mesh.rotation.set(0, angle, 0);
         }
     }
     

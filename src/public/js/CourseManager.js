@@ -193,6 +193,20 @@ class CourseManager {
                 // Position players at first tee
                 if (teePosition && firstHolePosition) {
                     window.playerManager.positionPlayersAtTeebox(teePosition, firstHolePosition, true);
+                    
+                    // Create initial disc for first player
+                    const firstPlayer = window.playerManager.getCurrentPlayer();
+                    if (firstPlayer && firstPlayer.bag) {
+                        // Clean up any existing disc
+                        if (window.gameState.currentDisc) {
+                            window.gameState.currentDisc.remove();
+                        }
+                        // Create new disc for first player
+                        const selectedDisc = firstPlayer.bag.getSelectedDisc();
+                        window.gameState.currentDisc = new Disc(this.scene, selectedDisc);
+                        window.gameState.currentDisc.setPosition(firstPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
+                        window.gameState.discInHand = true;
+                    }
                 }
             }
             
