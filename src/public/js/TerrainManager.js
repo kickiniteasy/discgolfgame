@@ -72,7 +72,7 @@ class TerrainManager {
     }
 
     // Load terrain from course JSON data
-    loadFromCourseData(courseData) {
+    async loadFromCourseData(courseData) {
         this.clearTerrain();
         
         // Create the base ground plane first
@@ -99,17 +99,17 @@ class TerrainManager {
             return (order[a.type] || 99) - (order[b.type] || 99);
         });
 
-        // Adjust the y-position of terrain to prevent z-fighting
-        sortedTerrain.forEach((terrainData, index) => {
+        // Create all terrain objects
+        for (const terrainData of sortedTerrain) {
             // Small y-offset for each layer to prevent z-fighting
             if (!terrainData.position) terrainData.position = { x: 0, y: 0, z: 0 };
-            terrainData.position.y += index * 0.01;
-            this.createTerrainFromData(terrainData);
-        });
+            terrainData.position.y += sortedTerrain.indexOf(terrainData) * 0.01;
+            await this.createTerrainFromData(terrainData);
+        }
     }
 
     // Create a single terrain object from JSON data
-    createTerrainFromData(terrainData) {
+    async createTerrainFromData(terrainData) {
         const TerrainClass = Terrain.typeMap[terrainData.type];
         if (!TerrainClass) {
             console.warn(`Unknown terrain type: ${terrainData.type}`);
@@ -149,7 +149,7 @@ class TerrainManager {
         };
 
         const terrain = new TerrainClass(this.scene, options);
-        this.addTerrainObject(terrain);
+        this.terrainObjects.set(terrain.id, terrain);
         return terrain;
     }
 

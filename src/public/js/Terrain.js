@@ -31,12 +31,20 @@ class Terrain {
         
         this.mesh = null;
         this.hitboxMesh = null;
-        this.createMesh();
+        
+        // Initialize mesh and add to scene
+        this.init();
     }
 
-    createMesh() {
-        // Override in child classes
-        console.warn('createMesh() should be implemented by child classes');
+    async init() {
+        await this.createMesh();
+        if (this.mesh) {
+            this.addToScene();
+        }
+    }
+
+    async createMesh() {
+        return Promise.resolve();
     }
 
     addToScene() {
@@ -280,23 +288,28 @@ class Terrain {
 class FairwayTerrain extends Terrain {
     static type = 'fairway';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.PlaneGeometry(1, 1);
         
         // Load textures
         const textureLoader = new THREE.TextureLoader();
-        const fairwayTexture = textureLoader.load(
-            'textures/fairway/fairway_diffuse.png',
-            undefined,
-            undefined,
-            (error) => console.error('Error loading fairway texture:', error)
-        );
-        const fairwayNormal = textureLoader.load(
-            'textures/fairway/fairway_normal.png',
-            undefined,
-            undefined,
-            (error) => console.error('Error loading fairway normal map:', error)
-        );
+        const fairwayTexture = await new Promise((resolve) => {
+            textureLoader.load(
+                'textures/fairway/fairway_diffuse.png',
+                resolve,
+                undefined,
+                (error) => console.error('Error loading fairway texture:', error)
+            );
+        });
+        
+        const fairwayNormal = await new Promise((resolve) => {
+            textureLoader.load(
+                'textures/fairway/fairway_normal.png',
+                resolve,
+                undefined,
+                (error) => console.error('Error loading fairway normal map:', error)
+            );
+        });
         
         // Configure texture settings
         fairwayTexture.wrapS = fairwayTexture.wrapT = THREE.RepeatWrapping;
@@ -326,6 +339,7 @@ class FairwayTerrain extends Terrain {
         
         // Update texture repeat based on scale
         this.updateTextureRepeat();
+        return Promise.resolve();
     }
     
     applyTransforms() {
@@ -348,7 +362,7 @@ class FairwayTerrain extends Terrain {
 class RoughTerrain extends Terrain {
     static type = 'rough';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.PlaneGeometry(1, 1);
         const material = new THREE.MeshStandardMaterial({
             color: 0x355E3B,
@@ -358,13 +372,14 @@ class RoughTerrain extends Terrain {
         
         this.applyVisualProperties(material);
         this.mesh = new THREE.Mesh(geometry, material);
+        return Promise.resolve();
     }
 }
 
 class WaterTerrain extends Terrain {
     static type = 'water';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.PlaneGeometry(
             this.options.scale.x,
             this.options.scale.z
@@ -377,23 +392,21 @@ class WaterTerrain extends Terrain {
             opacity: 0.8
         });
         
-        // Apply custom visual properties
         this.applyVisualProperties(material);
-        
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.rotation.x = -Math.PI / 2;
         
-        // Set water depth from properties
         if (this.options.properties.depth) {
             this.mesh.position.y -= this.options.properties.depth;
         }
+        return Promise.resolve();
     }
 }
 
 class SandTerrain extends Terrain {
     static type = 'sand';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.PlaneGeometry(
             this.options.scale.x,
             this.options.scale.z
@@ -406,14 +419,14 @@ class SandTerrain extends Terrain {
         
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.rotation.x = -Math.PI / 2;
+        return Promise.resolve();
     }
 }
 
 class TreeTerrain extends Terrain {
     static type = 'tree';
     
-    createMesh() {
-        // Create a simple tree with trunk and foliage
+    async createMesh() {
         const trunkGeometry = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
         const trunkMaterial = new THREE.MeshStandardMaterial({
             color: 0x8B4513,
@@ -433,7 +446,6 @@ class TreeTerrain extends Terrain {
         this.mesh.add(trunk);
         this.mesh.add(foliage);
 
-        // Create hitbox just for the trunk with fixed size
         const hitboxGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
         const hitboxMaterial = new THREE.MeshBasicMaterial({
             color: 0xffff00,
@@ -444,15 +456,16 @@ class TreeTerrain extends Terrain {
         });
 
         this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
-        this.hitboxMesh.position.y = 1; // Center vertically on trunk
+        this.hitboxMesh.position.y = 1;
         this.mesh.add(this.hitboxMesh);
+        return Promise.resolve();
     }
 }
 
 class BushTerrain extends Terrain {
     static type = 'bush';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.SphereGeometry(0.5, 8, 6);
         const material = new THREE.MeshStandardMaterial({
             color: 0x2d5a27,
@@ -462,7 +475,6 @@ class BushTerrain extends Terrain {
         
         this.mesh = new THREE.Mesh(geometry, material);
 
-        // Create a small hitbox at the base of the bush
         const hitboxGeometry = new THREE.BoxGeometry(0.8, 0.3, 0.8);
         const hitboxMaterial = new THREE.MeshBasicMaterial({
             color: 0xffff00,
@@ -473,21 +485,21 @@ class BushTerrain extends Terrain {
         });
 
         this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
-        this.hitboxMesh.position.y = -0.25; // Position at the base
+        this.hitboxMesh.position.y = -0.25;
         this.mesh.add(this.hitboxMesh);
         
-        // Apply random scale after creating hitbox
         const randomScale = 0.3;
         this.mesh.scale.x *= 1 + (Math.random() * randomScale - randomScale/2);
         this.mesh.scale.y *= 0.8 + (Math.random() * 0.2);
         this.mesh.scale.z *= 1 + (Math.random() * randomScale - randomScale/2);
+        return Promise.resolve();
     }
 }
 
 class RockTerrain extends Terrain {
     static type = 'rock';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.DodecahedronGeometry(0.5, 1);
         const material = new THREE.MeshStandardMaterial({
             color: 0x808080,
@@ -497,17 +509,17 @@ class RockTerrain extends Terrain {
         
         this.mesh = new THREE.Mesh(geometry, material);
         
-        // Random rotation for variety
         this.mesh.rotation.x = Math.random() * Math.PI;
         this.mesh.rotation.y = Math.random() * Math.PI;
         this.mesh.rotation.z = Math.random() * Math.PI;
+        return Promise.resolve();
     }
 }
 
 class PathTerrain extends Terrain {
     static type = 'path';
     
-    createMesh() {
+    async createMesh() {
         const geometry = new THREE.PlaneGeometry(
             this.options.scale.x,
             this.options.scale.z
@@ -520,6 +532,7 @@ class PathTerrain extends Terrain {
         
         this.mesh = new THREE.Mesh(geometry, material);
         this.mesh.rotation.x = -Math.PI / 2;
+        return Promise.resolve();
     }
 }
 
@@ -620,6 +633,27 @@ class CustomTerrain extends Terrain {
 
     async loadOBJ() {
         const loader = new THREE.OBJLoader();
+        
+        // If the model URL ends with 'model.obj', try to load the corresponding MTL file
+        if (this.options.customProperties.modelUrl.endsWith('model.obj')) {
+            const mtlUrl = this.options.customProperties.modelUrl.replace('model.obj', 'materials.mtl');
+            try {
+                const mtlLoader = new THREE.MTLLoader();
+                const materials = await new Promise((resolve, reject) => {
+                    mtlLoader.load(
+                        mtlUrl,
+                        resolve,
+                        undefined,
+                        reject
+                    );
+                });
+                materials.preload();
+                loader.setMaterials(materials);
+            } catch (error) {
+                console.warn('Could not load MTL file:', error);
+            }
+        }
+
         const obj = await new Promise((resolve, reject) => {
             loader.load(
                 this.options.customProperties.modelUrl,

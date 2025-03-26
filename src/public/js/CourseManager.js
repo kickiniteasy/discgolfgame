@@ -3,6 +3,7 @@ class CourseManager {
         this.scene = scene;
         this.currentCourse = null;
         this.prebuiltCourses = ['beginner', 'forest_valley', 'whispering_pines', 'editor', 'custom'];
+        this.terrainManager = new TerrainManager(scene);
     }
 
     async loadCourseFromJSON(courseData) {
@@ -12,63 +13,20 @@ class CourseManager {
                 throw new Error('Invalid course data format');
             }
 
-            // Convert course data to expected format
-            const convertedCourseData = {
-                id: courseData.course_id || courseData.id,
-                name: courseData.name,
-                metadata: courseData.metadata || {},
-                courseSize: courseData.courseSize || { width: 300, length: 400 },
-                holes: courseData.holes.map(hole => {
-                    // Handle both new schema and old schema formats
-                    if (hole.basket && hole.teebox) {
-                        // New schema format
-                        return {
-                            number: hole.holeNumber,
-                            par: hole.par,
-                            description: hole.description || '',
-                            basket: {
-                                position: hole.basket.position || { x: 0, y: 0, z: 0 },
-                                rotation: hole.basket.rotation || { x: 0, y: 0, z: 0 }
-                            },
-                            teebox: {
-                                position: hole.teebox.position || { x: 0, y: 0, z: 0 },
-                                rotation: hole.teebox.rotation || { x: 0, y: 0, z: 0 }
-                            }
-                        };
-                    } else {
-                        // Old schema format (x, z, teeX, teeZ)
-                        return {
-                            number: 1,
-                            par: 3,
-                            description: '',
-                            basket: {
-                                position: { x: hole.x || 0, y: 0, z: hole.z || 0 },
-                                rotation: { x: 0, y: 0, z: 0 }
-                            },
-                            teebox: {
-                                position: { x: hole.teeX || 0, y: 0, z: hole.teeZ || 0 },
-                                rotation: { x: 0, y: 0, z: 0 }
-                            }
-                        };
-                    }
-                })
-            };
-
             // Clear current course if it exists
             this.clearCurrentCourse();
 
             // Create new course instance
-            this.currentCourse = new Course(this.scene, convertedCourseData);
+            this.currentCourse = new Course(this.scene, courseData);
             
             // Update sky with new course size if it exists
-            if (window.sky) {
-                window.sky.updateCourseSize(convertedCourseData.courseSize);
+            if (window.sky && courseData.courseSize) {
+                window.sky.updateCourseSize(courseData.courseSize);
             }
             
             // Load terrain if available
-            if (window.terrainManager && courseData.terrain) {
-                window.terrainManager.clearTerrain(); // Ensure terrain is cleared first
-                window.terrainManager.loadFromCourseData(courseData);
+            if (courseData.terrain) {
+                await this.terrainManager.loadFromCourseData(courseData);
             }
 
             // Reset game state
@@ -84,6 +42,18 @@ class CourseManager {
         } catch (error) {
             console.error('Error loading course:', error);
             return false;
+        }
+    }
+
+    applyVisualSettings(visualSettings) {
+        // Apply sky image if provided
+        if (visualSettings.skyImageUrl && window.sky) {
+            window.sky.setSkyImage(visualSettings.skyImageUrl);
+        }
+
+        // Apply background color if provided
+        if (visualSettings.backgroundColor && window.sky) {
+            window.sky.setBackgroundColor(visualSettings.backgroundColor);
         }
     }
 
@@ -203,8 +173,8 @@ class CourseManager {
         }
 
         // Clear terrain
-        if (window.terrainManager) {
-            window.terrainManager.clearTerrain();
+        if (this.terrainManager) {
+            this.terrainManager.clearTerrain();
         }
 
         this.currentCourse = null;
@@ -263,25 +233,14 @@ class CourseManager {
             }
         }
 
-        // Reset UI elements
-        const scoreElement = document.getElementById('score');
-        const throwsElement = document.getElementById('throws');
-        
-        if (scoreElement) scoreElement.textContent = '0';
-        if (throwsElement) throwsElement.textContent = '0';
-
         // Reset game state object
         window.gameState = {
             throwing: false,
             power: 0,
             powerIncreasing: true,
-            discInHand: true
+            discInHand: true,
+            showHitboxes: window.gameState?.showHitboxes || false
         };
-
-        // Clear existing portals
-        if (window.portalManager) {
-            window.portalManager.removeAllPortals();
-        }
     }
 
     clearCourse() {
