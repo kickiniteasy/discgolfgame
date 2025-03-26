@@ -32,15 +32,19 @@ class Terrain {
         this.mesh = null;
         this.hitboxMesh = null;
         
-        // Initialize mesh and add to scene
-        this.init();
+        // Don't automatically initialize - let the caller await init()
     }
 
     async init() {
+        // Create mesh and wait for it to complete
         await this.createMesh();
+        
+        // Only add to scene if mesh creation was successful
         if (this.mesh) {
             this.addToScene();
+            return true;
         }
+        return false;
     }
 
     async createMesh() {
@@ -221,16 +225,17 @@ class Terrain {
             this.mesh.remove(this.hitboxMesh);
         }
 
-        const hitboxGeometry = new THREE.BoxGeometry(size.x, size.y, size.z);
-        const hitboxMaterial = new THREE.MeshBasicMaterial({
+        // Create edges geometry instead of box geometry for cleaner visualization
+        const boxGeometry = new THREE.BoxGeometry(size.x, size.y, size.z);
+        const edgesGeometry = new THREE.EdgesGeometry(boxGeometry);
+        const hitboxMaterial = new THREE.LineBasicMaterial({
             color: color,
-            wireframe: true,
             transparent: true,
-            opacity: 0.3,
+            opacity: 0.5,
             visible: this.options.showHitboxes
         });
 
-        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+        this.hitboxMesh = new THREE.LineSegments(edgesGeometry, hitboxMaterial);
         if (this.mesh) {
             this.mesh.add(this.hitboxMesh);
         }
@@ -446,18 +451,37 @@ class TreeTerrain extends Terrain {
         this.mesh.add(trunk);
         this.mesh.add(foliage);
 
-        const hitboxGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
-        const hitboxMaterial = new THREE.MeshBasicMaterial({
+        // Create a compound hitbox for the tree
+        // Trunk hitbox
+        const trunkHitboxGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
+        const hitboxMaterial = new THREE.LineBasicMaterial({
             color: 0xffff00,
-            wireframe: true,
             transparent: true,
-            opacity: 0.3,
+            opacity: 0.5,
             visible: this.options.showHitboxes
         });
 
-        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
-        this.hitboxMesh.position.y = 1;
+        // Create trunk hitbox
+        const trunkHitbox = new THREE.LineSegments(
+            new THREE.EdgesGeometry(trunkHitboxGeometry),
+            hitboxMaterial
+        );
+        trunkHitbox.position.y = 1;
+
+        // Create foliage hitbox (cone-shaped)
+        const foliageHitboxGeometry = new THREE.CylinderGeometry(0.2, 0.8, 2, 8);
+        const foliageHitbox = new THREE.LineSegments(
+            new THREE.EdgesGeometry(foliageHitboxGeometry),
+            hitboxMaterial
+        );
+        foliageHitbox.position.y = 2.5;
+
+        // Create a group for hitboxes
+        this.hitboxMesh = new THREE.Group();
+        this.hitboxMesh.add(trunkHitbox);
+        this.hitboxMesh.add(foliageHitbox);
         this.mesh.add(this.hitboxMesh);
+
         return Promise.resolve();
     }
 }

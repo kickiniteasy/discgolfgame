@@ -1,14 +1,19 @@
 class PortalTerrain extends Terrain {
     static type = 'portal';
 
-    createMesh() {
+    async createMesh() {
         // Determine if this is an entry or exit portal
         const isEntry = this.options.properties.isEntry || false;
         
         // Use custom color if provided, otherwise use default red/green
         let color;
         if (this.options.visualProperties?.color) {
-            color = this.options.visualProperties.color;
+            // Handle both hex string and number formats
+            if (typeof this.options.visualProperties.color === 'string') {
+                color = new THREE.Color(this.options.visualProperties.color);
+            } else {
+                color = this.options.visualProperties.color;
+            }
         } else {
             color = isEntry ? 0xff0000 : 0x00ff00; // Default: Red for entry, green for exit
         }
@@ -77,7 +82,7 @@ class PortalTerrain extends Terrain {
             const context = canvas.getContext('2d');
             canvas.width = 512;
             canvas.height = 64;
-            context.fillStyle = '#' + color.toString(16).padStart(6, '0');
+            context.fillStyle = '#' + (typeof color === 'number' ? color.toString(16) : colorObj.getHexString()).padStart(6, '0');
             context.font = 'bold 32px Arial';
             context.textAlign = 'center';
             context.fillText(label, canvas.width/2, canvas.height/2);
@@ -102,10 +107,20 @@ class PortalTerrain extends Terrain {
             wireframe: true,
             transparent: true,
             opacity: 0.3,
-            visible: this.options.showHitboxes
+            visible: true // Always create visible for debugging
         });
         this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
         this.mesh.add(this.hitboxMesh);
+
+        // Log portal creation
+        console.log('Created portal:', {
+            isEntry,
+            position: this.options.position,
+            color: typeof color === 'number' ? '#' + color.toString(16) : color,
+            hitboxSize
+        });
+
+        return true; // Indicate successful mesh creation
     }
 
     update() {

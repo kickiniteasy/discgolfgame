@@ -3,7 +3,12 @@ class CourseManager {
         this.scene = scene;
         this.currentCourse = null;
         this.prebuiltCourses = ['beginner', 'forest_valley', 'whispering_pines', 'editor', 'custom'];
-        this.terrainManager = new TerrainManager(scene);
+        // Use existing TerrainManager if available, otherwise create new one
+        this.terrainManager = window.terrainManager || new TerrainManager(scene);
+        // Ensure global terrainManager is set
+        if (!window.terrainManager) {
+            window.terrainManager = this.terrainManager;
+        }
     }
 
     async loadCourseFromJSON(courseData) {
