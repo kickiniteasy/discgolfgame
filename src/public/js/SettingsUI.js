@@ -10,14 +10,6 @@ class SettingsUI {
         this.playerSettingsList = document.getElementById('player-settings-list');
         this.savePlayersButton = document.getElementById('save-players-button');
         
-        // Create settings container if it doesn't exist
-        this.settingsContainer = document.createElement('div');
-        this.settingsContainer.className = 'settings-container';
-        const playersTab = document.getElementById('players-tab');
-        if (playersTab) {
-            playersTab.insertBefore(this.settingsContainer, this.playerSettingsList);
-        }
-        
         // Create confirmation modal
         this.createConfirmationModal();
         

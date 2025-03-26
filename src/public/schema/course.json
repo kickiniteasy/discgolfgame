@@ -1,7 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Disc Golf Course Schema",
-  "description": "Schema for defining disc golf courses including metadata, holes, and terrain features",
+  "description": "Simplified schema for defining disc golf courses with basic visual customization options",
   "type": "object",
   "required": [
     "course_id",
@@ -86,6 +86,22 @@
         }
       }
     },
+    "visualSettings": {
+      "type": "object",
+      "description": "Basic visual settings for the course",
+      "properties": {
+        "skyImageUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL to a sky image/skybox texture"
+        },
+        "backgroundColor": {
+          "type": "string",
+          "pattern": "^#[0-9A-Fa-f]{6}$",
+          "description": "Hex color code for the background/default sky color"
+        }
+      }
+    },
     "courseSize": {
       "type": "object",
       "required": ["width", "length"],
@@ -100,11 +116,52 @@
         }
       }
     },
+    "defaultTextures": {
+      "type": "object",
+      "description": "Default texture settings for various terrain types",
+      "properties": {
+        "fairwayTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Default texture URL for fairway terrain"
+        },
+        "roughTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Default texture URL for rough terrain"
+        },
+        "heavyRoughTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Default texture URL for heavy rough terrain"
+        },
+        "waterTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Default texture URL for water surfaces"
+        },
+        "sandTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Default texture URL for sand terrain"
+        },
+        "teepadTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Default texture URL for tee pads"
+        },
+        "groundTexture": {
+          "type": "string",
+          "format": "uri",
+          "description": "Base texture for the ground plane"
+        }
+      }
+    },
     "holes": {
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["holeNumber", "par", "teeboxes", "basket", "mandatories", "outOfBounds", "fairway"],
+        "required": ["holeNumber", "par", "teebox", "basket", "outOfBounds", "fairway"],
         "properties": {
           "holeNumber": {
             "type": "integer",
@@ -120,45 +177,38 @@
             "type": "string",
             "description": "Description of the hole including any notable features or challenges"
           },
-          "teeboxes": {
-            "type": "array",
-            "items": {
-              "type": "object",
-              "required": ["position", "rotation", "type"],
-              "properties": {
-                "position": {
-                  "type": "object",
-                  "required": ["x", "y", "z"],
-                  "properties": {
-                    "x": { "type": "number" },
-                    "y": { "type": "number" },
-                    "z": { "type": "number" }
-                  }
-                },
-                "rotation": {
-                  "type": "object",
-                  "required": ["x", "y", "z"],
-                  "description": "Rotation angles in degrees. Y rotation is most important, determining which direction the teebox faces. X and Z typically remain 0.",
-                  "properties": {
-                    "x": { 
-                      "type": "number",
-                      "description": "Rotation around X axis in degrees (typically 0)"
-                    },
-                    "y": { 
-                      "type": "number",
-                      "description": "Rotation around Y axis in degrees (0-360, determines which direction teebox faces)"
-                    },
-                    "z": { 
-                      "type": "number",
-                      "description": "Rotation around Z axis in degrees (typically 0)"
-                    }
-                  }
-                },
-                "type": {
-                  "type": "string",
-                  "enum": ["pro", "amateur", "recreational"],
-                  "description": "Type/difficulty of the tee position"
+          "teebox": {
+            "type": "object",
+            "required": ["position", "rotation", "type"],
+            "properties": {
+              "position": {
+                "type": "object",
+                "required": ["x", "y", "z"],
+                "properties": {
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "z": { "type": "number" }
                 }
+              },
+              "rotation": {
+                "type": "object",
+                "required": ["x", "y", "z"],
+                "description": "Rotation angles in degrees. Y rotation is most important, determining which direction the teebox faces.",
+                "properties": {
+                  "x": { "type": "number" },
+                  "y": { "type": "number" },
+                  "z": { "type": "number" }
+                }
+              },
+              "type": {
+                "type": "string",
+                "enum": ["pro", "amateur", "recreational"],
+                "description": "Type/difficulty of the tee position"
+              },
+              "textureUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Optional custom texture for this specific teebox"
               }
             }
           },
@@ -173,25 +223,6 @@
                   "x": { "type": "number" },
                   "y": { "type": "number" },
                   "z": { "type": "number" }
-                }
-              }
-            }
-          },
-          "mandatories": {
-            "type": "array",
-            "description": "List of mandatory passages that must be navigated",
-            "items": {
-              "type": "object",
-              "required": ["terrainId", "direction"],
-              "properties": {
-                "terrainId": {
-                  "type": "string",
-                  "description": "ID of the terrain object that serves as the mandatory"
-                },
-                "direction": {
-                  "type": "string",
-                  "enum": ["left", "right", "above", "below"],
-                  "description": "Direction the disc must pass relative to the mandatory"
                 }
               }
             }
@@ -246,6 +277,11 @@
               "width": {
                 "type": "number",
                 "description": "Width of the fairway in meters"
+              },
+              "textureUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Optional custom texture for this specific fairway"
               }
             }
           }
@@ -275,7 +311,6 @@
               "bush",
               "rock",
               "path",
-              "portal",
               "custom"
             ],
             "description": "Type of terrain feature"
@@ -300,21 +335,10 @@
           },
           "rotation": {
             "type": "object",
-            "required": ["x", "y", "z"],
-            "description": "Rotation angles in degrees. Y rotation is most important, determining which direction the teebox faces. X and Z typically remain 0.",
             "properties": {
-              "x": { 
-                "type": "number",
-                "description": "Rotation around X axis in degrees (typically 0)"
-              },
-              "y": { 
-                "type": "number",
-                "description": "Rotation around Y axis in degrees (0-360, determines which direction teebox faces)"
-              },
-              "z": { 
-                "type": "number",
-                "description": "Rotation around Z axis in degrees (typically 0)"
-              }
+              "x": { "type": "number" },
+              "y": { "type": "number" },
+              "z": { "type": "number" }
             }
           },
           "visualProperties": {
@@ -343,6 +367,11 @@
                 "minimum": 0,
                 "maximum": 1,
                 "description": "Material opacity (0 = transparent, 1 = opaque)"
+              },
+              "textureUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to a texture image for this terrain object"
               }
             }
           },
@@ -363,9 +392,10 @@
             "type": "object",
             "description": "Additional properties specific to terrain type",
             "properties": {
-              "height": {
-                "type": "number",
-                "description": "Height for terrain features that need it"
+              "hazardType": {
+                "type": "string",
+                "enum": ["none", "casual", "penalty"],
+                "description": "Type of hazard for gameplay effects"
               },
               "depth": {
                 "type": "number",
@@ -376,45 +406,11 @@
                 "minimum": 0,
                 "maximum": 1,
                 "description": "Density for vegetation (rough, trees, bushes)"
-              },
-              "hazardType": {
-                "type": "string",
-                "enum": ["none", "casual", "penalty"],
-                "default": "none",
-                "description": "Whether the terrain is a hazard and its type"
-              },
-              "portalType": {
-                "type": "string",
-                "enum": ["entry", "exit"],
-                "description": "Type of portal (entry or exit)"
-              },
-              "label": {
-                "type": "string",
-                "description": "Label text for exit portals"
-              },
-              "targetUrl": {
-                "type": "string",
-                "format": "uri",
-                "description": "Target URL for exit portals"
-              },
-              "ref": {
-                "type": "string",
-                "format": "uri",
-                "description": "Reference URL for entry portals to return to"
               }
             }
-          },
-          "customProperties": {
-            "type": "object",
-            "description": "Additional properties for custom terrain types"
-          },
-          "assetUrl": {
-            "type": "string",
-            "format": "uri",
-            "description": "URL to the 3D asset if applicable"
           }
         }
       }
     }
   }
-} 
+}

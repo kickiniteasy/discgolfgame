@@ -706,9 +706,13 @@ canvas {
 #settings-modal .section-title {
     color: white;
     font-size: 20px;
-    margin: 0 0 20px 0;
+    margin: 30px 0 20px 0;
     padding-bottom: 10px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+#settings-modal .section-title:first-child {
+    margin-top: 0;
 }
 
 #settings-modal .tab-button {
@@ -800,9 +804,19 @@ canvas {
 }
 
 .form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
     resize: vertical;
     min-height: 100px;
     font-family: monospace;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
 }
 
 .input-group {
@@ -1186,4 +1200,41 @@ canvas {
 .setting-item select:focus {
     outline: none;
     border-color: rgba(255, 255, 255, 0.5);
+}
+
+.course-info {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 10px 0 20px;
+}
+
+.course-info a {
+    color: #4CAF50;
+    text-decoration: none;
+}
+
+.course-info a:hover {
+    text-decoration: underline;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+}
+
+.checkbox-label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 } 

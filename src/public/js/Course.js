@@ -36,7 +36,7 @@ class Course {
 
         // Create new holes and teeboxes
         holesData.forEach((holeData, index) => {
-            if (!holeData.basket || !holeData.basket.position || !holeData.teeboxes || !holeData.teeboxes[0]) {
+            if (!holeData.basket || !holeData.basket.position || !holeData.teebox) {
                 console.error(`Invalid hole data for hole ${index + 1}:`, holeData);
                 return;
             }
@@ -54,10 +54,10 @@ class Course {
             const teebox = new Teebox(
                 this.scene, 
                 {
-                    x: holeData.teeboxes[0].position.x || 0,
-                    z: holeData.teeboxes[0].position.z || 0
+                    x: holeData.teebox.position.x || 0,
+                    z: holeData.teebox.position.z || 0
                 },
-                holeData.teeboxes[0].rotation || { x: 0, y: 0, z: 0 }
+                holeData.teebox.rotation || { x: 0, y: 0, z: 0 }
             );
             this.teeboxes.push(teebox);
         });
@@ -121,11 +121,10 @@ class Course {
                 basket: {
                     position: hole.getPosition()
                 },
-                teeboxes: [{
+                teebox: {
                     position: this.teeboxes[index].getPosition(),
-                    rotation: { x: 0, y: 0, z: 0 },
-                    type: "recreational"
-                }]
+                    rotation: { x: 0, y: 0, z: 0 }
+                }
             }))
         };
     }
@@ -138,9 +137,39 @@ class Course {
                 name: 'Beginner Course',
                 par: 9,
                 holes: [
-                    { x: 0, z: -100, teeX: 0, teeZ: -80 },    // Hole 1
-                    { x: 100, z: -50, teeX: 80, teeZ: -50 },   // Hole 2
-                    { x: -80, z: -120, teeX: -60, teeZ: -120 }   // Hole 3
+                    {
+                        holeNumber: 1,
+                        par: 3,
+                        basket: {
+                            position: { x: 0, z: -100 }
+                        },
+                        teebox: {
+                            position: { x: 0, z: -80 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    },
+                    {
+                        holeNumber: 2,
+                        par: 3,
+                        basket: {
+                            position: { x: 100, z: -50 }
+                        },
+                        teebox: {
+                            position: { x: 80, z: -50 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    },
+                    {
+                        holeNumber: 3,
+                        par: 3,
+                        basket: {
+                            position: { x: -80, z: -120 }
+                        },
+                        teebox: {
+                            position: { x: -60, z: -120 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    }
                 ]
             },
             {
@@ -148,10 +177,50 @@ class Course {
                 name: 'Forest Valley',
                 par: 12,
                 holes: [
-                    { x: 0, z: -150, teeX: 0, teeZ: -130 },    // Hole 1
-                    { x: 120, z: -80, teeX: 100, teeZ: -80 },   // Hole 2
-                    { x: -100, z: -200, teeX: -80, teeZ: -200 },  // Hole 3
-                    { x: 50, z: -250, teeX: 30, teeZ: -250 }    // Hole 4
+                    {
+                        holeNumber: 1,
+                        par: 3,
+                        basket: {
+                            position: { x: 0, z: -150 }
+                        },
+                        teebox: {
+                            position: { x: 0, z: -130 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    },
+                    {
+                        holeNumber: 2,
+                        par: 3,
+                        basket: {
+                            position: { x: 120, z: -80 }
+                        },
+                        teebox: {
+                            position: { x: 100, z: -80 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    },
+                    {
+                        holeNumber: 3,
+                        par: 3,
+                        basket: {
+                            position: { x: -100, z: -200 }
+                        },
+                        teebox: {
+                            position: { x: -80, z: -200 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    },
+                    {
+                        holeNumber: 4,
+                        par: 3,
+                        basket: {
+                            position: { x: 50, z: -250 }
+                        },
+                        teebox: {
+                            position: { x: 30, z: -250 },
+                            rotation: { x: 0, y: 0, z: 0 }
+                        }
+                    }
                 ]
             }
             // Add more courses here

@@ -14,6 +14,19 @@
         "version": "1.0.0",
         "creationDate": "2024-03-20T12:00:00Z"
     },
+    "visualSettings": {
+        "skyImageUrl": "https://example.com/textures/clear_blue_sky.jpg",
+        "backgroundColor": "#87CEEB"
+    },
+    "defaultTextures": {
+        "fairwayTexture": "https://example.com/textures/short_grass.jpg",
+        "roughTexture": "https://example.com/textures/tall_grass.jpg",
+        "heavyRoughTexture": "https://example.com/textures/thick_vegetation.jpg",
+        "waterTexture": "https://example.com/textures/water.jpg",
+        "sandTexture": "https://example.com/textures/sand.jpg",
+        "teepadTexture": "https://example.com/textures/concrete.jpg",
+        "groundTexture": "https://example.com/textures/dirt.jpg"
+    },
     "courseSize": {
         "width": 300,
         "length": 400
@@ -23,17 +36,14 @@
             "holeNumber": 1,
             "par": 3,
             "description": "Straight shot with a gentle downhill slope. Perfect for learning proper form.",
-            "teeboxes": [
-                {
-                    "position": { "x": 0, "y": 0, "z": 0 },
-                    "rotation": { "x": 0, "y": 0, "z": 0 },
-                    "type": "recreational"
-                }
-            ],
-            "basket": {
-                "position": { "x": 0, "y": -2, "z": 20 }
+            "teebox": {
+                "position": { "x": 0, "y": 0, "z": 0 },
+                "rotation": { "x": 0, "y": 0, "z": 0 },
+                "type": "recreational"
             },
-            "mandatories": [],
+            "basket": {
+                "position": { "x": 0, "y": 0, "z": 20 }
+            },
             "outOfBounds": [],
             "fairway": {
                 "shape": [
@@ -47,17 +57,14 @@
             "holeNumber": 2,
             "par": 3,
             "description": "Gentle right turn with scattered trees. Teaches controlled throws around obstacles.",
-            "teeboxes": [
-                {
-                    "position": { "x": 30, "y": 0, "z": 0 },
-                    "rotation": { "x": 0, "y": 90, "z": 0 },
-                    "type": "recreational"
-                }
-            ],
+            "teebox": {
+                "position": { "x": 30, "y": 0, "z": 0 },
+                "rotation": { "x": 0, "y": 90, "z": 0 },
+                "type": "recreational"
+            },
             "basket": {
                 "position": { "x": 50, "y": 0, "z": 0 }
             },
-            "mandatories": [],
             "outOfBounds": [],
             "fairway": {
                 "shape": [
@@ -71,17 +78,14 @@
             "holeNumber": 3,
             "par": 3,
             "description": "Slight left turn with a small elevation change. Introduces uphill putting.",
-            "teeboxes": [
-                {
-                    "position": { "x": 30, "y": 0, "z": 30 },
-                    "rotation": { "x": 0, "y": 270, "z": 0 },
-                    "type": "recreational"
-                }
-            ],
-            "basket": {
-                "position": { "x": 10, "y": 1, "z": 30 }
+            "teebox": {
+                "position": { "x": 30, "y": 0, "z": 30 },
+                "rotation": { "x": 0, "y": 270, "z": 0 },
+                "type": "recreational"
             },
-            "mandatories": [],
+            "basket": {
+                "position": { "x": 10, "y": 0, "z": 30 }
+            },
             "outOfBounds": [],
             "fairway": {
                 "shape": [
@@ -96,20 +100,23 @@
         {
             "id": "fairway-1",
             "type": "fairway",
-            "position": { "x": 0, "y": 0.1, "z": 10 },
+            "position": { "x": 0, "y": 0, "z": 10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 20, "y": 1, "z": 30 },
             "visualProperties": {
                 "color": "#90EE90",
                 "roughness": 0.8,
                 "metalness": 0.1,
-                "opacity": 1.0
-            }
+                "opacity": 1.0,
+                "textureUrl": "https://example.com/textures/beginner_fairway.jpg"
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole1"]
         },
         {
             "id": "fairway-2",
             "type": "fairway",
-            "position": { "x": 40, "y": 0.1, "z": 0 },
+            "position": { "x": 40, "y": 0, "z": 0 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 30, "y": 1, "z": 20 },
             "visualProperties": {
@@ -117,12 +124,14 @@
                 "roughness": 0.8,
                 "metalness": 0.1,
                 "opacity": 1.0
-            }
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole2"]
         },
         {
             "id": "fairway-3",
             "type": "fairway",
-            "position": { "x": 20, "y": 0.1, "z": 30 },
+            "position": { "x": 20, "y": 0, "z": 30 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 30, "y": 1, "z": 20 },
             "visualProperties": {
@@ -130,12 +139,14 @@
                 "roughness": 0.8,
                 "metalness": 0.1,
                 "opacity": 1.0
-            }
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole3"]
         },
         {
             "id": "rough-1",
             "type": "rough",
-            "position": { "x": 0, "y": 0.1, "z": 10 },
+            "position": { "x": 0, "y": 0, "z": 10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 40, "y": 1, "z": 50 },
             "visualProperties": {
@@ -143,7 +154,9 @@
                 "roughness": 1.0,
                 "metalness": 0.0,
                 "opacity": 1.0
-            }
+            },
+            "variant": "default",
+            "tags": ["rough"]
         },
         {
             "id": "tree-group-1",
@@ -151,6 +164,9 @@
             "position": { "x": 35, "y": 0, "z": -10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
+            "visualProperties": {
+                "color": "#228B22"
+            },
             "variant": "sparse",
             "tags": ["obstacle"]
         },
@@ -160,6 +176,9 @@
             "position": { "x": 45, "y": 0, "z": 10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
+            "visualProperties": {
+                "color": "#228B22"
+            },
             "variant": "sparse",
             "tags": ["obstacle"]
         },
@@ -168,14 +187,24 @@
             "type": "bush",
             "position": { "x": -5, "y": 0, "z": 5 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "visualProperties": {
+                "color": "#32CD32"
+            },
+            "variant": "default",
+            "tags": ["vegetation"]
         },
         {
             "id": "bush-2",
             "type": "bush",
             "position": { "x": 5, "y": 0, "z": 15 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
+            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
+            "visualProperties": {
+                "color": "#32CD32"
+            },
+            "variant": "default",
+            "tags": ["vegetation"]
         }
     ]
-} 
+}

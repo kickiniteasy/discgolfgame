@@ -142,14 +142,17 @@
                             <button type="button" class="save-button" id="save-players-button">Save Changes</button>
                         </div>
                         <div id="courses-tab" class="tab">
-                            <h3 class="section-title">Course Management</h3>
+                            <h3 class="section-title">Pre-built Courses</h3>
                             <div class="form-group">
-                                <label for="course-select">Load Pre-built Course</label>
+                                <label for="course-select">Select a Course</label>
                                 <select id="course-select">
                                     <option value="">Select a course...</option>
                                 </select>
                             </div>
 
+                            <h3 class="section-title">Create Your Own Course</h3>
+                            <p class="course-info">Create your own course using our JSON schema. Each course consists of holes with teeboxes, baskets, and optional terrain features. <a href="https://github.com/kickiniteasy/discgolfgame/blob/main/docs/course_schema.md" target="_blank">View Schema Documentation</a></p>
+                            
                             <div class="form-group">
                                 <label for="course-url">Load Course from URL</label>
                                 <div class="input-group">
@@ -167,6 +170,14 @@
                             <div class="course-actions">
                                 <button id="copy-course" class="secondary-button">Copy Course</button>
                                 <button id="save-course" class="secondary-button">Save Course</button>
+                            </div>
+
+                            <h3 class="section-title">Course Settings</h3>
+                            <div class="form-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="show-hitboxes">
+                                    Show Hitboxes
+                                </label>
                             </div>
                         </div>
                     </div>

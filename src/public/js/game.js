@@ -32,7 +32,7 @@ async function initGame() {
     const scene = new THREE.Scene();
     // Create sky
     const sky = new Sky(scene, {
-        type: 'gradient',
+        type: 'panorama',
         sunPosition: new THREE.Vector3(100, 45, 0) // Sun at 45 degrees elevation
     });
 
@@ -83,11 +83,15 @@ async function initGame() {
         window.ui = new UI();
         const settingsUI = new SettingsUI(window.playerManager);
         
-        // Add hitbox toggle to settings
-        settingsUI.addSetting('showHitboxes', 'Show Hitboxes', 'checkbox', window.gameState.showHitboxes, (value) => {
-            window.gameState.showHitboxes = value;
-            window.terrainManager.setAllHitboxesVisibility(value);
-        });
+        // Initialize hitbox toggle in courses section
+        const showHitboxesCheckbox = document.getElementById('show-hitboxes');
+        if (showHitboxesCheckbox) {
+            showHitboxesCheckbox.checked = window.gameState.showHitboxes;
+            showHitboxesCheckbox.addEventListener('change', (e) => {
+                window.gameState.showHitboxes = e.target.checked;
+                window.terrainManager.setAllHitboxesVisibility(e.target.checked);
+            });
+        }
 
         // Create BagUI with current player's bag
         const bagUI = new BagUI(null, (selectedDisc) => {

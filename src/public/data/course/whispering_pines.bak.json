@@ -1,0 +1,1889 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "course_id": "whispering-pines-01",
+    "name": "Whispering Pines Disc Golf Course",
+    "metadata": {
+      "description": "Nestled in a dense pine forest with rolling hills, Whispering Pines offers a challenging championship-level course with a diverse mix of tight wooded fairways, strategic water crossings, and a few open bomber holes. The course features elevation changes on nearly every hole and requires a complete arsenal of shots to score well.",
+      "location": {
+        "latitude": 44.9778,
+        "longitude": -93.2650,
+        "address": "1200 Forest Trail, Pine Valley, MN 55401"
+      },
+      "difficulty": 4,
+      "source": "Custom Design",
+      "author": "DiscCraft Designs",
+      "authorUrl": "https://example.com/disccraft",
+      "version": "1.0.0",
+      "creationDate": "2025-03-24T12:00:00Z",
+      "dataUrl": "https://example.com/courses/whispering-pines"
+    },
+    "courseSize": {
+      "width": 800,
+      "length": 1200
+    },
+    "holes": [
+      {
+        "holeNumber": 1,
+        "par": 3,
+        "description": "A gentle opener with a slight right-to-left fairway through a corridor of pine trees. The fairway widens as you approach the basket, which is protected by two large pines on either side.",
+        "teeboxes": [
+          {
+            "position": { "x": 50, "y": 0, "z": 50 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 60, "y": 0, "z": 60 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 70, "y": 0, "z": 70 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 150, "y": -2, "z": 120 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 130, "z": 140 },
+              { "x": 180, "z": 140 },
+              { "x": 180, "z": 90 },
+              { "x": 130, "z": 90 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 50, "z": 50 },
+            { "x": 85, "z": 75 },
+            { "x": 120, "z": 100 },
+            { "x": 150, "z": 120 }
+          ],
+          "width": 10
+        }
+      },
+      {
+        "holeNumber": 2,
+        "par": 4,
+        "description": "A challenging dogleg right that climbs uphill before revealing the basket on a plateau. Trees line both sides of the fairway, and the green slopes away on the far side, adding risk to aggressive approaches.",
+        "teeboxes": [
+          {
+            "position": { "x": 175, "y": -2, "z": 100 },
+            "rotation": { "x": 0, "y": 90, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 185, "y": -2, "z": 100 },
+            "rotation": { "x": 0, "y": 90, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 195, "y": -2, "z": 100 },
+            "rotation": { "x": 0, "y": 90, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 320, "y": 8, "z": 200 }
+        },
+        "mandatories": [
+          {
+            "terrainId": "tree-dog-leg-2",
+            "direction": "right"
+          }
+        ],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 310, "z": 220 },
+              { "x": 340, "z": 220 },
+              { "x": 340, "z": 180 },
+              { "x": 310, "z": 180 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 175, "z": 100 },
+            { "x": 240, "z": 110 },
+            { "x": 280, "z": 150 },
+            { "x": 320, "z": 200 }
+          ],
+          "width": 12
+        }
+      },
+      {
+        "holeNumber": 3,
+        "par": 3,
+        "description": "A dramatic downhill shot through a narrow gap in the trees. The basket sits in a small clearing, but is guarded by a small water hazard in front and dense trees behind.",
+        "teeboxes": [
+          {
+            "position": { "x": 340, "y": 8, "z": 180 },
+            "rotation": { "x": -10, "y": 270, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 340, "y": 6, "z": 170 },
+            "rotation": { "x": -10, "y": 270, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 340, "y": 4, "z": 160 },
+            "rotation": { "x": -10, "y": 270, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 230, "y": -5, "z": 175 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "circle",
+            "points": [{ "x": 255, "z": 175 }],
+            "radius": 10
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 340, "z": 180 },
+            { "x": 300, "z": 175 },
+            { "x": 260, "z": 175 },
+            { "x": 230, "z": 175 }
+          ],
+          "width": 8
+        }
+      },
+      {
+        "holeNumber": 4,
+        "par": 4,
+        "description": "A challenging par 4 with a narrow initial fairway that opens up midway. A creek crosses the fairway twice, requiring precise placement to avoid a penalty. The basket sits on a small mound with bunkers on either side.",
+        "teeboxes": [
+          {
+            "position": { "x": 210, "y": -5, "z": 150 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 210, "y": -5, "z": 140 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 210, "y": -5, "z": 130 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 200, "y": -3, "z": 30 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 195, "z": 130 },
+              { "x": 225, "z": 130 },
+              { "x": 225, "z": 110 },
+              { "x": 195, "z": 110 }
+            ]
+          },
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 195, "z": 70 },
+              { "x": 225, "z": 70 },
+              { "x": 225, "z": 50 },
+              { "x": 195, "z": 50 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 210, "z": 150 },
+            { "x": 210, "z": 120 },
+            { "x": 205, "z": 90 },
+            { "x": 200, "z": 60 },
+            { "x": 200, "z": 30 }
+          ],
+          "width": 15
+        }
+      },
+      {
+        "holeNumber": 5,
+        "par": 3,
+        "description": "A short but technical par 3 with multiple routes to the basket. Dense trees block the direct line, forcing players to choose between a tight right gap or a wider left hyzer line. The basket sits in a small depression surrounded by pine trees.",
+        "teeboxes": [
+          {
+            "position": { "x": 230, "y": -3, "z": 20 },
+            "rotation": { "x": 0, "y": 270, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 220, "y": -3, "z": 20 },
+            "rotation": { "x": 0, "y": 270, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 210, "y": -3, "z": 20 },
+            "rotation": { "x": 0, "y": 270, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 140, "y": -5, "z": 30 }
+        },
+        "mandatories": [],
+        "outOfBounds": [],
+        "fairway": {
+          "shape": [
+            { "x": 230, "z": 20 },
+            { "x": 190, "z": 20 },
+            { "x": 140, "z": 30 }
+          ],
+          "width": 6
+        }
+      },
+      {
+        "holeNumber": 6,
+        "par": 5,
+        "description": "A monster par 5 that winds through a dense forest with strategic landing zones. Multiple tree islands create a multi-stage challenge, requiring placement over pure distance. Water guards the right side of the entire fairway.",
+        "teeboxes": [
+          {
+            "position": { "x": 120, "y": -5, "z": 40 },
+            "rotation": { "x": 0, "y": 225, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 125, "y": -5, "z": 45 },
+            "rotation": { "x": 0, "y": 225, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 130, "y": -5, "z": 50 },
+            "rotation": { "x": 0, "y": 225, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 20, "y": 0, "z": 130 }
+        },
+        "mandatories": [
+          {
+            "terrainId": "mando-tree-hole6",
+            "direction": "left"
+          }
+        ],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 100, "z": 60 },
+              { "x": 120, "z": 60 },
+              { "x": 90, "z": 80 },
+              { "x": 70, "z": 95 },
+              { "x": 50, "z": 115 },
+              { "x": 30, "z": 130 },
+              { "x": 10, "z": 140 },
+              { "x": 0, "z": 130 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 120, "z": 40 },
+            { "x": 90, "z": 70 },
+            { "x": 60, "z": 90 },
+            { "x": 40, "z": 110 },
+            { "x": 20, "z": 130 }
+          ],
+          "width": 18
+        }
+      },
+      {
+        "holeNumber": 7,
+        "par": 3,
+        "description": "A technical par 3 that forces an S-curve flight path around two large tree clusters. The fairway has a slight uphill grade, and the basket is protected by a grouping of three guardian trees.",
+        "teeboxes": [
+          {
+            "position": { "x": 30, "y": 0, "z": 150 },
+            "rotation": { "x": 0, "y": 10, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 35, "y": 0, "z": 150 },
+            "rotation": { "x": 0, "y": 10, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 40, "y": 0, "z": 150 },
+            "rotation": { "x": 0, "y": 10, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 85, "y": 4, "z": 250 }
+        },
+        "mandatories": [
+          {
+            "terrainId": "left-tree-cluster-hole7",
+            "direction": "right"
+          },
+          {
+            "terrainId": "right-tree-cluster-hole7",
+            "direction": "left"
+          }
+        ],
+        "outOfBounds": [],
+        "fairway": {
+          "shape": [
+            { "x": 30, "z": 150 },
+            { "x": 50, "z": 190 },
+            { "x": 60, "z": 210 },
+            { "x": 75, "z": 230 },
+            { "x": 85, "z": 250 }
+          ],
+          "width": 8
+        }
+      },
+      {
+        "holeNumber": 8,
+        "par": 4,
+        "description": "A scenic par 4 that plays alongside a lake. The fairway curves gently to the right, with the basket positioned on a small peninsula extending into the water. Bold players might attempt to cut the corner over the water for a birdie look.",
+        "teeboxes": [
+          {
+            "position": { "x": 100, "y": 4, "z": 265 },
+            "rotation": { "x": 0, "y": 300, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 95, "y": 4, "z": 260 },
+            "rotation": { "x": 0, "y": 300, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 90, "y": 4, "z": 255 },
+            "rotation": { "x": 0, "y": 300, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 15, "y": 0, "z": 300 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 80, "z": 300 },
+              { "x": 60, "z": 320 },
+              { "x": 30, "z": 330 },
+              { "x": 5, "z": 310 },
+              { "x": 0, "z": 290 },
+              { "x": 10, "z": 280 },
+              { "x": 40, "z": 285 },
+              { "x": 70, "z": 290 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 100, "z": 265 },
+            { "x": 70, "z": 280 },
+            { "x": 40, "z": 290 },
+            { "x": 15, "z": 300 }
+          ],
+          "width": 16
+        }
+      },
+      {
+        "holeNumber": 9,
+        "par": 3,
+        "description": "A picturesque uphill par 3 with the basket positioned on top of a rocky hill. Multiple tree clusters create windows that must be hit to reach the green. The hillside drops off steeply behind the basket, penalizing overthrows.",
+        "teeboxes": [
+          {
+            "position": { "x": 30, "y": 0, "z": 320 },
+            "rotation": { "x": 15, "y": 0, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 30, "y": 2, "z": 330 },
+            "rotation": { "x": 15, "y": 0, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 30, "y": 4, "z": 340 },
+            "rotation": { "x": 15, "y": 0, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 35, "y": 15, "z": 420 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 15, "z": 430 },
+              { "x": 55, "z": 430 },
+              { "x": 55, "z": 450 },
+              { "x": 15, "z": 450 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 30, "z": 320 },
+            { "x": 32, "z": 360 },
+            { "x": 35, "z": 390 },
+            { "x": 35, "z": 420 }
+          ],
+          "width": 10
+        }
+      },
+      {
+        "holeNumber": 10,
+        "par": 3,
+        "description": "A dramatic downhill bomber hole with the basket visible from the tee. The fairway is mostly open, but large isolated trees dot the landscape and must be avoided. The green slopes from back to front.",
+        "teeboxes": [
+          {
+            "position": { "x": 60, "y": 18, "z": 430 },
+            "rotation": { "x": -20, "y": 90, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 70, "y": 16, "z": 430 },
+            "rotation": { "x": -20, "y": 90, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 80, "y": 14, "z": 430 },
+            "rotation": { "x": -20, "y": 90, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 180, "y": -2, "z": 435 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "circle",
+            "points": [{ "x": 120, "z": 410 }],
+            "radius": 10
+          },
+          {
+            "type": "circle",
+            "points": [{ "x": 140, "z": 450 }],
+            "radius": 10
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 60, "z": 430 },
+            { "x": 100, "z": 432 },
+            { "x": 140, "z": 434 },
+            { "x": 180, "z": 435 }
+          ],
+          "width": 25
+        }
+      },
+      {
+        "holeNumber": 11,
+        "par": 4,
+        "description": "A tight wooded par 4 with a low ceiling throughout. The fairway makes a gentle left turn and narrows as it approaches the basket. Multiple fallen logs create additional obstacles that must be navigated.",
+        "teeboxes": [
+          {
+            "position": { "x": 210, "y": -2, "z": 435 },
+            "rotation": { "x": 0, "y": 90, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 220, "y": -2, "z": 430 },
+            "rotation": { "x": 0, "y": 90, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 230, "y": -2, "z": 425 },
+            "rotation": { "x": 0, "y": 90, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 350, "y": -2, "z": 400 }
+        },
+        "mandatories": [
+          {
+            "terrainId": "low-branch-hole11",
+            "direction": "below"
+          }
+        ],
+        "outOfBounds": [],
+        "fairway": {
+          "shape": [
+            { "x": 210, "z": 435 },
+            { "x": 250, "z": 430 },
+            { "x": 290, "z": 420 },
+            { "x": 330, "z": 405 },
+            { "x": 350, "z": 400 }
+          ],
+          "width": 7
+        }
+      },
+      {
+        "holeNumber": 12,
+        "par": 3,
+        "description": "A moderate length par 3 with a split fairway offering two distinct routes to the basket. The left path is longer but more open, while the right path is shorter but requires threading a narrow gap. The basket sits on a small plateau.",
+        "teeboxes": [
+          {
+            "position": { "x": 370, "y": -2, "z": 380 },
+            "rotation": { "x": 0, "y": 135, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 365, "y": -2, "z": 385 },
+            "rotation": { "x": 0, "y": 135, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 360, "y": -2, "z": 390 },
+            "rotation": { "x": 0, "y": 135, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 430, "y": 2, "z": 320 }
+        },
+        "mandatories": [],
+        "outOfBounds": [],
+        "fairway": {
+          "shape": [
+            { "x": 370, "z": 380 },
+            { "x": 400, "z": 350 },
+            { "x": 430, "z": 320 }
+          ],
+          "width": 20
+        }
+      },
+      {
+        "holeNumber": 13,
+        "par": 4,
+        "description": "A challenging par 4 with a blind shot around a dense cluster of trees. The fairway slopes down and to the left, with the basket positioned near a small pond. The green is fast and slopes toward the water.",
+        "teeboxes": [
+          {
+            "position": { "x": 440, "y": 2, "z": 300 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 440, "y": 2, "z": 290 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 440, "y": 2, "z": 280 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 400, "y": -4, "z": 200 }
+        },
+        "mandatories": [
+          {
+            "terrainId": "tree-cluster-hole13",
+            "direction": "left"
+          }
+        ],
+        "outOfBounds": [
+          {
+            "type": "circle",
+            "points": [{ "x": 385, "z": 190 }],
+            "radius": 15
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 440, "z": 300 },
+            { "x": 430, "z": 270 },
+            { "x": 420, "z": 240 },
+            { "x": 410, "z": 220 },
+            { "x": 400, "z": 200 }
+          ],
+          "width": 14
+        }
+      },
+      {
+        "holeNumber": 14,
+        "par": 3,
+        "description": "A short but technical par 3 over a small ravine. Multiple mature trees guard the basket, creating small windows that must be hit. The green slopes down toward the ravine on the far side.",
+        "teeboxes": [
+          {
+            "position": { "x": 420, "y": -4, "z": 180 },
+            "rotation": { "x": 0, "y": 270, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 410, "y": -4, "z": 180 },
+            "rotation": { "x": 0, "y": 270, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 400, "y": -4, "z": 180 },
+            "rotation": { "x": 0, "y": 270, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 350, "y": -4, "z": 185 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 415, "z": 175 },
+              { "x": 415, "z": 195 },
+              { "x": 380, "z": 195 },
+              { "x": 380, "z": 175 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 420, "z": 180 },
+            { "x": 380, "z": 182 },
+            { "x": 350, "z": 185 }
+          ],
+          "width": 8
+        }
+      },
+      {
+        "holeNumber": 15,
+        "par": 5,
+        "description": "An epic par 5 with multiple elevation changes and fairway turns. Players must navigate a series of strategically placed tree clusters. The fairway narrows in the middle before opening up to a protected green surrounded by bunkers.",
+        "teeboxes": [
+          {
+            "position": { "x": 330, "y": -4, "z": 170 },
+            "rotation": { "x": 0, "y": 225, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 335, "y": -4, "z": 175 },
+            "rotation": { "x": 0, "y": 225, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 340, "y": -4, "z": 180 },
+            "rotation": { "x": 0, "y": 225, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 210, "y": 0, "z": 50 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "circle",
+            "points": [{ "x": 290, "z": 140 }],
+            "radius": 8
+          },
+          {
+            "type": "circle",
+            "points": [{ "x": 260, "z": 110 }],
+            "radius": 8
+          },
+          {
+            "type": "circle",
+            "points": [{ "x": 225, "z": 60 }],
+            "radius": 8
+          },
+          {
+            "type": "circle",
+            "points": [{ "x": 195, "z": 40 }],
+            "radius": 8
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 330, "z": 170 },
+            { "x": 300, "z": 150 },
+            { "x": 280, "z": 130 },
+            { "x": 250, "z": 100 },
+            { "x": 230, "z": 80 },
+            { "x": 210, "z": 50 }
+          ],
+          "width": 20
+        }
+      },
+      {
+        "holeNumber": 16,
+        "par": 3,
+        "description": "A scenic par 3 over a small pond. The basket is visible from the tee, but water completely guards the front of the green. A large tree on the right forces most shots to take the left-to-right line over the water.",
+        "teeboxes": [
+          {
+            "position": { "x": 250, "y": 0, "z": 30 },
+            "rotation": { "x": 0, "y": 315, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 245, "y": 0, "z": 25 },
+            "rotation": { "x": 0, "y": 315, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 240, "y": 0, "z": 20 },
+            "rotation": { "x": 0, "y": 315, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 200, "y": 0, "z": -20 }
+        },
+        "mandatories": [
+          {
+            "terrainId": "right-guardian-tree-hole16",
+            "direction": "left"
+          }
+        ],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 240, "z": 20 },
+              { "x": 240, "z": -10 },
+              { "x": 210, "z": -30 },
+              { "x": 190, "z": -30 },
+              { "x": 190, "z": 10 },
+              { "x": 220, "z": 25 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 250, "z": 30 },
+            { "x": 225, "z": 5 },
+            { "x": 200, "z": -20 }
+          ],
+          "width": 10
+        }
+      },
+      {
+        "holeNumber": 17,
+        "par": 4,
+        "description": "A narrow par 4 through a dense pine alley. The fairway doglegs right midway, with the basket hidden until the corner is reached. Multiple trees create a tunnel effect for the entire hole.",
+        "teeboxes": [
+          {
+            "position": { "x": 180, "y": 0, "z": -40 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 180, "y": 0, "z": -50 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 180, "y": 0, "z": -60 },
+            "rotation": { "x": 0, "y": 180, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 260, "y": 0, "z": -120 }
+        },
+        "mandatories": [],
+        "outOfBounds": [],
+        "fairway": {
+          "shape": [
+            { "x": 180, "z": -40 },
+            { "x": 180, "z": -80 },
+            { "x": 200, "z": -100 },
+            { "x": 230, "z": -115 },
+            { "x": 260, "z": -120 }
+          ],
+          "width": 6
+        }
+      },
+      {
+        "holeNumber": 18,
+        "par": 4,
+        "description": "A grand finale with the basket positioned on an island green. The fairway is open for the first half, then narrows as it approaches the water. A safe layup area exists before the water, but aggressive players can attempt to reach the island in one big throw.",
+        "teeboxes": [
+          {
+            "position": { "x": 280, "y": 0, "z": -140 },
+            "rotation": { "x": 0, "y": 135, "z": 0 },
+            "type": "pro"
+          },
+          {
+            "position": { "x": 275, "y": 0, "z": -135 },
+            "rotation": { "x": 0, "y": 135, "z": 0 },
+            "type": "amateur"
+          },
+          {
+            "position": { "x": 270, "y": 0, "z": -130 },
+            "rotation": { "x": 0, "y": 135, "z": 0 },
+            "type": "recreational"
+          }
+        ],
+        "basket": {
+          "position": { "x": 350, "y": 0, "z": -200 }
+        },
+        "mandatories": [],
+        "outOfBounds": [
+          {
+            "type": "polygon",
+            "points": [
+              { "x": 300, "z": -160 },
+              { "x": 330, "z": -170 },
+              { "x": 365, "z": -185 },
+              { "x": 370, "z": -210 },
+              { "x": 335, "z": -230 },
+              { "x": 310, "z": -210 },
+              { "x": 320, "z": -180 }
+            ]
+          }
+        ],
+        "fairway": {
+          "shape": [
+            { "x": 280, "z": -140 },
+            { "x": 310, "z": -170 },
+            { "x": 350, "z": -200 }
+          ],
+          "width": 15
+        }
+      }
+    ],
+    "terrain": [
+      {
+        "id": "fairway-base",
+        "type": "fairway",
+        "position": { "x": 400, "y": -5, "z": 600 },
+        "scale": { "x": 800, "y": 1, "z": 1200 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#7fba00",
+          "roughness": 0.8,
+          "metalness": 0,
+          "opacity": 1
+        },
+        "variant": "default",
+        "tags": ["base", "fairway"],
+        "properties": {
+          "hazardType": "none"
+        }
+      },
+      {
+        "id": "rough-border",
+        "type": "rough",
+        "position": { "x": 400, "y": -5, "z": 600 },
+        "scale": { "x": 820, "y": 1, "z": 1220 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#a3d117",
+          "roughness": 0.9,
+          "metalness": 0,
+          "opacity": 1
+        },
+        "variant": "default",
+        "tags": ["rough", "border"],
+        "properties": {
+          "hazardType": "casual",
+          "density": 0.7
+        }
+      },
+      {
+        "id": "heavy-rough-outer",
+        "type": "heavyRough",
+        "position": { "x": 400, "y": -5, "z": 600 },
+        "scale": { "x": 840, "y": 1, "z": 1240 },
+        "rotation": { "x": 0, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#2b5916",
+          "roughness": 0.95,
+          "metalness": 0,
+          "opacity": 1
+        },
+        "variant": "dense",
+        "tags": ["heavy-rough", "outer"],
+        "properties": {
+          "hazardType": "penalty",
+          "density": 0.9
+        }
+      },
+      
+
+      {
+        "id": "tree-left-h1-1",
+        "type": "tree",
+        "position": { "x": 70, "y": 0, "z": 70 },
+        "scale": { "x": 1.5, "y": 2, "z": 1.5 },
+        "visualProperties": {
+          "color": "#006400"
+        },
+        "variant": "tall",
+        "tags": ["tree", "hole1"]
+      },
+      {
+        "id": "tree-right-h1-1",
+        "type": "tree",
+        "position": { "x": 90, "y": 0, "z": 60 },
+        "scale": { "x": 1.2, "y": 1.8, "z": 1.2 },
+        "visualProperties": {
+          "color": "#006400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole1"]
+      },
+      {
+        "id": "tree-corridor-h1-1",
+        "type": "treeGroup",
+        "position": { "x": 100, "y": 0, "z": 80 },
+        "scale": { "x": 8, "y": 2, "z": 5 },
+        "visualProperties": {
+          "color": "#006400"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole1"],
+        "properties": {
+          "density": 0.8
+        }
+      },
+      {
+        "id": "tree-corridor-h1-2",
+        "type": "treeGroup",
+        "position": { "x": 100, "y": 0, "z": 30 },
+        "scale": { "x": 8, "y": 2, "z": 5 },
+        "visualProperties": {
+          "color": "#006400"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole1"],
+        "properties": {
+          "density": 0.8
+        }
+      },
+      {
+        "id": "basket-guardians-h1-left",
+        "type": "tree",
+        "position": { "x": 140, "y": -2, "z": 130 },
+        "scale": { "x": 1.8, "y": 2.2, "z": 1.8 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole1", "guardian"]
+      },
+      {
+        "id": "basket-guardians-h1-right",
+        "type": "tree",
+        "position": { "x": 160, "y": -2, "z": 110 },
+        "scale": { "x": 2, "y": 2.5, "z": 2 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole1", "guardian"]
+      },
+ 
+      {
+        "id": "tree-dog-leg-2",
+        "type": "tree",
+        "position": { "x": 240, "y": 0, "z": 110 },
+        "scale": { "x": 2.5, "y": 3, "z": 2.5 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole2", "mandatory"]
+      },
+      {
+        "id": "tree-line-h2-left",
+        "type": "treeGroup",
+        "position": { "x": 240, "y": 0, "z": 80 },
+        "scale": { "x": 10, "y": 2.5, "z": 5 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole2"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-line-h2-right",
+        "type": "treeGroup",
+        "position": { "x": 240, "y": 0, "z": 140 },
+        "scale": { "x": 10, "y": 2.5, "z": 5 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole2"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "hill-h2",
+        "type": "fairway",
+        "position": { "x": 320, "y": 4, "z": 200 },
+        "scale": { "x": 40, "y": 8, "z": 40 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole2"]
+      },
+
+      {
+        "id": "water-hazard-h3",
+        "type": "water",
+        "position": { "x": 255, "y": -6, "z": 175 },
+        "scale": { "x": 20, "y": 1, "z": 20 },
+        "visualProperties": {
+          "color": "#4169E1",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole3"],
+        "properties": {
+          "depth": 2,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "tree-gap-h3-left",
+        "type": "treeGroup",
+        "position": { "x": 310, "y": 2, "z": 155 },
+        "scale": { "x": 10, "y": 3, "z": 15 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole3"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-gap-h3-right",
+        "type": "treeGroup",
+        "position": { "x": 310, "y": 2, "z": 195 },
+        "scale": { "x": 10, "y": 3, "z": 15 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole3"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+
+      {
+        "id": "creek-crossing-h4-1",
+        "type": "water",
+        "position": { "x": 210, "y": -6, "z": 120 },
+        "scale": { "x": 30, "y": 1, "z": 10 },
+        "visualProperties": {
+          "color": "#87CEFA",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole4"],
+        "properties": {
+          "depth": 1,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "creek-crossing-h4-2",
+        "type": "water",
+        "position": { "x": 210, "y": -6, "z": 60 },
+        "scale": { "x": 30, "y": 1, "z": 10 },
+        "visualProperties": {
+          "color": "#87CEFA",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole4"],
+        "properties": {
+          "depth": 1,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "bunker-h4-left",
+        "type": "sand",
+        "position": { "x": 190, "y": -4, "z": 35 },
+        "scale": { "x": 10, "y": 1, "z": 8 },
+        "visualProperties": {
+          "color": "#F5DEB3"
+        },
+        "variant": "default",
+        "tags": ["sand", "hole4"],
+        "properties": {
+          "hazardType": "casual"
+        }
+      },
+      {
+        "id": "bunker-h4-right",
+        "type": "sand",
+        "position": { "x": 210, "y": -4, "z": 35 },
+        "scale": { "x": 10, "y": 1, "z": 8 },
+        "visualProperties": {
+          "color": "#F5DEB3"
+        },
+        "variant": "default",
+        "tags": ["sand", "hole4"],
+        "properties": {
+          "hazardType": "casual"
+        }
+      },
+      
+      {
+        "id": "tree-cluster-h5-middle",
+        "type": "treeGroup",
+        "position": { "x": 190, "y": 0, "z": 25 },
+        "scale": { "x": 15, "y": 2.5, "z": 10 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole5"],
+        "properties": {
+          "density": 0.8
+        }
+      },
+      {
+        "id": "tree-h5-guardian-1",
+        "type": "tree",
+        "position": { "x": 150, "y": -5, "z": 20 },
+        "scale": { "x": 1.5, "y": 2, "z": 1.5 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole5", "guardian"]
+      },
+      {
+        "id": "tree-h5-guardian-2",
+        "type": "tree",
+        "position": { "x": 145, "y": -5, "z": 35 },
+        "scale": { "x": 1.7, "y": 2.2, "z": 1.7 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole5", "guardian"]
+      },
+      {
+        "id": "tree-h5-guardian-3",
+        "type": "tree",
+        "position": { "x": 130, "y": -5, "z": 25 },
+        "scale": { "x": 1.4, "y": 1.9, "z": 1.4 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole5", "guardian"]
+      },
+
+      {
+        "id": "water-hazard-h6",
+        "type": "water",
+        "position": { "x": 60, "y": -6, "z": 100 },
+        "scale": { "x": 60, "y": 1, "z": 80 },
+        "visualProperties": {
+          "color": "#4169E1",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole6"],
+        "properties": {
+          "depth": 3,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "tree-island-h6-1",
+        "type": "treeGroup",
+        "position": { "x": 90, "y": -3, "z": 65 },
+        "scale": { "x": 15, "y": 2.5, "z": 15 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole6"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-island-h6-2",
+        "type": "treeGroup",
+        "position": { "x": 60, "y": -3, "z": 90 },
+        "scale": { "x": 15, "y": 2.5, "z": 15 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole6"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "mando-tree-hole6",
+        "type": "tree",
+        "position": { "x": 80, "y": -3, "z": 80 },
+        "scale": { "x": 2.5, "y": 3, "z": 2.5 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole6", "mandatory"]
+      },
+
+      {
+        "id": "left-tree-cluster-hole7",
+        "type": "treeGroup",
+        "position": { "x": 45, "y": 2, "z": 190 },
+        "scale": { "x": 15, "y": 2.5, "z": 15 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole7", "mandatory"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "right-tree-cluster-hole7",
+        "type": "treeGroup",
+        "position": { "x": 70, "y": 3, "z": 230 },
+        "scale": { "x": 15, "y": 2.5, "z": 15 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole7", "mandatory"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-h7-guardian-1",
+        "type": "tree",
+        "position": { "x": 75, "y": 4, "z": 240 },
+        "scale": { "x": 1.5, "y": 2, "z": 1.5 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole7", "guardian"]
+      },
+      {
+        "id": "tree-h7-guardian-2",
+        "type": "tree",
+        "position": { "x": 90, "y": 4, "z": 245 },
+        "scale": { "x": 1.7, "y": 2.2, "z": 1.7 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole7", "guardian"]
+      },
+      {
+        "id": "tree-h7-guardian-3",
+        "type": "tree",
+        "position": { "x": 80, "y": 4, "z": 260 },
+        "scale": { "x": 1.4, "y": 1.9, "z": 1.4 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole7", "guardian"]
+      },
+      
+
+      {
+        "id": "lake-h8",
+        "type": "water",
+        "position": { "x": 50, "y": -6, "z": 300 },
+        "scale": { "x": 80, "y": 1, "z": 50 },
+        "visualProperties": {
+          "color": "#1E90FF",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole8"],
+        "properties": {
+          "depth": 4,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "peninsula-h8",
+        "type": "fairway",
+        "position": { "x": 15, "y": 0, "z": 300 },
+        "scale": { "x": 20, "y": 1, "z": 20 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["fairway", "hole8"]
+      },
+      {
+        "id": "tree-h8-obstacle-1",
+        "type": "tree",
+        "position": { "x": 65, "y": 0, "z": 270 },
+        "scale": { "x": 2.5, "y": 3, "z": 2.5 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole8"]
+      },
+      {
+        "id": "tree-h8-obstacle-2",
+        "type": "tree",
+        "position": { "x": 40, "y": 0, "z": 280 },
+        "scale": { "x": 2, "y": 2.8, "z": 2 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole8"]
+      },
+      
+
+      {
+        "id": "hill-h9",
+        "type": "fairway",
+        "position": { "x": 35, "y": 10, "z": 420 },
+        "scale": { "x": 30, "y": 15, "z": 30 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole9"]
+      },
+      {
+        "id": "rock-formation-h9",
+        "type": "rock",
+        "position": { "x": 35, "y": 13, "z": 420 },
+        "scale": { "x": 15, "y": 5, "z": 15 },
+        "visualProperties": {
+          "color": "#808080",
+          "roughness": 0.9
+        },
+        "variant": "default",
+        "tags": ["rock", "hole9"]
+      },
+      {
+        "id": "tree-cluster-h9-1",
+        "type": "treeGroup",
+        "position": { "x": 50, "y": 8, "z": 380 },
+        "scale": { "x": 12, "y": 2.5, "z": 12 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole9"],
+        "properties": {
+          "density": 0.8
+        }
+      },
+      {
+        "id": "tree-cluster-h9-2",
+        "type": "treeGroup",
+        "position": { "x": 20, "y": 8, "z": 380 },
+        "scale": { "x": 12, "y": 2.5, "z": 12 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole9"],
+        "properties": {
+          "density": 0.8
+        }
+      },
+      {
+        "id": "drop-off-h9",
+        "type": "heavyRough",
+        "position": { "x": 35, "y": 15, "z": 440 },
+        "scale": { "x": 40, "y": 1, "z": 20 },
+        "visualProperties": {
+          "color": "#2b5916",
+          "roughness": 0.95
+        },
+        "variant": "dense",
+        "tags": ["hazard", "hole9"],
+        "properties": {
+          "hazardType": "penalty",
+          "density": 0.9
+        }
+      },
+
+      {
+        "id": "tree-h10-obstacle-1",
+        "type": "tree",
+        "position": { "x": 120, "y": 5, "z": 410 },
+        "scale": { "x": 2.8, "y": 3.2, "z": 2.8 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole10"]
+      },
+      {
+        "id": "tree-h10-obstacle-2",
+        "type": "tree",
+        "position": { "x": 140, "y": 2, "z": 450 },
+        "scale": { "x": 3, "y": 3.5, "z": 3 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole10"]
+      },
+      {
+        "id": "tree-h10-obstacle-3",
+        "type": "tree",
+        "position": { "x": 160, "y": 0, "z": 420 },
+        "scale": { "x": 2.5, "y": 3, "z": 2.5 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole10"]
+      },
+      {
+        "id": "hill-slope-h10",
+        "type": "fairway",
+        "position": { "x": 120, "y": 8, "z": 430 },
+        "scale": { "x": 120, "y": 20, "z": 30 },
+        "rotation": { "x": -20, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole10"]
+      },
+      
+
+      {
+        "id": "low-branch-hole11",
+        "type": "tree",
+        "position": { "x": 270, "y": 5, "z": 425 },
+        "scale": { "x": 3, "y": 1, "z": 3 },
+        "rotation": { "x": 90, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#8B4513"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole11", "mandatory"]
+      },
+      {
+        "id": "fallen-log-h11-1",
+        "type": "tree",
+        "position": { "x": 240, "y": -1, "z": 435 },
+        "scale": { "x": 2, "y": 0.5, "z": 0.5 },
+        "rotation": { "x": 0, "y": 45, "z": 0 },
+        "visualProperties": {
+          "color": "#8B4513"
+        },
+        "variant": "default",
+        "tags": ["obstacle", "hole11"]
+      },
+      {
+        "id": "fallen-log-h11-2",
+        "type": "tree",
+        "position": { "x": 290, "y": -1, "z": 420 },
+        "scale": { "x": 2.5, "y": 0.6, "z": 0.6 },
+        "rotation": { "x": 0, "y": 120, "z": 0 },
+        "visualProperties": {
+          "color": "#8B4513"
+        },
+        "variant": "default",
+        "tags": ["obstacle", "hole11"]
+      },
+      {
+        "id": "tree-canopy-h11",
+        "type": "treeGroup",
+        "position": { "x": 280, "y": 10, "z": 425 },
+        "scale": { "x": 150, "y": 1, "z": 60 },
+        "visualProperties": {
+          "color": "#004d00",
+          "opacity": 0.8
+        },
+        "variant": "sparse",
+        "tags": ["tree", "hole11"],
+        "properties": {
+          "density": 0.6
+        }
+      },
+ 
+      {
+        "id": "tree-h12-left-fairway",
+        "type": "treeGroup",
+        "position": { "x": 380, "y": -2, "z": 330 },
+        "scale": { "x": 20, "y": 2.5, "z": 30 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "sparse",
+        "tags": ["tree", "hole12"],
+        "properties": {
+          "density": 0.6
+        }
+      },
+      {
+        "id": "tree-h12-right-fairway",
+        "type": "treeGroup",
+        "position": { "x": 420, "y": -2, "z": 340 },
+        "scale": { "x": 10, "y": 2.5, "z": 25 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole12"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "plateau-h12",
+        "type": "fairway",
+        "position": { "x": 430, "y": 2, "z": 320 },
+        "scale": { "x": 20, "y": 4, "z": 20 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole12"]
+      },
+
+      {
+        "id": "tree-cluster-hole13",
+        "type": "treeGroup",
+        "position": { "x": 440, "y": 2, "z": 250 },
+        "scale": { "x": 20, "y": 2.5, "z": 20 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole13", "mandatory"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "pond-h13",
+        "type": "water",
+        "position": { "x": 385, "y": -5, "z": 190 },
+        "scale": { "x": 30, "y": 1, "z": 30 },
+        "visualProperties": {
+          "color": "#1E90FF",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole13"],
+        "properties": {
+          "depth": 2,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "slope-h13",
+        "type": "fairway",
+        "position": { "x": 420, "y": -1, "z": 250 },
+        "scale": { "x": 30, "y": 6, "z": 100 },
+        "rotation": { "x": 5, "y": 0, "z": -3 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole13"]
+      },
+ 
+      {
+        "id": "ravine-h14",
+        "type": "heavyRough",
+        "position": { "x": 385, "y": -6, "z": 185 },
+        "scale": { "x": 35, "y": 2, "z": 20 },
+        "visualProperties": {
+          "color": "#2b5916",
+          "roughness": 0.95
+        },
+        "variant": "dense",
+        "tags": ["hazard", "hole14"],
+        "properties": {
+          "hazardType": "penalty",
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-h14-guardian-1",
+        "type": "tree",
+        "position": { "x": 360, "y": -4, "z": 175 },
+        "scale": { "x": 1.8, "y": 2.2, "z": 1.8 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole14", "guardian"]
+      },
+      {
+        "id": "tree-h14-guardian-2",
+        "type": "tree",
+        "position": { "x": 345, "y": -4, "z": 190 },
+        "scale": { "x": 2, "y": 2.5, "z": 2 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole14", "guardian"]
+      },
+      {
+        "id": "tree-h14-guardian-3",
+        "type": "tree",
+        "position": { "x": 360, "y": -4, "z": 200 },
+        "scale": { "x": 1.6, "y": 2, "z": 1.6 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole14", "guardian"]
+      },
+      
+
+      {
+        "id": "elevation-changes-h15-1",
+        "type": "fairway",
+        "position": { "x": 300, "y": -2, "z": 150 },
+        "scale": { "x": 40, "y": 4, "z": 30 },
+        "rotation": { "x": -5, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole15"]
+      },
+      {
+        "id": "elevation-changes-h15-2",
+        "type": "fairway",
+        "position": { "x": 250, "y": 2, "z": 100 },
+        "scale": { "x": 40, "y": 6, "z": 30 },
+        "rotation": { "x": 5, "y": 0, "z": 0 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["elevation", "hole15"]
+      },
+      {
+        "id": "sand-trap-h15-1",
+        "type": "sand",
+        "position": { "x": 290, "y": -3, "z": 140 },
+        "scale": { "x": 16, "y": 1, "z": 16 },
+        "visualProperties": {
+          "color": "#F5DEB3"
+        },
+        "variant": "default",
+        "tags": ["sand", "hole15"],
+        "properties": {
+          "hazardType": "casual"
+        }
+      },
+      {
+        "id": "sand-trap-h15-2",
+        "type": "sand",
+        "position": { "x": 260, "y": 0, "z": 110 },
+        "scale": { "x": 16, "y": 1, "z": 16 },
+        "visualProperties": {
+          "color": "#F5DEB3"
+        },
+        "variant": "default",
+        "tags": ["sand", "hole15"],
+        "properties": {
+          "hazardType": "casual"
+        }
+      },
+      {
+        "id": "sand-trap-h15-3",
+        "type": "sand",
+        "position": { "x": 225, "y": -1, "z": 60 },
+        "scale": { "x": 16, "y": 1, "z": 16 },
+        "visualProperties": {
+          "color": "#F5DEB3"
+        },
+        "variant": "default",
+        "tags": ["sand", "hole15"],
+        "properties": {
+          "hazardType": "casual"
+        }
+      },
+      {
+        "id": "sand-trap-h15-4",
+        "type": "sand",
+        "position": { "x": 195, "y": -1, "z": 40 },
+        "scale": { "x": 16, "y": 1, "z": 16 },
+        "visualProperties": {
+          "color": "#F5DEB3"
+        },
+        "variant": "default",
+        "tags": ["sand", "hole15"],
+        "properties": {
+          "hazardType": "casual"
+        }
+      },
+      
+      {
+        "id": "pond-h16",
+        "type": "water",
+        "position": { "x": 220, "y": -6, "z": 0 },
+        "scale": { "x": 50, "y": 1, "z": 40 },
+        "visualProperties": {
+          "color": "#1E90FF",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole16"],
+        "properties": {
+          "depth": 3,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "right-guardian-tree-hole16",
+        "type": "tree",
+        "position": { "x": 230, "y": 0, "z": 10 },
+        "scale": { "x": 2.8, "y": 3.5, "z": 2.8 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole16", "mandatory"]
+      },
+      {
+        "id": "tree-tunnel-h17-left",
+        "type": "treeGroup",
+        "position": { "x": 170, "y": 0, "z": -80 },
+        "scale": { "x": 5, "y": 3, "z": 60 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole17"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-tunnel-h17-right",
+        "type": "treeGroup",
+        "position": { "x": 190, "y": 0, "z": -80 },
+        "scale": { "x": 5, "y": 3, "z": 60 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole17"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-tunnel-h17-corner-left",
+        "type": "treeGroup",
+        "position": { "x": 200, "y": 0, "z": -110 },
+        "scale": { "x": 30, "y": 3, "z": 10 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole17"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "tree-tunnel-h17-corner-right",
+        "type": "treeGroup",
+        "position": { "x": 170, "y": 0, "z": -110 },
+        "scale": { "x": 10, "y": 3, "z": 20 },
+        "visualProperties": {
+          "color": "#004d00"
+        },
+        "variant": "dense",
+        "tags": ["tree", "hole17"],
+        "properties": {
+          "density": 0.9
+        }
+      },
+      {
+        "id": "island-h18",
+        "type": "fairway",
+        "position": { "x": 345, "y": 0, "z": -200 },
+        "scale": { "x": 35, "y": 1, "z": 35 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["fairway", "hole18"]
+      },
+      {
+        "id": "water-h18",
+        "type": "water",
+        "position": { "x": 335, "y": -6, "z": -190 },
+        "scale": { "x": 70, "y": 1, "z": 70 },
+        "visualProperties": {
+          "color": "#1E90FF",
+          "opacity": 0.8
+        },
+        "variant": "default",
+        "tags": ["water", "hole18"],
+        "properties": {
+          "depth": 4,
+          "hazardType": "penalty"
+        }
+      },
+      {
+        "id": "layup-zone-h18",
+        "type": "fairway",
+        "position": { "x": 310, "y": 0, "z": -160 },
+        "scale": { "x": 20, "y": 1, "z": 20 },
+        "visualProperties": {
+          "color": "#7fba00"
+        },
+        "variant": "default",
+        "tags": ["fairway", "hole18"]
+      },
+      {
+        "id": "tree-h18-obstacle",
+        "type": "tree",
+        "position": { "x": 300, "y": 0, "z": -155 },
+        "scale": { "x": 2.2, "y": 2.8, "z": 2.2 },
+        "visualProperties": {
+          "color": "#004400"
+        },
+        "variant": "wide",
+        "tags": ["tree", "hole18"]
+      }
+    ]
+  }

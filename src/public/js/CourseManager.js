@@ -14,24 +14,44 @@ class CourseManager {
 
             // Convert course data to expected format
             const convertedCourseData = {
-                id: courseData.course_id,
+                id: courseData.course_id || courseData.id,
                 name: courseData.name,
-                metadata: courseData.metadata,
-                courseSize: courseData.courseSize,
-                holes: courseData.holes.map(hole => ({
-                    number: hole.holeNumber,
-                    par: hole.par,
-                    description: hole.description,
-                    basket: {
-                        position: hole.basket.position || { x: 0, y: 0, z: 0 },
-                        rotation: hole.basket.rotation || { x: 0, y: 0, z: 0 }
-                    },
-                    teeboxes: [{
-                        position: hole.teeboxes[0].position || { x: 0, y: 0, z: 0 },
-                        rotation: hole.teeboxes[0].rotation || { x: 0, y: 0, z: 0 },
-                        type: hole.teeboxes[0].type || 'recreational'
-                    }]
-                }))
+                metadata: courseData.metadata || {},
+                courseSize: courseData.courseSize || { width: 300, length: 400 },
+                holes: courseData.holes.map(hole => {
+                    // Handle both new schema and old schema formats
+                    if (hole.basket && hole.teebox) {
+                        // New schema format
+                        return {
+                            number: hole.holeNumber,
+                            par: hole.par,
+                            description: hole.description || '',
+                            basket: {
+                                position: hole.basket.position || { x: 0, y: 0, z: 0 },
+                                rotation: hole.basket.rotation || { x: 0, y: 0, z: 0 }
+                            },
+                            teebox: {
+                                position: hole.teebox.position || { x: 0, y: 0, z: 0 },
+                                rotation: hole.teebox.rotation || { x: 0, y: 0, z: 0 }
+                            }
+                        };
+                    } else {
+                        // Old schema format (x, z, teeX, teeZ)
+                        return {
+                            number: 1,
+                            par: 3,
+                            description: '',
+                            basket: {
+                                position: { x: hole.x || 0, y: 0, z: hole.z || 0 },
+                                rotation: { x: 0, y: 0, z: 0 }
+                            },
+                            teebox: {
+                                position: { x: hole.teeX || 0, y: 0, z: hole.teeZ || 0 },
+                                rotation: { x: 0, y: 0, z: 0 }
+                            }
+                        };
+                    }
+                })
             };
 
             // Clear current course if it exists
@@ -40,8 +60,8 @@ class CourseManager {
             // Create new course instance
             this.currentCourse = new Course(this.scene, convertedCourseData);
             
-            // Load terrain
-            if (window.terrainManager) {
+            // Load terrain if available
+            if (window.terrainManager && courseData.terrain) {
                 window.terrainManager.clearTerrain(); // Ensure terrain is cleared first
                 window.terrainManager.loadFromCourseData(courseData);
             }
@@ -95,9 +115,17 @@ class CourseManager {
     }
 
     validateCourseData(courseData) {
-        // Basic validation - check required fields
-        const requiredFields = ['course_id', 'name', 'metadata', 'courseSize', 'holes', 'terrain'];
-        return requiredFields.every(field => courseData.hasOwnProperty(field));
+        // Check if it's a static course from getCourseList()
+        if (courseData.id && courseData.name && Array.isArray(courseData.holes)) {
+            return true;
+        }
+        
+        // Check if it's a course from file (new schema)
+        if (courseData.course_id && courseData.name && Array.isArray(courseData.holes)) {
+            return true;
+        }
+        
+        return false;
     }
 
     getCurrentCourse() {
