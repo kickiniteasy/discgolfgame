@@ -292,6 +292,15 @@ class TerrainManager {
 
             // Handle different terrain types
             switch(terrain.constructor.type) {
+                case 'portal':
+                    // Use standard hitbox collision for portals
+                    const portalBox = new THREE.Box3().setFromObject(terrain.hitboxMesh);
+                    portalBox.expandByScalar(0.5); // Make hitbox slightly larger for better collision detection
+                    if (portalBox.containsPoint(position)) {
+                        return { collided: true, terrain: terrain, point: position.clone(), isPortal: true };
+                    }
+                    break;
+
                 case 'tree':
                     this.updateTreePhysics(terrain, deltaTime);
                     break;
@@ -363,5 +372,22 @@ class TerrainManager {
 
     updateTreePhysics(terrain, dt) {
         // Implementation of updateTreePhysics method
+    }
+
+    // Helper method to create and add terrain directly
+    addTerrain(type, options) {
+        const terrainData = {
+            id: crypto.randomUUID(),
+            type: type,
+            position: options.position,
+            rotation: options.rotation,
+            scale: options.scale,
+            properties: options.properties || {},
+            visualProperties: options.visualProperties || {},
+            variant: options.variant || 'default',
+            tags: options.tags || []
+        };
+        
+        return this.createTerrainFromData(terrainData);
     }
 } 

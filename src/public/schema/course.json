@@ -326,6 +326,7 @@
               "bush",
               "rock",
               "path",
+              "portal",
               "custom"
             ],
             "description": "Type of terrain feature"
@@ -421,6 +422,20 @@
                 "minimum": 0,
                 "maximum": 1,
                 "description": "Density for vegetation (rough, trees, bushes)"
+              },
+              "isEntry": {
+                "type": "boolean",
+                "description": "For portal type: true if this is an entry portal, false for exit portal"
+              },
+              "targetUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "For portal type: The URL to redirect to when an exit portal is hit"
+              },
+              "ref": {
+                "type": "string",
+                "format": "uri",
+                "description": "For portal type: The URL to return to when an entry portal is hit"
               }
             }
           }

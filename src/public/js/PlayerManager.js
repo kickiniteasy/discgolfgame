@@ -56,6 +56,8 @@ class PlayerManager {
         const urlParams = new URLSearchParams(window.location.search);
         const portalUsername = urlParams.get('username');
         const portalColor = urlParams.get('color');
+        const fromPortal = urlParams.get('portal') === 'true';
+        const refUrl = urlParams.get('ref');
 
         // Get saved color from localStorage or use portal color or default
         let playerColor = this.playerColors[0];
@@ -95,6 +97,26 @@ class PlayerManager {
             const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
             const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
             this.positionPlayersAtTeebox(teePosition, holePosition);
+
+            // If we came from a portal, create an entry portal behind the player
+            if (fromPortal && refUrl && window.terrainManager) {
+                const playerPos = this.getCurrentPlayer().position.clone();
+                // Position portal further back behind player
+                const portalPos = playerPos.clone().add(new THREE.Vector3(0, 0, -5)); // Changed from -2 to -5 units back
+                
+                // Create entry portal
+                const portalOptions = {
+                    position: portalPos,
+                    rotation: new THREE.Vector3(0, 0, 0), // Face away from player
+                    scale: new THREE.Vector3(1, 1, 1),
+                    properties: {
+                        isEntry: true,
+                        ref: refUrl
+                    }
+                };
+                
+                window.terrainManager.addTerrain('portal', portalOptions);
+            }
         }
         
         // Set first player as current and notify
@@ -121,10 +143,11 @@ class PlayerManager {
         }
 
         // Log portal parameters if they exist
-        if (urlParams.get('portal') === 'true') {
+        if (fromPortal) {
             console.log('Initialized player from portal:', {
                 username: username,
-                color: '#' + playerColor.toString(16).padStart(6, '0')
+                color: '#' + playerColor.toString(16).padStart(6, '0'),
+                refUrl: refUrl
             });
         }
     }

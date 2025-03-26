@@ -4,7 +4,14 @@ class PortalTerrain extends Terrain {
     createMesh() {
         // Determine if this is an entry or exit portal
         const isEntry = this.options.properties.isEntry || false;
-        const color = isEntry ? 0xff0000 : 0x00ff00; // Red for entry, green for exit
+        
+        // Use custom color if provided, otherwise use default red/green
+        let color;
+        if (this.options.visualProperties?.color) {
+            color = this.options.visualProperties.color;
+        } else {
+            color = isEntry ? 0xff0000 : 0x00ff00; // Default: Red for entry, green for exit
+        }
         
         // Create portal group
         this.mesh = new THREE.Group();
@@ -117,33 +124,55 @@ class PortalTerrain extends Terrain {
         }
     }
 
-    checkDiscCollision(disc) {
-        if (!disc || !disc.isFlying || !this.hitboxMesh) return false;
-
-        const box = new THREE.Box3().setFromObject(this.hitboxMesh);
-        box.expandByScalar(0.5);
-
-        if (box.containsPoint(disc.position)) {
-            this.handlePortalCollision();
-            return true;
-        }
-
-        return false;
-    }
-
     handlePortalCollision() {
         const isEntry = this.options.properties.isEntry;
+        console.log('Portal collision handling. Is entry portal:', isEntry);
+        
         if (isEntry && this.options.properties.ref) {
-            // Entry portal - redirect to ref
+            console.log('Redirecting to ref:', this.options.properties.ref);
             window.location.href = this.options.properties.ref;
         } else if (!isEntry && this.options.properties.targetUrl) {
+            console.log('Exit portal hit. Target URL:', this.options.properties.targetUrl);
             // Exit portal - redirect with parameters
             const params = new URLSearchParams();
             params.append('portal', 'true');
-            params.append('username', window.playerManager?.getCurrentPlayer()?.name || 'Player');
-            params.append('color', (window.playerManager?.getCurrentPlayer()?.color || '#ffffff').replace('#', ''));
+            
+            // Safely get player name
+            const currentPlayer = window.playerManager?.getCurrentPlayer();
+            const playerName = currentPlayer?.name || 'Player';
+            params.append('username', playerName);
+            
+            // Safely get player color and convert to hex string
+            let playerColor = '#ffffff';
+            if (currentPlayer?.color) {
+                // Handle both string and THREE.Color objects
+                if (typeof currentPlayer.color === 'string') {
+                    playerColor = currentPlayer.color;
+                } else if (currentPlayer.color.isColor) {
+                    playerColor = '#' + currentPlayer.color.getHexString();
+                }
+            }
+            params.append('color', playerColor.replace('#', ''));
+            
             params.append('ref', window.location.href);
-            window.location.href = this.options.properties.targetUrl + '?' + params.toString();
+
+            // Parse the target URL to handle existing query params and fragments
+            const targetUrlObj = new URL(this.options.properties.targetUrl);
+            
+            // Get existing search params if any
+            const existingParams = new URLSearchParams(targetUrlObj.search);
+            
+            // Merge our new params with existing ones
+            for (const [key, value] of params) {
+                existingParams.append(key, value);
+            }
+            
+            // Reconstruct the URL with all parameters and any existing fragment
+            targetUrlObj.search = existingParams.toString();
+            console.log('Redirecting to:', targetUrlObj.toString());
+            window.location.href = targetUrlObj.toString();
+        } else {
+            console.warn('Portal collision but no valid ref/targetUrl found:', this.options.properties);
         }
     }
 }

@@ -198,6 +198,17 @@ class Disc {
         if (window.terrainManager) {
             const collision = window.terrainManager.checkCollision(this.position);
             if (collision.collided) {
+                if (collision.isPortal) {
+                    console.log('Portal collision detected!');
+                    // Let the portal handle the collision
+                    collision.terrain.handlePortalCollision();
+                    // Remove the disc since we're teleporting
+                    this.remove();
+                    window.gameState.currentDisc = null;
+                    return;
+                }
+                
+                // Handle regular collision
                 // Move back to previous position
                 this.position.copy(previousPosition);
                 
