@@ -214,17 +214,19 @@ canvas {
 }
 
 .tab-button {
-    background-color: #333;
-    color: white;
+    background-color: #f1f1f1;
     border: none;
     padding: 10px 20px;
-    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.3s;
+}
+
+.tab-button:hover {
+    background-color: #ddd;
 }
 
 .tab-button.active {
-    background-color: #666;
+    background-color: #ccc;
 }
 
 .tab {
@@ -512,6 +514,74 @@ canvas {
 #settings-button img {
     width: 24px;
     height: 24px;
+}
+
+/* Stats.js panel */
+#stats-panel {
+    position: fixed;
+    top: 0px;
+    cursor: pointer;
+    opacity: 0.9;
+    z-index: 10000;
+    display: none;
+}
+
+#stats-panel canvas {
+    cursor: pointer;
+}
+
+/* Dev Button and Section */
+.dev-button {
+    font-size: 12px !important;
+    padding: 4px 8px !important;
+    opacity: 0.7;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    margin-left: 10px;
+}
+
+.dev-button:hover {
+    opacity: 1;
+    background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.version-section {
+    flex: 0 0 auto;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.8em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+#dev-tab .settings-container {
+    padding: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+}
+
+#dev-tab .setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    color: white;
+}
+
+#dev-tab .setting-item label {
+    margin-right: 10px;
+}
+
+#dev-tab .setting-item input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
 }
 
 /* Settings Modal Specific */

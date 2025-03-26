@@ -16,6 +16,7 @@
     <script src="https://unpkg.com/fflate/umd/index.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/stats.min.js"></script>
     <script src="js/Sky.js"></script>
     <script src="js/UI.js"></script>
     <script src="js/Terrain.js"></script>
@@ -189,16 +190,28 @@
                                 <button id="save-course" class="secondary-button">Save Course</button>
                             </div>
 
-                            <h3 class="section-title">Course Settings</h3>
-                            <div class="form-group">
-                                <label class="checkbox-label">
+                            <div class="course-info">
+                                <p>You can create your own courses using any SVG editor like Inkscape or Adobe Illustrator.</p>
+                                <p>Export as SVG and upload here, or copy/paste the JSON data directly.</p>
+                            </div>
+                        </div>
+                        <div id="dev-tab" class="tab">
+                            <div class="settings-container">
+                                <div class="setting-item">
+                                    <label for="show-hitboxes">Show Hitboxes</label>
                                     <input type="checkbox" id="show-hitboxes">
-                                    Show Hitboxes
-                                </label>
+                                </div>
+                                <div class="setting-item">
+                                    <label for="show-fps">Show FPS Counter</label>
+                                    <input type="checkbox" id="show-fps">
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="version-section">Version: <span id="app-version"></span></div>
+                    <div class="version-section">
+                        Version: <span id="app-version"></span>
+                        <button class="dev-button tab-button" data-tab="dev">Dev</button>
+                    </div>
                 </div>
             </div>
         </div>

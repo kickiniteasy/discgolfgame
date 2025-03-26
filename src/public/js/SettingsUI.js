@@ -70,6 +70,11 @@ class SettingsUI {
         
         // Add the reset buttons container after the player settings list
         this.playerSettingsList.parentNode.insertBefore(resetButtonsContainer, this.playerSettingsList.nextSibling);
+
+        this.initializeDevControls();
+
+        // Set initial tab
+        this.switchTab('players');
     }
 
     createConfirmationModal() {
@@ -142,18 +147,27 @@ class SettingsUI {
     }
 
     initializeEventListeners() {
-        // Settings button
-        this.settingsButton.addEventListener('click', () => this.showModal());
-        this.closeButton.addEventListener('click', () => this.hideModal());
-        this.settingsModal.addEventListener('click', e => {
-            if (e.target === this.settingsModal) this.hideModal();
-        });
+        // Close button event
+        this.closeButton.addEventListener('click', () => this.closeModal());
 
-        // Tab switching
+        // Settings button event
+        this.settingsButton.addEventListener('click', () => this.openModal());
+
+        // Tab button events
         this.tabButtons = this.settingsModal.querySelectorAll('.tab-button');
         this.tabs = this.settingsModal.querySelectorAll('.tab');
         this.tabButtons.forEach(button => {
-            button.addEventListener('click', () => this.switchTab(button.dataset.tab));
+            button.addEventListener('click', () => {
+                const tabId = button.dataset.tab;
+                this.switchTab(tabId);
+            });
+        });
+
+        // Close modal when clicking outside
+        window.addEventListener('click', (event) => {
+            if (event.target === this.settingsModal) {
+                this.closeModal();
+            }
         });
 
         // Save players button
@@ -169,6 +183,9 @@ class SettingsUI {
         this.loadJsonButton.addEventListener('click', () => this.handleLoadCourseJson());
         this.copyCourseButton.addEventListener('click', () => this.handleCopyCourse());
         this.saveCourseButton.addEventListener('click', () => this.handleSaveCourse());
+
+        // Initialize dev controls
+        this.initializeDevControls();
     }
 
     validateTwitterHandle(name) {
@@ -436,7 +453,7 @@ class SettingsUI {
             });
         }
         
-        this.hideModal();
+        this.closeModal();
         if (anyChanges) {
             this.showMessage('Player settings saved!', 'success');
         }
@@ -477,7 +494,7 @@ class SettingsUI {
         const success = await this.courseManager.loadCourseFromFile(courseId);
         if (success) {
             this.showMessage('Course loaded successfully!', 'success');
-            this.hideModal();
+            this.closeModal();
         } else {
             this.showMessage('Failed to load course.', 'error');
         }
@@ -493,7 +510,7 @@ class SettingsUI {
         const success = await this.courseManager.loadCourseFromURL(url);
         if (success) {
             this.showMessage('Course loaded successfully!', 'success');
-            this.hideModal();
+            this.closeModal();
         } else {
             this.showMessage('Failed to load course from URL.', 'error');
         }
@@ -526,7 +543,7 @@ class SettingsUI {
 
             if (success) {
                 this.showMessage('Course loaded successfully!', 'success');
-                this.hideModal();
+                this.closeModal();
             } else {
                 this.showMessage('Failed to load course from file.', 'error');
             }
@@ -546,7 +563,7 @@ class SettingsUI {
         const success = await this.courseManager.loadCourseFromJSON(jsonText);
         if (success) {
             this.showMessage('Course loaded successfully!', 'success');
-            this.hideModal();
+            this.closeModal();
         } else {
             this.showMessage('Failed to load course from JSON.', 'error');
         }
@@ -570,19 +587,21 @@ class SettingsUI {
         }
     }
 
-    showModal() {
+    openModal() {
         this.updatePlayersList();
         
         // Update version display
         const versionElement = document.getElementById('app-version');
         if (versionElement && window.APP_VERSION) {
             versionElement.textContent = window.APP_VERSION;
+        } else {
+            versionElement.textContent = 'Dev Build';
         }
         
         this.settingsModal.style.display = 'block';
     }
 
-    hideModal() {
+    closeModal() {
         this.settingsModal.style.display = 'none';
         
         // Clear course inputs
@@ -784,5 +803,31 @@ class SettingsUI {
         this.settingsContainer.appendChild(settingContainer);
 
         return input;
+    }
+
+    initializeDevControls() {
+        // Get the checkboxes
+        const hitboxCheckbox = document.getElementById('show-hitboxes');
+        const fpsCheckbox = document.getElementById('show-fps');
+
+        // Set initial state and add event listener for hitboxes
+        if (hitboxCheckbox) {
+            hitboxCheckbox.checked = window.gameState.showHitboxes;
+            hitboxCheckbox.addEventListener('change', (e) => {
+                window.gameState.showHitboxes = e.target.checked;
+                window.terrainManager.setAllHitboxesVisibility(e.target.checked);
+            });
+        }
+
+        // Set initial state and add event listener for FPS counter
+        if (fpsCheckbox) {
+            fpsCheckbox.checked = false; // Default to off
+            fpsCheckbox.addEventListener('change', (e) => {
+                const statsPanel = document.getElementById('stats-panel');
+                if (statsPanel) {
+                    statsPanel.style.display = e.target.checked ? 'block' : 'none';
+                }
+            });
+        }
     }
 } 

@@ -31,6 +31,12 @@ async function initGame() {
     // Initialize scene
     const scene = new THREE.Scene();
 
+    // Initialize stats
+    const stats = new Stats();
+    stats.dom.id = 'stats-panel';
+    stats.dom.style.display = 'none'; // Hide by default
+    document.body.appendChild(stats.dom);
+
     // Initialize managers first
     try {
         // Initialize UI first
@@ -213,6 +219,9 @@ async function initGame() {
         // Animation loop
         function animate() {
             requestAnimationFrame(animate);
+
+            // Update stats
+            stats.update();
 
             // Update game state
             if (window.gameState.throwing) {
