@@ -5,10 +5,14 @@ class CameraController {
         this.controls = new THREE.OrbitControls(camera, domElement);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
-        this.controls.screenSpacePanning = false;
+        this.controls.screenSpacePanning = true;
         this.controls.minDistance = 5;
-        this.controls.maxDistance = 50;
-        this.controls.maxPolarAngle = Math.PI / 2;
+        this.controls.maxDistance = 100;
+        this.controls.maxPolarAngle = Math.PI / 1.5;
+        this.controls.panSpeed = 1.0;
+        this.controls.rotateSpeed = 0.8;
+        this.controls.zoomSpeed = 1.2;
+        this.controls.enablePan = true;
 
         // Animation state
         this.isAnimating = false;

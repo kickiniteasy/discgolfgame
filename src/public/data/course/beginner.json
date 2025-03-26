@@ -25,20 +25,20 @@
             "description": "Straight shot with a gentle downhill slope. Perfect for learning proper form.",
             "teeboxes": [
                 {
-                    "position": { "x": 0, "y": 0, "z": -80 },
+                    "position": { "x": 0, "y": 0, "z": 0 },
                     "rotation": { "x": 0, "y": 0, "z": 0 },
                     "type": "recreational"
                 }
             ],
             "basket": {
-                "position": { "x": 0, "y": -2, "z": -100 }
+                "position": { "x": 0, "y": -2, "z": 20 }
             },
             "mandatories": [],
             "outOfBounds": [],
             "fairway": {
                 "shape": [
-                    { "x": 0, "z": -80 },
-                    { "x": 0, "z": -100 }
+                    { "x": 0, "z": 0 },
+                    { "x": 0, "z": 20 }
                 ],
                 "width": 15
             }
@@ -49,20 +49,20 @@
             "description": "Gentle right turn with scattered trees. Teaches controlled throws around obstacles.",
             "teeboxes": [
                 {
-                    "position": { "x": 80, "y": 0, "z": -50 },
+                    "position": { "x": 30, "y": 0, "z": 0 },
                     "rotation": { "x": 0, "y": 90, "z": 0 },
                     "type": "recreational"
                 }
             ],
             "basket": {
-                "position": { "x": 100, "y": 0, "z": -50 }
+                "position": { "x": 50, "y": 0, "z": 0 }
             },
             "mandatories": [],
             "outOfBounds": [],
             "fairway": {
                 "shape": [
-                    { "x": 80, "z": -50 },
-                    { "x": 100, "z": -50 }
+                    { "x": 30, "z": 0 },
+                    { "x": 50, "z": 0 }
                 ],
                 "width": 15
             }
@@ -73,20 +73,20 @@
             "description": "Slight left turn with a small elevation change. Introduces uphill putting.",
             "teeboxes": [
                 {
-                    "position": { "x": -60, "y": 0, "z": -120 },
+                    "position": { "x": 30, "y": 0, "z": 30 },
                     "rotation": { "x": 0, "y": 270, "z": 0 },
                     "type": "recreational"
                 }
             ],
             "basket": {
-                "position": { "x": -80, "y": 1, "z": -120 }
+                "position": { "x": 10, "y": 1, "z": 30 }
             },
             "mandatories": [],
             "outOfBounds": [],
             "fairway": {
                 "shape": [
-                    { "x": -60, "z": -120 },
-                    { "x": -80, "z": -120 }
+                    { "x": 30, "z": 30 },
+                    { "x": 10, "z": 30 }
                 ],
                 "width": 15
             }
@@ -96,7 +96,7 @@
         {
             "id": "fairway-1",
             "type": "fairway",
-            "position": { "x": 0, "y": 0.1, "z": -90 },
+            "position": { "x": 0, "y": 0.1, "z": 10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 20, "y": 1, "z": 30 },
             "visualProperties": {
@@ -109,7 +109,7 @@
         {
             "id": "fairway-2",
             "type": "fairway",
-            "position": { "x": 90, "y": 0.1, "z": -50 },
+            "position": { "x": 40, "y": 0.1, "z": 0 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 30, "y": 1, "z": 20 },
             "visualProperties": {
@@ -122,7 +122,7 @@
         {
             "id": "fairway-3",
             "type": "fairway",
-            "position": { "x": -70, "y": 0.1, "z": -120 },
+            "position": { "x": 20, "y": 0.1, "z": 30 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 30, "y": 1, "z": 20 },
             "visualProperties": {
@@ -135,7 +135,7 @@
         {
             "id": "rough-1",
             "type": "rough",
-            "position": { "x": 0, "y": 0.1, "z": -90 },
+            "position": { "x": 0, "y": 0.1, "z": 10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 40, "y": 1, "z": 50 },
             "visualProperties": {
@@ -148,7 +148,7 @@
         {
             "id": "tree-group-1",
             "type": "treeGroup",
-            "position": { "x": 85, "y": 0, "z": -60 },
+            "position": { "x": 35, "y": 0, "z": -10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "variant": "sparse",
@@ -157,7 +157,7 @@
         {
             "id": "tree-group-2",
             "type": "treeGroup",
-            "position": { "x": 95, "y": 0, "z": -40 },
+            "position": { "x": 45, "y": 0, "z": 10 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "variant": "sparse",
@@ -166,14 +166,14 @@
         {
             "id": "bush-1",
             "type": "bush",
-            "position": { "x": -5, "y": 0, "z": -85 },
+            "position": { "x": -5, "y": 0, "z": 5 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
         },
         {
             "id": "bush-2",
             "type": "bush",
-            "position": { "x": 5, "y": 0, "z": -95 },
+            "position": { "x": 5, "y": 0, "z": 15 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 1.2, "y": 1.2, "z": 1.2 }
         }

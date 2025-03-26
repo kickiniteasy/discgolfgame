@@ -440,6 +440,15 @@ class PlayerManager {
 
         const activePlayer = isNewHole ? this.players[0] : this.getCurrentPlayer();
         
+        // Calculate direction from tee to hole
+        const teeToHole = new THREE.Vector2(
+            holePosition.x - teePosition.x,
+            holePosition.z - teePosition.z
+        ).normalize();
+        
+        // Calculate the back direction (opposite of tee-to-hole)
+        const backDirection = teeToHole.clone().multiplyScalar(-1);
+        
         this.players.forEach((player, index) => {
             if (player === activePlayer) {
                 // Active player stays on the tee
@@ -460,11 +469,12 @@ class PlayerManager {
             } else {
                 // Position other players in a relaxed formation behind the tee
                 const backOffset = 2; // Fixed distance behind the tee
-                const sideSpread = 0.6; // Gentler side spread
+                const sideSpread = 0.6; // Gentle side spread
                 
-                // Spread players slightly side to side behind the tee
-                const xPosition = teePosition.x + ((index - 1) * sideSpread - sideSpread);
-                const zPosition = teePosition.z + backOffset;
+                // Calculate position behind the tee based on direction to hole
+                const xOffset = ((index - 1) * sideSpread - sideSpread);
+                const xPosition = teePosition.x + (backDirection.x * backOffset) + xOffset;
+                const zPosition = teePosition.z + (backDirection.y * backOffset);
                 
                 player.moveToPosition(new THREE.Vector3(
                     xPosition,
