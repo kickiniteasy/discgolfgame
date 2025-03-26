@@ -206,7 +206,40 @@ class FairwayTerrain extends Terrain {
     
     createMesh() {
         const geometry = new THREE.PlaneGeometry(1, 1);
+        
+        // Load textures
+        const textureLoader = new THREE.TextureLoader();
+        const fairwayTexture = textureLoader.load(
+            'textures/fairway/fairway_diffuse.png',
+            undefined,
+            undefined,
+            (error) => console.error('Error loading fairway texture:', error)
+        );
+        const fairwayNormal = textureLoader.load(
+            'textures/fairway/fairway_normal.png',
+            undefined,
+            undefined,
+            (error) => console.error('Error loading fairway normal map:', error)
+        );
+        
+        // Configure texture settings
+        fairwayTexture.wrapS = fairwayTexture.wrapT = THREE.RepeatWrapping;
+        fairwayTexture.repeat.set(1, 1);
+        fairwayTexture.anisotropy = 4;
+        fairwayTexture.magFilter = THREE.LinearFilter;
+        fairwayTexture.minFilter = THREE.LinearMipmapLinearFilter;
+        fairwayTexture.encoding = THREE.sRGBEncoding;
+        
+        fairwayNormal.wrapS = fairwayNormal.wrapT = THREE.RepeatWrapping;
+        fairwayNormal.repeat.set(1, 1);
+        fairwayNormal.anisotropy = 4;
+        fairwayNormal.magFilter = THREE.LinearFilter;
+        fairwayNormal.minFilter = THREE.LinearMipmapLinearFilter;
+        
         const material = new THREE.MeshStandardMaterial({
+            map: fairwayTexture,
+            normalMap: fairwayNormal,
+            normalScale: new THREE.Vector2(0.8, 0.8),
             color: 0x90EE90,
             roughness: 0.8,
             metalness: 0.1
@@ -214,6 +247,25 @@ class FairwayTerrain extends Terrain {
         
         this.applyVisualProperties(material);
         this.mesh = new THREE.Mesh(geometry, material);
+        
+        // Update texture repeat based on scale
+        this.updateTextureRepeat();
+    }
+    
+    applyTransforms() {
+        super.applyTransforms();
+        this.updateTextureRepeat();
+    }
+    
+    updateTextureRepeat() {
+        if (!this.mesh?.material?.map || !this.mesh?.material?.normalMap) return;
+        
+        // Set repeat based on scale (1 repeat per 5 units, similar to ground plane)
+        const repeatX = this.options.scale.x / 5;
+        const repeatY = this.options.scale.z / 5;
+        
+        this.mesh.material.map.repeat.set(repeatX, repeatY);
+        this.mesh.material.normalMap.repeat.set(repeatX, repeatY);
     }
 }
 

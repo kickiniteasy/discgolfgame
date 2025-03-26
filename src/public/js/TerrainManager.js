@@ -3,6 +3,7 @@ class TerrainManager {
         this.scene = scene;
         this.terrainObjects = new Map(); // Using Map to store terrain by ID
         this.groundPlane = null;
+        this.textureLoader = new THREE.TextureLoader();
         this.registerTerrainTypes();
     }
 
@@ -20,11 +21,59 @@ class TerrainManager {
         const width = courseSize?.width || 300;
         const length = courseSize?.length || 400;
 
-        const geometry = new THREE.PlaneGeometry(width, length);
+        // Load textures with error handling
+        const grassTexture = this.textureLoader.load(
+            'textures/grass/grass_diffuse.png', // Changed to .png and removed leading slash
+            undefined,
+            undefined,
+            (error) => console.error('Error loading grass texture:', error)
+        );
+        const grassNormal = this.textureLoader.load(
+            'textures/grass/grass_normal.png', // Changed to .png and removed leading slash
+            undefined,
+            undefined,
+            (error) => console.error('Error loading normal map:', error)
+        );
+        
+        console.log('Loading textures:', {
+            grassTexture: grassTexture,
+            grassNormal: grassNormal
+        });
+        
+        // Configure texture repeat based on size
+        const repeatX = width / 5; // More detailed grass (reduced from 10)
+        const repeatY = length / 5;
+        
+        // Configure texture settings for better quality
+        grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping;
+        grassTexture.repeat.set(repeatX, repeatY);
+        grassTexture.anisotropy = 4; // Reduced from 16 to ensure compatibility
+        grassTexture.magFilter = THREE.LinearFilter;
+        grassTexture.minFilter = THREE.LinearMipmapLinearFilter;
+        grassTexture.encoding = THREE.sRGBEncoding; // Proper color space
+        
+        grassNormal.wrapS = grassNormal.wrapT = THREE.RepeatWrapping;
+        grassNormal.repeat.set(repeatX, repeatY);
+        grassNormal.anisotropy = 4;
+        grassNormal.magFilter = THREE.LinearFilter;
+        grassNormal.minFilter = THREE.LinearMipmapLinearFilter;
+
+        const geometry = new THREE.PlaneGeometry(width, length, 32, 32);
         const material = new THREE.MeshStandardMaterial({
-            color: 0x355E3B, // Dark green base
-            roughness: 1.0,
-            metalness: 0.0
+            map: grassTexture,
+            normalMap: grassNormal,
+            normalScale: new THREE.Vector2(0.8, 0.8), // Reduced normal map effect
+            color: 0x7ea04d, // Adjusted green tint
+            roughness: 0.9,
+            metalness: 0.0,
+            envMapIntensity: 1.0 // Reset to default
+        });
+
+        // Log material setup
+        console.log('Ground material setup:', {
+            hasTexture: !!material.map,
+            hasNormalMap: !!material.normalMap,
+            color: material.color.getHexString()
         });
 
         this.groundPlane = new THREE.Mesh(geometry, material);

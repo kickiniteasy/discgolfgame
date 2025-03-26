@@ -30,7 +30,11 @@ async function initGame() {
 
     // Initialize scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x87ceeb); // Sky blue background
+    // Create sky
+    const sky = new Sky(scene, {
+        type: 'gradient',
+        sunPosition: new THREE.Vector3(100, 45, 0) // Sun at 45 degrees elevation
+    });
 
     // Initialize camera
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+    <!-- Base level (neutral gray) -->
+    <rect width="64" height="64" fill="#808080"/>
+    
+    <!-- Height map for grass blades (white = raised) -->
+    <g>
+        <!-- Tall blade -->
+        <path d="M10 64 C5 30 15 10 10 0 L15 64 Z" fill="white" opacity="0.8"/>
+        <!-- Medium blade -->
+        <path d="M30 64 C25 40 35 15 30 0 L35 64 Z" fill="white" opacity="0.7"/>
+        <!-- Short blade -->
+        <path d="M50 64 C45 50 55 20 50 0 L55 64 Z" fill="white" opacity="0.6"/>
+        <!-- Curved blade -->
+        <path d="M20 64 C15 45 25 25 15 0 L25 64 Z" fill="white" opacity="0.75"/>
+        <!-- Small blade -->
+        <path d="M40 64 C35 55 45 35 40 10 L45 64 Z" fill="white" opacity="0.65"/>
+    </g>
+</svg> 
