@@ -7,7 +7,6 @@ class Sky {
             courseSize: options.courseSize || { width: 300, length: 400 }
         };
         this.walls = [];
-        this.isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         this.createSky();
     }
 
@@ -20,59 +19,51 @@ class Sky {
     createPanoramaWalls() {
         const textureLoader = new THREE.TextureLoader();
         
-        // Create a simpler background for mobile
+        // Create a gradient background first
         const canvas = document.createElement('canvas');
-        canvas.width = this.isMobile ? 1 : 2; // Smaller for mobile
-        canvas.height = this.isMobile ? 256 : 512; // Reduced height for mobile
+        canvas.width = 2;
+        canvas.height = 512;
         const context = canvas.getContext('2d');
-        const gradient = context.createLinearGradient(0, 0, 0, canvas.height);
-        gradient.addColorStop(0, '#0077ff');
-        gradient.addColorStop(0.7, '#6eb5ff');
-        gradient.addColorStop(1, '#FFFFFF');
+        const gradient = context.createLinearGradient(0, 0, 0, 512);
+        gradient.addColorStop(0, '#0077ff'); // Deep sky blue
+        gradient.addColorStop(0.7, '#6eb5ff'); // Lighter blue
+        gradient.addColorStop(1, '#FFFFFF'); // White
         context.fillStyle = gradient;
-        context.fillRect(0, 0, canvas.width, canvas.height);
+        context.fillRect(0, 0, 2, 512);
         const backgroundTexture = new THREE.CanvasTexture(canvas);
-        backgroundTexture.minFilter = THREE.LinearFilter;
-        backgroundTexture.magFilter = THREE.LinearFilter;
-        backgroundTexture.generateMipmaps = false;
         this.scene.background = backgroundTexture;
         
-        // Use lower resolution texture for mobile
-        const textureUrl = this.isMobile ? 
-            this.options.textureUrl.replace('_4k', '_2k') : 
-            this.options.textureUrl;
-        
         textureLoader.load(
-            textureUrl,
+            this.options.textureUrl,
             (texture) => {
-                // Configure texture with mobile optimizations
+                // Configure texture
                 texture.minFilter = THREE.LinearFilter;
                 texture.magFilter = THREE.LinearFilter;
                 texture.generateMipmaps = false;
                 texture.needsUpdate = true;
                 
-                // Wall dimensions
+                // Wall dimensions - match course size exactly
                 const frontWidth = this.options.courseSize.width;
-                const wallHeight = this.isMobile ? 50 : 100; // Lower height for mobile
+                const wallHeight = 100;   // Height of all walls
                 const depth = this.options.courseSize.length;
                 
-                // Create gradient texture for alpha - simplified for mobile
+                // Create gradient texture for alpha
                 const gradientCanvas = document.createElement('canvas');
                 gradientCanvas.width = 1;
-                gradientCanvas.height = this.isMobile ? 256 : 512;
+                gradientCanvas.height = 512;
                 const gradientCtx = gradientCanvas.getContext('2d');
-                const alphaGradient = gradientCtx.createLinearGradient(0, 0, 0, gradientCanvas.height);
-                alphaGradient.addColorStop(0, 'rgba(255,255,255,0)');
-                alphaGradient.addColorStop(0.3, 'rgba(255,255,255,1)');
+                const alphaGradient = gradientCtx.createLinearGradient(0, 0, 0, 512);
+                alphaGradient.addColorStop(0, 'rgba(255,255,255,0)'); // Transparent at top
+                alphaGradient.addColorStop(0.3, 'rgba(255,255,255,1)'); // Solid at bottom
                 gradientCtx.fillStyle = alphaGradient;
-                gradientCtx.fillRect(0, 0, 1, gradientCanvas.height);
+                gradientCtx.fillRect(0, 0, 1, 512);
                 const alphaMap = new THREE.CanvasTexture(gradientCanvas);
                 alphaMap.needsUpdate = true;
                 
-                // Create a single material instance to be shared
+                // Material that won't cast or receive shadows
                 const wallMaterial = new THREE.MeshBasicMaterial({
                     map: texture,
-                    side: this.isMobile ? THREE.FrontSide : THREE.DoubleSide, // Single-sided for mobile
+                    side: THREE.DoubleSide,
                     depthWrite: false,
                     transparent: true,
                     alphaMap: alphaMap
@@ -80,31 +71,41 @@ class Sky {
                 
                 // Create walls
                 const walls = [];
-                const yOffset = wallHeight / 2;
                 
-                // Create wall geometries
-                const frontGeometry = new THREE.PlaneGeometry(frontWidth, wallHeight);
-                const sideGeometry = new THREE.PlaneGeometry(depth, wallHeight);
+                // Position walls exactly at ground level
+                const yOffset = wallHeight / 2;  // Center point of wall height
                 
                 // North wall (front)
-                const northWall = new THREE.Mesh(frontGeometry, wallMaterial);
+                const northWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(frontWidth, wallHeight),
+                    wallMaterial.clone()
+                );
                 northWall.position.set(0, yOffset, -depth/2);
                 walls.push(northWall);
                 
                 // South wall (back)
-                const southWall = new THREE.Mesh(frontGeometry, wallMaterial);
+                const southWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(frontWidth, wallHeight),
+                    wallMaterial.clone()
+                );
                 southWall.position.set(0, yOffset, depth/2);
                 southWall.rotation.y = Math.PI;
                 walls.push(southWall);
                 
                 // East wall (right)
-                const eastWall = new THREE.Mesh(sideGeometry, wallMaterial);
+                const eastWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(depth, wallHeight),
+                    wallMaterial.clone()
+                );
                 eastWall.position.set(frontWidth/2, yOffset, 0);
                 eastWall.rotation.y = -Math.PI/2;
                 walls.push(eastWall);
                 
                 // West wall (left)
-                const westWall = new THREE.Mesh(sideGeometry, wallMaterial);
+                const westWall = new THREE.Mesh(
+                    new THREE.PlaneGeometry(depth, wallHeight),
+                    wallMaterial.clone()
+                );
                 westWall.position.set(-frontWidth/2, yOffset, 0);
                 westWall.rotation.y = Math.PI/2;
                 walls.push(westWall);
@@ -116,7 +117,9 @@ class Sky {
                     this.walls.push(wall);
                 });
             },
-            undefined,
+            (progress) => {
+                // Optional: Handle progress silently
+            },
             (error) => {
                 console.error('Error loading wall texture:', error);
             }
