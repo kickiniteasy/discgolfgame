@@ -45,10 +45,10 @@ class Sky {
                 texture.generateMipmaps = false;
                 texture.needsUpdate = true;
                 
-                // Wall dimensions
-                const frontWidth = 1000;  // Width of front/back walls
-                const wallHeight = 500;   // Height of all walls
-                const depth = 800;        // Distance between front and back walls
+                // Wall dimensions - match ground plane size exactly
+                const frontWidth = 300;  // Width of front/back walls (matches ground plane width)
+                const wallHeight = 100;   // Height of all walls - reduced to be more proportional
+                const depth = 400;        // Distance between front and back walls (matches ground plane length)
                 
                 // Create gradient texture for alpha
                 const gradientCanvas = document.createElement('canvas');
@@ -75,8 +75,8 @@ class Sky {
                 // Create walls
                 const walls = [];
                 
-                // Calculate Y position to align with horizon
-                const yOffset = wallHeight * 0.15; // Only show 85% of the wall above ground
+                // Position walls exactly at ground level
+                const yOffset = wallHeight / 2;  // Center point of wall height
                 
                 // North wall (front)
                 const northWall = new THREE.Mesh(

@@ -7,7 +7,7 @@ class Player {
         this.bag = new Bag(); // Each player has their own bag
         this.score = 0;
         this.throws = 0;
-        this.position = new THREE.Vector3(0, 0.5, 0);
+        this.position = new THREE.Vector3(0, 0.5, 0); // Base height for player when not on teebox
         this.isCurrentTurn = false;
         this.hasCompletedHole = false;
         this.lastDiscPosition = null; // Track where their disc landed
@@ -19,7 +19,7 @@ class Player {
         ];
         
         // Create player model
-        const geometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32);
+        const geometry = new THREE.CylinderGeometry(0.2, 0.2, 1, 32); // Made player taller (1 unit)
         const material = new THREE.MeshStandardMaterial({ color: this.color });
         this.model = new THREE.Mesh(geometry, material);
         this.model.castShadow = true;

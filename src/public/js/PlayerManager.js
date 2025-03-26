@@ -151,7 +151,7 @@ class PlayerManager {
             
             player.moveToPosition(new THREE.Vector3(
                 xPosition,
-                0.25, // Lower height for waiting players
+                0.5, // Base height when not on teebox
                 zPosition
             ));
 
@@ -209,7 +209,7 @@ class PlayerManager {
                 
                 currentPlayer.moveToPosition(new THREE.Vector3(
                     xPosition,
-                    0.25, // Lower height for waiting players
+                    0.5, // Base height when not on teebox
                     zPosition
                 ));
                 
@@ -328,7 +328,7 @@ class PlayerManager {
                             
                             player.moveToPosition(new THREE.Vector3(
                                 xPosition,
-                                0.25,
+                                0.5, // Base height when not on teebox
                                 zPosition
                             ));
                         }
@@ -337,7 +337,7 @@ class PlayerManager {
                     // Move next player to tee
                     nextPlayer.moveToPosition(new THREE.Vector3(
                         teePosition.x,
-                        0.5,
+                        0.7, // Position player above teebox (0.2 teebox height + 0.5 base height)
                         teePosition.z
                     ));
 
@@ -354,7 +354,7 @@ class PlayerManager {
         } else if (nextPlayer.lastDiscPosition) {
             // Not first throw - move to last disc position but maintain player height
             const discPos = nextPlayer.lastDiscPosition.clone();
-            discPos.y = 0.5; // Keep player at consistent height above ground
+            discPos.y = 0.5; // Base height when not on teebox
             nextPlayer.moveToPosition(discPos);
 
             // Update distance from last disc position
@@ -405,7 +405,7 @@ class PlayerManager {
         this.players.forEach((player, index) => {
             player.moveToPosition(new THREE.Vector3(
                 startX + (index * spacing),
-                0.5,
+                0.5, // Base height when not on teebox
                 0
             ));
         });
@@ -454,7 +454,7 @@ class PlayerManager {
                 // Active player stays on the tee
                 player.moveToPosition(new THREE.Vector3(
                     teePosition.x,
-                    0.5, // Standard height
+                    0.7, // Position player above teebox (0.2 teebox height + 0.5 base height)
                     teePosition.z
                 ));
 
@@ -478,7 +478,7 @@ class PlayerManager {
                 
                 player.moveToPosition(new THREE.Vector3(
                     xPosition,
-                    0.25, // Lower height to simulate sitting/crouching
+                    0.5, // Base height when not on teebox
                     zPosition
                 ));
             }
@@ -548,7 +548,7 @@ class PlayerManager {
                 // Position first player at teebox
                 firstPlayer.moveToPosition(new THREE.Vector3(
                     teePosition.x,
-                    0.5,
+                    0.7, // Position player above teebox (0.2 teebox height + 0.5 base height)
                     teePosition.z
                 ));
                 
@@ -636,7 +636,7 @@ class PlayerManager {
                         
                         p.moveToPosition(new THREE.Vector3(
                             xPosition,
-                            0.25,
+                            0.5, // Base height when not on teebox
                             zPosition
                         ));
                     }
@@ -645,7 +645,7 @@ class PlayerManager {
                 // Position next player at teebox
                 nextPlayer.moveToPosition(new THREE.Vector3(
                     teePosition.x,
-                    0.5,
+                    0.7, // Position player above teebox (0.2 teebox height + 0.5 base height)
                     teePosition.z
                 ));
                 
@@ -671,7 +671,7 @@ class PlayerManager {
             } else {
                 // If not repositioning to teebox, just adjust height and create new disc
                 const currentPos = nextPlayer.position.clone();
-                currentPos.y = 0.5; // Set to standard player height
+                currentPos.y = 0.5; // Base height when not on teebox
                 nextPlayer.moveToPosition(currentPos);
                 
                 if (window.gameState) {
