@@ -60,6 +60,11 @@ class CourseManager {
             // Create new course instance
             this.currentCourse = new Course(this.scene, convertedCourseData);
             
+            // Update sky with new course size if it exists
+            if (window.sky) {
+                window.sky.updateCourseSize(convertedCourseData.courseSize);
+            }
+            
             // Load terrain if available
             if (window.terrainManager && courseData.terrain) {
                 window.terrainManager.clearTerrain(); // Ensure terrain is cleared first
@@ -273,10 +278,36 @@ class CourseManager {
             discInHand: true
         };
 
-        // Reinitialize portals
+        // Clear existing portals
         if (window.portalManager) {
             window.portalManager.removeAllPortals();
-            window.portalManager.initialize();
         }
+    }
+
+    clearCourse() {
+        // Remove all terrain
+        if (window.terrainManager) {
+            window.terrainManager.clearTerrain();
+        }
+
+        // Remove all baskets
+        this.baskets.forEach(basket => {
+            if (basket.mesh) {
+                this.scene.remove(basket.mesh);
+            }
+        });
+        this.baskets = [];
+
+        // Remove all teeboxes
+        this.teeboxes.forEach(teebox => {
+            if (teebox.mesh) {
+                this.scene.remove(teebox.mesh);
+            }
+        });
+        this.teeboxes = [];
+
+        // Reset hole number
+        window.gameState.currentHole = 1;
+        this.updateUI();
     }
 } 

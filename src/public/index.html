@@ -9,10 +9,15 @@
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
     <script src="js/Sky.js"></script>
     <script src="js/UI.js"></script>
     <script src="js/Terrain.js"></script>
-    <script src="js/Portal.js"></script>
+    <script src="js/PortalTerrain.js"></script>
     <script src="js/Disc.js"></script>
     <script src="js/Hole.js"></script>
     <script src="js/Teebox.js"></script>
@@ -24,9 +29,9 @@
     <script src="js/PlayerManager.js"></script>
     <script src="js/TerrainManager.js"></script>
     <script src="js/CourseManager.js"></script>
-    <script src="js/PortalManager.js"></script>
     <script src="js/CameraController.js"></script>
     <script src="js/CelebrationEffects.js"></script>
+    <script src="js/SVGCourseConverter.js"></script>
     <script src="js/game.js"></script>
 </head>
 <body>
@@ -153,6 +158,16 @@
                             <h3 class="section-title">Create Your Own Course</h3>
                             <p class="course-info">Create your own course using our JSON schema. Each course consists of holes with teeboxes, baskets, and optional terrain features. <a href="https://github.com/kickiniteasy/discgolfgame/blob/main/docs/course_schema.md" target="_blank">View Schema Documentation</a></p>
                             
+                            <div class="form-group">
+                                <input type="file" id="course-file" accept=".json,.svg" style="display: none;">
+                                <button id="upload-course-button" class="primary-button">
+                                    <svg class="upload-icon" viewBox="0 0 24 24" width="16" height="16" style="margin-right: 8px;">
+                                        <path fill="currentColor" d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z"/>
+                                    </svg>
+                                    Upload Your Course
+                                </button>
+                            </div>
+
                             <div class="form-group">
                                 <label for="course-url">Load Course from URL</label>
                                 <div class="input-group">

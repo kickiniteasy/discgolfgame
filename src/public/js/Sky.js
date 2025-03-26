@@ -3,23 +3,21 @@ class Sky {
         this.scene = scene;
         this.options = {
             type: options.type || 'panorama',
-            textureUrl: options.textureUrl || 'textures/sky/skybox_4k.png'
+            textureUrl: options.textureUrl || 'textures/sky/skybox_4k.png',
+            courseSize: options.courseSize || { width: 300, length: 400 }
         };
-
-        console.log('Sky constructor - Using texture:', this.options.textureUrl);
+        this.walls = [];
         this.createSky();
     }
 
     createSky() {
         if (this.options.type === 'panorama') {
-            console.log('Creating panorama walls');
             this.createPanoramaWalls();
         }
     }
 
     createPanoramaWalls() {
         const textureLoader = new THREE.TextureLoader();
-        console.log('Loading wall texture from:', this.options.textureUrl);
         
         // Create a gradient background first
         const canvas = document.createElement('canvas');
@@ -38,17 +36,16 @@ class Sky {
         textureLoader.load(
             this.options.textureUrl,
             (texture) => {
-                console.log('Wall texture loaded successfully');
                 // Configure texture
                 texture.minFilter = THREE.LinearFilter;
                 texture.magFilter = THREE.LinearFilter;
                 texture.generateMipmaps = false;
                 texture.needsUpdate = true;
                 
-                // Wall dimensions - match ground plane size exactly
-                const frontWidth = 300;  // Width of front/back walls (matches ground plane width)
-                const wallHeight = 100;   // Height of all walls - reduced to be more proportional
-                const depth = 400;        // Distance between front and back walls (matches ground plane length)
+                // Wall dimensions - match course size exactly
+                const frontWidth = this.options.courseSize.width;
+                const wallHeight = 100;   // Height of all walls
+                const depth = this.options.courseSize.length;
                 
                 // Create gradient texture for alpha
                 const gradientCanvas = document.createElement('canvas');
@@ -114,32 +111,33 @@ class Sky {
                 walls.push(westWall);
                 
                 // Add all walls to scene
-                this.walls = walls;
                 walls.forEach((wall, index) => {
                     wall.name = ['North', 'South', 'East', 'West'][index] + ' Wall';
                     this.scene.add(wall);
-                    console.log(`Added ${wall.name} to scene:`, {
-                        position: wall.position,
-                        rotation: wall.rotation,
-                        geometry: wall.geometry.parameters
-                    });
-                });
-                
-                console.log('Walls added to scene:', {
-                    textureSize: `${texture.image.width}x${texture.image.height}`,
-                    frontWidth,
-                    wallHeight,
-                    depth,
-                    wallCount: walls.length
+                    this.walls.push(wall);
                 });
             },
             (progress) => {
-                console.log('Loading wall texture progress:', Math.round(progress.loaded / progress.total * 100) + '%');
+                // Optional: Handle progress silently
             },
             (error) => {
                 console.error('Error loading wall texture:', error);
             }
         );
+    }
+
+    updateCourseSize(newSize) {
+        if (!newSize || !newSize.width || !newSize.length) return;
+        
+        // Update the stored course size
+        this.options.courseSize = newSize;
+        
+        // Remove existing walls
+        this.dispose();
+        
+        // Recreate walls with new size
+        this.walls = [];
+        this.createSky();
     }
 
     dispose() {

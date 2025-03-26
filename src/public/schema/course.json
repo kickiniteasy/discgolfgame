@@ -1,7 +1,29 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Disc Golf Course Schema",
-  "description": "Simplified schema for defining disc golf courses with basic visual customization options",
+  "description": "Simplified schema for defining disc golf courses with basic visual customization options. This schema is designed for Three.js rendering with a right-handed coordinate system where (0,0,0) represents the center of the course. The X and Z coordinates are used for ground plane positioning (X is left/right, Z is forward/back), while Y represents height (up/down). Ground-level objects should use Y=0.",
+  "coordinateSystem": {
+    "type": "object",
+    "description": "The course uses a Three.js right-handed coordinate system where:",
+    "properties": {
+      "origin": {
+        "type": "string",
+        "description": "The origin (0,0,0) is at the center of the course"
+      },
+      "xAxis": {
+        "type": "string",
+        "description": "X axis: Positive values go right, negative values go left"
+      },
+      "yAxis": {
+        "type": "string",
+        "description": "Y axis: Represents height/elevation. Y=0 is ground level. Positive values go up, negative values go down"
+      },
+      "zAxis": {
+        "type": "string",
+        "description": "Z axis: Positive values go forward, negative values go backward"
+      }
+    }
+  },
   "type": "object",
   "required": [
     "course_id",
@@ -129,11 +151,6 @@
           "type": "string",
           "format": "uri",
           "description": "Default texture URL for rough terrain"
-        },
-        "heavyRoughTexture": {
-          "type": "string",
-          "format": "uri",
-          "description": "Default texture URL for heavy rough terrain"
         },
         "waterTexture": {
           "type": "string",
@@ -303,11 +320,9 @@
             "enum": [
               "fairway",
               "rough",
-              "heavyRough",
               "water",
               "sand",
               "tree",
-              "treeGroup",
               "bush",
               "rock",
               "path",

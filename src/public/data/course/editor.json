@@ -1,483 +1,1097 @@
 {
-  "course_id": "my-disc-golf-course",
-  "name": "My Disc Golf Course",
+  "course_id": "course_vfaely4re",
+  "name": "Converted SVG Course",
   "metadata": {
-    "description": "A custom disc golf course",
+    "description": "Course converted from SVG file",
     "location": {
-      "latitude": 45.5231,
-      "longitude": -122.6765,
-      "address": "Custom location, Portland, OR"
+      "latitude": 0,
+      "longitude": 0,
+      "address": "Unknown"
     },
     "difficulty": 3,
-    "source": "Custom",
-    "author": "Course Creator",
+    "source": "SVG Converter",
+    "author": "SVG Converter",
     "version": "1.0.0",
-    "creationDate": "2025-03-26T06:39:03.877Z"
-  },
-  "visualSettings": {
-    "skyImageUrl": "https://example.com/textures/clear_sky.jpg",
-    "backgroundColor": "#87CEEB"
-  },
-  "defaultTextures": {
-    "fairwayTexture": "https://example.com/textures/short_grass.jpg",
-    "roughTexture": "https://example.com/textures/tall_grass.jpg",
-    "heavyRoughTexture": "https://example.com/textures/thick_vegetation.jpg",
-    "waterTexture": "https://example.com/textures/water.jpg",
-    "sandTexture": "https://example.com/textures/sand.jpg",
-    "teepadTexture": "https://example.com/textures/concrete.jpg",
-    "groundTexture": "https://example.com/textures/dirt.jpg"
+    "creationDate": "2025-03-26T18:18:21.957Z"
   },
   "courseSize": {
-    "width": 157,
-    "length": 316
+    "width": 500.00000000000006,
+    "length": 375
   },
   "holes": [
     {
       "holeNumber": 1,
       "par": 3,
-      "description": "A new hole",
       "teebox": {
         "position": {
-          "x": 76,
-          "y": 2467,
-          "z": 0
+          "x": -145.83333333333337,
+          "y": 0,
+          "z": -17.22713541666664
         },
         "rotation": {
           "x": 0,
-          "y": 0,
+          "y": 0.8751579273684775,
           "z": 0
         },
-        "type": "amateur"
+        "type": "recreational"
       },
       "basket": {
         "position": {
-          "x": 114,
-          "y": 1924,
-          "z": 0
+          "x": -95.97551041666668,
+          "y": 0,
+          "z": 24.39715104166669
         }
       },
       "outOfBounds": [],
       "fairway": {
         "shape": [
           {
-            "x": 76,
-            "z": 0
+            "x": -145.83333333333337,
+            "z": -17.22713541666664
           },
           {
-            "x": 114,
-            "z": 0
+            "x": -95.97551041666668,
+            "z": 24.39715104166669
           }
         ],
-        "width": 15
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 2,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -60.48091145833337,
+          "y": 0,
+          "z": -22.069114583333317
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.3535916399751332,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -34.66754166666669,
+          "y": 0,
+          "z": 47.866093750000005
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -60.48091145833337,
+            "z": -22.069114583333317
+          },
+          {
+            "x": -34.66754166666669,
+            "z": 47.866093750000005
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 3,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -120.26992708333336,
+          "y": 0,
+          "z": 53.87850000000003
+        },
+        "rotation": {
+          "x": 0,
+          "y": 1.117163495158745,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -25.712218750000005,
+          "y": 0,
+          "z": 99.9794947916667
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -120.26992708333336,
+            "z": 53.87850000000003
+          },
+          {
+            "x": -25.712218750000005,
+            "z": 99.9794947916667
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 4,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -64.11205729166667,
+          "y": 0,
+          "z": 102.98979166666669
+        },
+        "rotation": {
+          "x": 0,
+          "y": 2.0061534448505043,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 24.40671875000001,
+          "y": 0,
+          "z": 61.81785416666668
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -64.11205729166667,
+            "z": 102.98979166666669
+          },
+          {
+            "x": 24.40671875000001,
+            "z": 61.81785416666668
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 5,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 57.20456249999998,
+          "y": 0,
+          "z": 91.88598958333336
+        },
+        "rotation": {
+          "x": 0,
+          "y": -2.6659314779317214,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -12.359187500000019,
+          "y": 0,
+          "z": -43.160817708333326
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 57.20456249999998,
+            "z": 91.88598958333336
+          },
+          {
+            "x": -12.359187500000019,
+            "z": -43.160817708333326
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 6,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 13.694739583333302,
+          "y": 0,
+          "z": -51.34630208333331
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.5240843832913036,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 69.9789375,
+          "y": 0,
+          "z": 46.03155208333337
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 13.694739583333302,
+            "z": -51.34630208333331
+          },
+          {
+            "x": 69.9789375,
+            "z": 46.03155208333337
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 7,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 60.66578124999998,
+          "y": 0,
+          "z": 68.12133854166669
+        },
+        "rotation": {
+          "x": 0,
+          "y": 2.1340398694160303,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 171.706875,
+          "y": 0,
+          "z": -1.998583333333329
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 60.66578124999998,
+            "z": 68.12133854166669
+          },
+          {
+            "x": 171.706875,
+            "z": -1.998583333333329
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 8,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 195.27520833333332,
+          "y": 0,
+          "z": -41.47564583333332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -1.1914713005242097,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 96.2434375,
+          "y": 0,
+          "z": -1.998583333333329
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 195.27520833333332,
+            "z": -41.47564583333332
+          },
+          {
+            "x": 96.2434375,
+            "z": -1.998583333333329
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 9,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 90.20802083333334,
+          "y": 0,
+          "z": 4.296750000000003
+        },
+        "rotation": {
+          "x": 0,
+          "y": -2.376651477190005,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 29.00810416666664,
+          "y": 0,
+          "z": -59.45975520833332
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 90.20802083333334,
+            "z": 4.296750000000003
+          },
+          {
+            "x": 29.00810416666664,
+            "z": -59.45975520833332
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 10,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 52.90213541666665,
+          "y": 0,
+          "z": -75.11811979166666
+        },
+        "rotation": {
+          "x": 0,
+          "y": -1.5724199215460184,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -3.1687395833333483,
+          "y": 0,
+          "z": -75.20915624999999
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 52.90213541666665,
+            "z": -75.11811979166666
+          },
+          {
+            "x": -3.1687395833333483,
+            "z": -75.20915624999999
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 11,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -37.26126562500002,
+          "y": 0,
+          "z": -83.23021874999999
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.17083674370494406,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -19.685729166666675,
+          "y": 0,
+          "z": 18.646114583333343
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -37.26126562500002,
+            "z": -83.23021874999999
+          },
+          {
+            "x": -19.685729166666675,
+            "z": 18.646114583333343
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 12,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -55.09066666666669,
+          "y": 0,
+          "z": -23.747208333333333
+        },
+        "rotation": {
+          "x": 0,
+          "y": -2.848274875333653,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -82.62247916666666,
+          "y": 0,
+          "z": -114.90321354166666
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -55.09066666666669,
+            "z": -23.747208333333333
+          },
+          {
+            "x": -82.62247916666666,
+            "z": -114.90321354166666
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 13,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -77.17016666666669,
+          "y": 0,
+          "z": -38.8728802083333
+        },
+        "rotation": {
+          "x": 0,
+          "y": -2.592024380783995,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -123.73960937500001,
+          "y": 0,
+          "z": -114.90321354166666
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -77.17016666666669,
+            "z": -38.8728802083333
+          },
+          {
+            "x": -123.73960937500001,
+            "z": -114.90321354166666
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 14,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -124.5090729166667,
+          "y": 0,
+          "z": -108.89116145833333
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.23335859636710693,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -107.07294270833336,
+          "y": 0,
+          "z": -35.53421875000001
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -124.5090729166667,
+            "z": -108.89116145833333
+          },
+          {
+            "x": -107.07294270833336,
+            "z": -35.53421875000001
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 15,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -152.41448958333336,
+          "y": 0,
+          "z": -56.44943749999999
+        },
+        "rotation": {
+          "x": 0,
+          "y": -2.8214977371810255,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -171.791609375,
+          "y": 0,
+          "z": -114.90321354166666
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -152.41448958333336,
+            "z": -56.44943749999999
+          },
+          {
+            "x": -171.791609375,
+            "z": -114.90321354166666
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 16,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -152.41448958333336,
+          "y": 0,
+          "z": -86.53610416666665
+        },
+        "rotation": {
+          "x": 0,
+          "y": -1.2762735162756904,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -229.39359166666668,
+          "y": 0,
+          "z": -63.184875000000005
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -152.41448958333336,
+            "z": -86.53610416666665
+          },
+          {
+            "x": -229.39359166666668,
+            "z": -63.184875000000005
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 17,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -251.9333007291667,
+          "y": 0,
+          "z": -44.39234374999998
+        },
+        "rotation": {
+          "x": 0,
+          "y": 1.0271207728194007,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -199.20576562500003,
+          "y": 0,
+          "z": -12.521874999999966
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -251.9333007291667,
+            "z": -44.39234374999998
+          },
+          {
+            "x": -199.20576562500003,
+            "z": -12.521874999999966
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 18,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -191.5166354166667,
+          "y": 0,
+          "z": 23.510104166666707
+        },
+        "rotation": {
+          "x": 0,
+          "y": 2.9081882845767466,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -171.791609375,
+          "y": 0,
+          "z": -59.45975520833332
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -191.5166354166667,
+            "z": 23.510104166666707
+          },
+          {
+            "x": -171.791609375,
+            "z": -59.45975520833332
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 19,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -200.54304687500002,
+          "y": 0,
+          "z": -92.64803645833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0.40770870591749314,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -161.39066145833334,
+          "y": 0,
+          "z": -1.998583333333329
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -200.54304687500002,
+            "z": -92.64803645833332
+          },
+          {
+            "x": -161.39066145833334,
+            "z": -1.998583333333329
+          }
+        ],
+        "width": 10
       }
     }
   ],
   "terrain": [
     {
-      "id": "tree-1742971156108",
+      "id": "tree_0",
       "type": "tree",
       "position": {
-        "x": 96,
+        "x": -123.54276041666668,
         "y": 0,
-        "z": 2577
+        "z": -25.56184374999998
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 3,
+        "y": 3,
+        "z": 3
+      }
     },
     {
-      "id": "tree-1742971156461",
+      "id": "tree_1",
       "type": "tree",
       "position": {
-        "x": 98,
+        "x": -114.45484375000004,
         "y": 0,
-        "z": 2485
+        "z": -27.299322916666654
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 5,
+        "y": 3,
+        "z": 5
+      }
     },
     {
-      "id": "tree-1742971156885",
+      "id": "tree_2",
       "type": "tree",
       "position": {
-        "x": 103,
+        "x": -130.36690625000003,
         "y": 0,
-        "z": 2367
+        "z": -25.667796874999993
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 5,
+        "y": 5,
+        "z": 5
+      }
     },
     {
-      "id": "tree-1742971157771",
+      "id": "tree_3",
       "type": "tree",
       "position": {
-        "x": 112,
+        "x": -138.70502083333335,
         "y": 0,
-        "z": 2235
+        "z": -25.87283333333332
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 8,
+        "y": 3,
+        "z": 8
+      }
     },
     {
-      "id": "tree-1742971158422",
+      "id": "tree_4",
       "type": "tree",
       "position": {
-        "x": 130,
+        "x": -147.837375,
         "y": 0,
-        "z": 2042
+        "z": -25.311677083333308
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 8,
+        "y": 5,
+        "z": 8
+      }
     },
     {
-      "id": "tree-1742971158957",
+      "id": "tree_5",
       "type": "tree",
       "position": {
-        "x": 133,
+        "x": -155.36690625000003,
         "y": 0,
-        "z": 1828
+        "z": -25.477776041666658
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
     },
     {
-      "id": "tree-1742971159407",
+      "id": "tree_6",
       "type": "tree",
       "position": {
-        "x": 100,
+        "x": -164.50335937500003,
         "y": 0,
-        "z": 1793
+        "z": -26.541312499999975
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971159950",
+      "id": "tree_7",
       "type": "tree",
       "position": {
-        "x": 90,
+        "x": -152.00472916666666,
         "y": 0,
-        "z": 1858
+        "z": -4.777031249999993
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971160399",
+      "id": "tree_8",
       "type": "tree",
       "position": {
-        "x": 76,
+        "x": -89.55394270833335,
         "y": 0,
-        "z": 2003
+        "z": 16.49236458333337
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971160734",
+      "id": "tree_9",
       "type": "tree",
       "position": {
-        "x": 66,
+        "x": -95.07395833333334,
         "y": 0,
-        "z": 2178
+        "z": 4.010135416666685
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971161057",
+      "id": "tree_10",
       "type": "tree",
       "position": {
-        "x": 56,
+        "x": -102.90695833333336,
         "y": 0,
-        "z": 2384
+        "z": 12.031791666666692
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971161418",
+      "id": "tree_11",
       "type": "tree",
       "position": {
-        "x": 58,
+        "x": -106.17140625000002,
         "y": 0,
-        "z": 2581
+        "z": 34.40302083333336
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971162176",
+      "id": "tree_12",
       "type": "tree",
       "position": {
-        "x": 77,
+        "x": -80.05180208333334,
         "y": 0,
-        "z": 2726
+        "z": 30.40860416666669
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
-        "y": 0,
-        "z": 0
-      },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
-      },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     },
     {
-      "id": "tree-1742971162722",
+      "id": "tree_13",
       "type": "tree",
       "position": {
-        "x": 94,
+        "x": -83.60195312500002,
         "y": 0,
-        "z": 2687
+        "z": 42.424677083333336
       },
       "scale": {
-        "x": 1,
-        "y": 1,
-        "z": 1
-      },
-      "rotation": {
-        "x": 0,
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
+    },
+    {
+      "id": "tree_14",
+      "type": "tree",
+      "position": {
+        "x": -52.695750000000004,
         "y": 0,
-        "z": 0
+        "z": -0.6103645833333076
       },
-      "visualProperties": {
-        "color": "#228B22",
-        "roughness": 0.8,
-        "metalness": 0.1,
-        "opacity": 1
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_15",
+      "type": "tree",
+      "position": {
+        "x": -49.224895833333335,
+        "y": 0,
+        "z": 5.328281250000003
       },
-      "variant": "default",
-      "tags": [
-        "tree"
-      ]
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_16",
+      "type": "tree",
+      "position": {
+        "x": -43.918151041666675,
+        "y": 0,
+        "z": 13.898453125000003
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_17",
+      "type": "tree",
+      "position": {
+        "x": -45.31455208333335,
+        "y": 0,
+        "z": 19.865479166666688
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_18",
+      "type": "tree",
+      "position": {
+        "x": -41.84302083333333,
+        "y": 0,
+        "z": 24.510718750000024
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_19",
+      "type": "tree",
+      "position": {
+        "x": -34.66822916666666,
+        "y": 0,
+        "z": 32.53157812500001
+      },
+      "scale": {
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
+    },
+    {
+      "id": "tree_20",
+      "type": "tree",
+      "position": {
+        "x": -31.13927083333334,
+        "y": 0,
+        "z": 36.740624999999994
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_21",
+      "type": "tree",
+      "position": {
+        "x": -51.254239583333344,
+        "y": 0,
+        "z": 37.96342187500002
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_22",
+      "type": "tree",
+      "position": {
+        "x": -55.42022395833337,
+        "y": 0,
+        "z": 28.915135416666686
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_23",
+      "type": "tree",
+      "position": {
+        "x": -60.86915104166667,
+        "y": 0,
+        "z": 21.646020833333353
+      },
+      "scale": {
+        "x": 12,
+        "y": 5,
+        "z": 12
+      }
+    },
+    {
+      "id": "tree_24",
+      "type": "tree",
+      "position": {
+        "x": -156.32177083333335,
+        "y": 0,
+        "z": -12.733760416666655
+      },
+      "scale": {
+        "x": 15,
+        "y": 8,
+        "z": 15
+      }
     }
   ]
 }

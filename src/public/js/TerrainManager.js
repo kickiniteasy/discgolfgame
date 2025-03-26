@@ -9,10 +9,11 @@ class TerrainManager {
 
     // Register all terrain types
     registerTerrainTypes() {
-        // Register portal terrain type if it exists
-        if (typeof PortalTerrain !== 'undefined') {
-            Terrain.typeMap['portal'] = PortalTerrain;
-        }
+        // Register portal terrain type
+        Terrain.typeMap['portal'] = PortalTerrain;
+        
+        // Log registration to verify
+        console.log('Registered terrain types:', Object.keys(Terrain.typeMap));
     }
 
     // Create the base ground plane that covers the entire level
@@ -34,11 +35,6 @@ class TerrainManager {
             undefined,
             (error) => console.error('Error loading normal map:', error)
         );
-        
-        console.log('Loading textures:', {
-            grassTexture: grassTexture,
-            grassNormal: grassNormal
-        });
         
         // Configure texture repeat based on size
         const repeatX = width / 5; // More detailed grass (reduced from 10)
@@ -69,13 +65,6 @@ class TerrainManager {
             envMapIntensity: 1.0 // Reset to default
         });
 
-        // Log material setup
-        console.log('Ground material setup:', {
-            hasTexture: !!material.map,
-            hasNormalMap: !!material.normalMap,
-            color: material.color.getHexString()
-        });
-
         this.groundPlane = new THREE.Mesh(geometry, material);
         this.groundPlane.rotation.x = -Math.PI / 2; // Lay flat
         this.groundPlane.receiveShadow = true;
@@ -97,17 +86,15 @@ class TerrainManager {
         // Sort terrain by type to ensure proper rendering order
         const sortedTerrain = [...courseData.terrain].sort((a, b) => {
             const order = {
-                'elevation': 1,
-                'water': 2,
-                'fairway': 3,
-                'path': 4,
-                'rough': 5,
-                'heavyRough': 6,
+                'fairway': 2,
+                'rough': 4,
+                'water': 5,
                 'sand': 7,
-                'rock': 8,
+                'tree': 8,
                 'bush': 9,
-                'tree': 10,
-                'treeGroup': 11
+                'rock': 10,
+                'path': 12,
+                'custom': 15
             };
             return (order[a.type] || 99) - (order[b.type] || 99);
         });
@@ -192,10 +179,9 @@ class TerrainManager {
 
         // Generate terrain objects with proper scaling
         const terrainDistribution = [
-            { type: 'tree', count: Math.floor(bounds.count * 0.3), baseScale: 1 },
+            { type: 'tree', count: Math.floor(bounds.count * 0.15), baseScale: 1.0 },
+            { type: 'bush', count: Math.floor(bounds.count * 0.2), baseScale: 0.8 },
             { type: 'rock', count: Math.floor(bounds.count * 0.2), baseScale: 0.5 },
-            { type: 'bush', count: Math.floor(bounds.count * 0.2), baseScale: 0.7 },
-            { type: 'treeGroup', count: Math.floor(bounds.count * 0.1), baseScale: 1.2 },
             { type: 'elevation', count: Math.floor(bounds.count * 0.2), baseScale: 2 }
         ];
 
@@ -300,62 +286,36 @@ class TerrainManager {
             if (!terrain.mesh) continue;
 
             // Skip ground-type terrain (fairway, rough, etc)
-            if (['fairway', 'rough', 'heavyRough', 'path'].includes(terrain.constructor.type)) {
+            if (['fairway', 'rough', 'path'].includes(terrain.constructor.type)) {
                 continue;
             }
 
             // Handle different terrain types
             switch(terrain.constructor.type) {
                 case 'tree':
-                    // Only check collision with the trunk
-                    if (terrain.mesh.children && terrain.mesh.children[0]) { // First child is trunk
-                        const trunk = terrain.mesh.children[0];
-                        const trunkBox = new THREE.Box3().setFromObject(trunk);
-                        // Scale down trunk collision to be more forgiving
-                        const trunkCenter = trunkBox.getCenter(new THREE.Vector3());
-                        const trunkSize = trunkBox.getSize(new THREE.Vector3());
-                        const scaledTrunkBox = new THREE.Box3(
-                            new THREE.Vector3(
-                                trunkCenter.x - trunkSize.x * 0.3,
-                                trunkBox.min.y,
-                                trunkCenter.z - trunkSize.z * 0.3
-                            ),
-                            new THREE.Vector3(
-                                trunkCenter.x + trunkSize.x * 0.3,
-                                trunkBox.max.y,
-                                trunkCenter.z + trunkSize.z * 0.3
-                            )
-                        );
-                        if (scaledTrunkBox.containsPoint(position)) {
-                            return { collided: true, terrain: terrain, point: position.clone() };
-                        }
-                    }
+                    this.updateTreePhysics(terrain, deltaTime);
                     break;
 
-                case 'treeGroup':
-                    // Check each tree's trunk individually
-                    for (const treeGroup of terrain.mesh.children) {
-                        if (treeGroup.children && treeGroup.children[0]) { // First child is trunk
-                            const trunk = treeGroup.children[0];
-                            const trunkBox = new THREE.Box3().setFromObject(trunk);
-                            // Scale down trunk collision
-                            const trunkCenter = trunkBox.getCenter(new THREE.Vector3());
-                            const trunkSize = trunkBox.getSize(new THREE.Vector3());
-                            const scaledTrunkBox = new THREE.Box3(
-                                new THREE.Vector3(
-                                    trunkCenter.x - trunkSize.x * 0.3,
-                                    trunkBox.min.y,
-                                    trunkCenter.z - trunkSize.z * 0.3
-                                ),
-                                new THREE.Vector3(
-                                    trunkCenter.x + trunkSize.x * 0.3,
-                                    trunkBox.max.y,
-                                    trunkCenter.z + trunkSize.z * 0.3
-                                )
-                            );
-                            if (scaledTrunkBox.containsPoint(position)) {
-                                return { collided: true, terrain: terrain, point: position.clone() };
-                            }
+                case 'bush':
+                    // Bushes should have very minimal collision unless disc is very low
+                    if (position.y < 0.3) { // Only check if disc is very low
+                        const bushBox = new THREE.Box3().setFromObject(terrain.mesh);
+                        const bushCenter = bushBox.getCenter(new THREE.Vector3());
+                        const bushSize = bushBox.getSize(new THREE.Vector3());
+                        const scaledBushBox = new THREE.Box3(
+                            new THREE.Vector3(
+                                bushCenter.x - bushSize.x * 0.4,
+                                bushBox.min.y,
+                                bushCenter.z - bushSize.z * 0.4
+                            ),
+                            new THREE.Vector3(
+                                bushCenter.x + bushSize.x * 0.4,
+                                bushBox.max.y,
+                                bushCenter.z + bushSize.z * 0.4
+                            )
+                        );
+                        if (scaledBushBox.containsPoint(position)) {
+                            return { collided: true, terrain: terrain, point: position.clone() };
                         }
                     }
                     break;
@@ -389,30 +349,6 @@ class TerrainManager {
                         return { collided: true, terrain: terrain, point: position.clone() };
                     }
                     break;
-
-                case 'bush':
-                    // Bushes should have very minimal collision unless disc is very low
-                    if (position.y < 0.3) { // Only check if disc is very low
-                        const bushBox = new THREE.Box3().setFromObject(terrain.mesh);
-                        const bushCenter = bushBox.getCenter(new THREE.Vector3());
-                        const bushSize = bushBox.getSize(new THREE.Vector3());
-                        const scaledBushBox = new THREE.Box3(
-                            new THREE.Vector3(
-                                bushCenter.x - bushSize.x * 0.4,
-                                bushBox.min.y,
-                                bushCenter.z - bushSize.z * 0.4
-                            ),
-                            new THREE.Vector3(
-                                bushCenter.x + bushSize.x * 0.4,
-                                bushBox.max.y,
-                                bushCenter.z + bushSize.z * 0.4
-                            )
-                        );
-                        if (scaledBushBox.containsPoint(position)) {
-                            return { collided: true, terrain: terrain, point: position.clone() };
-                        }
-                    }
-                    break;
             }
         }
 
@@ -423,5 +359,9 @@ class TerrainManager {
         this.terrainObjects.forEach(terrain => {
             terrain.setHitboxVisibility(visible);
         });
+    }
+
+    updateTreePhysics(terrain, dt) {
+        // Implementation of updateTreePhysics method
     }
 } 

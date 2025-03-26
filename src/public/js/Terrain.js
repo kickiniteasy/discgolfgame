@@ -1,3 +1,13 @@
+/*
+Required CDN scripts (add these to your HTML before this script):
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+*/
+
 class Terrain {
     constructor(scene, options = {}) {
         this.scene = scene;
@@ -36,7 +46,7 @@ class Terrain {
             this.applyTransforms();
             
             // Only create automatic hitbox if the terrain type needs one and doesn't already have a custom hitbox
-            if (!['fairway', 'rough', 'heavyRough', 'path', 'tree', 'treeGroup', 'bush'].includes(this.constructor.type) 
+            if (!['fairway', 'rough', 'path', 'tree', 'bush'].includes(this.constructor.type) 
                 && !this.hitboxMesh) {
                 this.createHitboxFromBounds();
             }
@@ -57,7 +67,6 @@ class Terrain {
         // Handle special cases for ground planes
         if (this.constructor.type === 'fairway' || 
             this.constructor.type === 'rough' || 
-            this.constructor.type === 'heavyRough' ||
             this.constructor.type === 'path' ||
             this.constructor.type === 'water' ||
             this.constructor.type === 'sand') {
@@ -352,24 +361,6 @@ class RoughTerrain extends Terrain {
     }
 }
 
-class HeavyRoughTerrain extends Terrain {
-    static type = 'heavyRough';
-    
-    createMesh() {
-        const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x254117, // Very dark green
-            roughness: 1.0,
-            metalness: 0.0
-        });
-        
-        // Apply custom visual properties
-        this.applyVisualProperties(material);
-        
-        this.mesh = new THREE.Mesh(geometry, material);
-    }
-}
-
 class WaterTerrain extends Terrain {
     static type = 'water';
     
@@ -458,64 +449,6 @@ class TreeTerrain extends Terrain {
     }
 }
 
-class TreeGroupTerrain extends Terrain {
-    static type = 'treeGroup';
-    
-    createMesh() {
-        this.mesh = new THREE.Group();
-        
-        // Create trees based on variant
-        switch (this.options.variant) {
-            case 'dense':
-                this.createDenseVariant();
-                break;
-            case 'sparse':
-                this.createSparseVariant();
-                break;
-            default:
-                this.createDefaultVariant();
-                break;
-        }
-    }
-
-    createDefaultVariant() {
-        this.createTrees(Math.floor(Math.random() * 3) + 3);
-    }
-
-    createDenseVariant() {
-        this.createTrees(Math.floor(Math.random() * 3) + 6);
-    }
-
-    createSparseVariant() {
-        this.createTrees(Math.floor(Math.random() * 2) + 2);
-    }
-
-    createTrees(count) {
-        for (let i = 0; i < count; i++) {
-            const tree = new TreeTerrain(this.scene, {
-                position: new THREE.Vector3(
-                    (Math.random() - 0.5) * 3,
-                    0,
-                    (Math.random() - 0.5) * 3
-                ),
-                scale: new THREE.Vector3(
-                    0.7 + Math.random() * 0.6,
-                    0.7 + Math.random() * 0.6,
-                    0.7 + Math.random() * 0.6
-                ),
-                visualProperties: this.options.visualProperties,
-                showHitboxes: this.options.showHitboxes
-            });
-            this.mesh.add(tree.mesh);
-        }
-    }
-
-    // Override createHitboxFromBounds to prevent creating a group hitbox
-    createHitboxFromBounds() {
-        // Do nothing - individual trees have their own hitboxes
-    }
-}
-
 class BushTerrain extends Terrain {
     static type = 'bush';
     
@@ -571,69 +504,6 @@ class RockTerrain extends Terrain {
     }
 }
 
-class ElevationTerrain extends Terrain {
-    static type = 'elevation';
-    
-    createMesh() {
-        // Create a box for the elevation
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x355E3B, // Dark green to match ground
-            roughness: 1.0,
-            metalness: 0.0
-        });
-        
-        this.applyVisualProperties(material);
-        this.mesh = new THREE.Mesh(geometry, material);
-        
-        // Enable shadows
-        this.mesh.castShadow = true;
-        this.mesh.receiveShadow = true;
-
-        // Mark this mesh as a physical obstacle
-        this.mesh.userData.isObstacle = true;
-        this.mesh.userData.type = 'elevation';
-    }
-
-    applyTransforms() {
-        if (!this.mesh) return;
-
-        // Get the height from properties
-        const height = this.options.properties.height || 1;
-        
-        // Apply position
-        this.mesh.position.copy(this.options.position);
-        
-        // Apply rotation
-        this.mesh.rotation.setFromVector3(this.options.rotation);
-        
-        // Apply scale, using height for Y
-        this.mesh.scale.x = this.options.scale.x;
-        this.mesh.scale.z = this.options.scale.z;
-        this.mesh.scale.y = height;
-
-        // Move the mesh up by half its height so it sits on the ground
-        this.mesh.position.y = height / 2;
-
-        // Update the collision box
-        const box = new THREE.Box3();
-        box.setFromObject(this.mesh);
-        this.mesh.userData.collisionBox = box;
-    }
-
-    // Helper method to get the height at a point
-    getHeightAtPoint(x, z) {
-        if (!this.mesh || !this.mesh.userData.collisionBox) return 0;
-
-        const box = this.mesh.userData.collisionBox;
-        if (x >= box.min.x && x <= box.max.x && 
-            z >= box.min.z && z <= box.max.z) {
-            return box.max.y;
-        }
-        return 0;
-    }
-}
-
 class PathTerrain extends Terrain {
     static type = 'path';
     
@@ -653,17 +523,214 @@ class PathTerrain extends Terrain {
     }
 }
 
-// Map of terrain types to their classes
+class CustomTerrain extends Terrain {
+    static type = 'custom';
+    
+    async createMesh() {
+        if (!this.options.customProperties?.modelUrl) {
+            console.error('CustomTerrain requires a modelUrl in customProperties');
+            return;
+        }
+
+        // Create a temporary mesh while loading
+        const tempGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const tempMaterial = new THREE.MeshBasicMaterial({ 
+            color: 0x888888,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.5
+        });
+        this.mesh = new THREE.Mesh(tempGeometry, tempMaterial);
+
+        try {
+            // Determine file extension
+            const fileExt = this.options.customProperties.modelUrl.split('.').pop().toLowerCase();
+            
+            // Load the appropriate model based on file type
+            switch (fileExt) {
+                case 'gltf':
+                case 'glb':
+                    await this.loadGLTF();
+                    break;
+                case 'obj':
+                    await this.loadOBJ();
+                    break;
+                case 'fbx':
+                    await this.loadFBX();
+                    break;
+                case 'stl':
+                    await this.loadSTL();
+                    break;
+                default:
+                    console.error(`Unsupported file format: ${fileExt}`);
+                    return;
+            }
+
+            // Apply any custom materials if specified
+            if (this.options.customProperties.materials) {
+                this.applyCustomMaterials();
+            }
+
+            // Create hitbox from loaded geometry
+            this.createHitboxFromBounds();
+
+        } catch (error) {
+            console.error('Error loading custom model:', error);
+        }
+    }
+
+    async loadGLTF() {
+        const loader = new THREE.GLTFLoader();
+        
+        // Add draco compression support if specified
+        if (this.options.customProperties.useDraco) {
+            const dracoLoader = new THREE.DRACOLoader();
+            dracoLoader.setDecoderPath('/js/libs/draco/');
+            loader.setDRACOLoader(dracoLoader);
+        }
+
+        const gltf = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = gltf.scene;
+        
+        // Handle animations if present
+        if (gltf.animations && gltf.animations.length > 0) {
+            this.mixer = new THREE.AnimationMixer(this.mesh);
+            this.animations = gltf.animations;
+            
+            // Auto-play first animation if specified
+            if (this.options.customProperties.autoPlayAnimation) {
+                const action = this.mixer.clipAction(this.animations[0]);
+                action.play();
+            }
+        }
+    }
+
+    async loadOBJ() {
+        const loader = new THREE.OBJLoader();
+        const obj = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = obj;
+    }
+
+    async loadFBX() {
+        const loader = new THREE.FBXLoader();
+        const fbx = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = fbx;
+
+        // Handle animations if present
+        if (fbx.animations && fbx.animations.length > 0) {
+            this.mixer = new THREE.AnimationMixer(this.mesh);
+            this.animations = fbx.animations;
+            
+            // Auto-play first animation if specified
+            if (this.options.customProperties.autoPlayAnimation) {
+                const action = this.mixer.clipAction(this.animations[0]);
+                action.play();
+            }
+        }
+    }
+
+    async loadSTL() {
+        const loader = new THREE.STLLoader();
+        const geometry = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Create default material if none specified
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x808080,
+            roughness: 0.8,
+            metalness: 0.2
+        });
+        
+        // Apply custom visual properties
+        this.applyVisualProperties(material);
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = new THREE.Mesh(geometry, material);
+    }
+
+    applyCustomMaterials() {
+        if (!this.mesh) return;
+
+        const materials = this.options.customProperties.materials;
+        this.mesh.traverse((child) => {
+            if (child.isMesh) {
+                // If material is specified for this mesh name
+                const materialConfig = materials[child.name];
+                if (materialConfig) {
+                    child.material = new THREE.MeshStandardMaterial(materialConfig);
+                }
+            }
+        });
+    }
+
+    update(deltaTime) {
+        super.update(deltaTime);
+        
+        // Update animation mixer if it exists
+        if (this.mixer) {
+            this.mixer.update(deltaTime);
+        }
+    }
+}
+
+// Update the terrain types mapping
 Terrain.typeMap = {
     fairway: FairwayTerrain,
     rough: RoughTerrain,
-    heavyRough: HeavyRoughTerrain,
     water: WaterTerrain,
     sand: SandTerrain,
     tree: TreeTerrain,
-    treeGroup: TreeGroupTerrain,
     bush: BushTerrain,
     rock: RockTerrain,
-    elevation: ElevationTerrain,
-    path: PathTerrain
+    path: PathTerrain,
+    custom: CustomTerrain
 }; 

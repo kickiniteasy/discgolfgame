@@ -19,13 +19,12 @@
         "backgroundColor": "#324E2D"
     },
     "defaultTextures": {
-        "fairwayTexture": "https://example.com/textures/forest_fairway.jpg",
+        "fairwayTexture": "https://example.com/textures/forest_grass.jpg",
         "roughTexture": "https://example.com/textures/forest_rough.jpg",
-        "heavyRoughTexture": "https://example.com/textures/forest_undergrowth.jpg",
-        "waterTexture": "https://example.com/textures/forest_stream.jpg",
+        "waterTexture": "https://example.com/textures/forest_water.jpg",
         "sandTexture": "https://example.com/textures/forest_sand.jpg",
-        "teepadTexture": "https://example.com/textures/forest_teepads.jpg",
-        "groundTexture": "https://example.com/textures/forest_floor.jpg"
+        "teepadTexture": "https://example.com/textures/concrete.jpg",
+        "groundTexture": "https://example.com/textures/forest_ground.jpg"
     },
     "courseSize": {
         "width": 400,
@@ -212,103 +211,31 @@
             }
         },
         {
-            "id": "tree-group-1",
-            "type": "treeGroup",
-            "position": { "x": -10, "y": 0, "z": -140 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
-            "visualProperties": {
-                "color": "#0B6623"
-            },
-            "variant": "dense",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "tree-group-2",
-            "type": "treeGroup",
-            "position": { "x": 105, "y": 0, "z": -90 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
-            "visualProperties": {
-                "color": "#0B6623"
-            },
-            "variant": "dense",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "tree-group-3",
-            "type": "treeGroup",
-            "position": { "x": 115, "y": 0, "z": -70 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
-            "visualProperties": {
-                "color": "#0B6623"
-            },
-            "variant": "dense",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "tree-group-4",
-            "type": "treeGroup",
-            "position": { "x": -95, "y": 0, "z": -190 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
-            "visualProperties": {
-                "color": "#0B6623"
-            },
-            "variant": "dense",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "tree-group-5",
-            "type": "treeGroup",
-            "position": { "x": 35, "y": 0, "z": -245 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1.2, "y": 1.2, "z": 1.2 },
-            "visualProperties": {
-                "color": "#0B6623"
-            },
-            "variant": "dense",
-            "tags": ["obstacle"]
-        },
-        {
-            "id": "heavy-rough-1",
-            "type": "heavyRough",
-            "position": { "x": -95, "y": 0, "z": -200 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 40, "y": 1, "z": 30 },
-            "visualProperties": {
-                "color": "#0B2B1D",
-                "roughness": 1.0,
-                "metalness": 0.0,
-                "opacity": 1.0,
-                "textureUrl": "https://example.com/textures/dense_undergrowth.jpg"
-            },
-            "variant": "dense",
-            "tags": ["heavy-rough", "hazard"],
-            "properties": {
-                "density": 0.8,
-                "hazardType": "casual"
-            }
-        },
-        {
-            "id": "rough-1",
+            "id": "rough_area_1",
             "type": "rough",
-            "position": { "x": 110, "y": 0, "z": -80 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 50, "y": 1, "z": 40 },
-            "visualProperties": {
-                "color": "#355E3B",
-                "roughness": 1.0,
-                "metalness": 0.0,
-                "opacity": 1.0
-            },
-            "variant": "default",
-            "tags": ["rough"],
+            "position": {"x": 15, "y": 0, "z": -20},
+            "scale": {"x": 8, "y": 1, "z": 12},
             "properties": {
-                "density": 0.5,
-                "hazardType": "casual"
+                "density": 0.8
             }
+        },
+        {
+            "id": "tree_cluster_1",
+            "type": "tree",
+            "position": {"x": -12, "y": 0, "z": 8},
+            "scale": {"x": 1.2, "y": 1.2, "z": 1.2}
+        },
+        {
+            "id": "tree_cluster_2",
+            "type": "tree",
+            "position": {"x": -11, "y": 0, "z": 9},
+            "scale": {"x": 1.1, "y": 1.1, "z": 1.1}
+        },
+        {
+            "id": "tree_cluster_3",
+            "type": "tree",
+            "position": {"x": -13, "y": 0, "z": 9},
+            "scale": {"x": 1.3, "y": 1.3, "z": 1.3}
         }
     ]
 }

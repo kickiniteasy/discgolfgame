@@ -1,5 +1,5 @@
 class CameraController {
-    constructor(scene, camera, domElement) {
+    constructor(camera, scene, domElement) {
         this.scene = scene;
         this.camera = camera;
         this.controls = new THREE.OrbitControls(camera, domElement);

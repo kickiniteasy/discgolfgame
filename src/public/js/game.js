@@ -30,58 +30,72 @@ async function initGame() {
 
     // Initialize scene
     const scene = new THREE.Scene();
-    // Create sky
-    const sky = new Sky(scene, {
-        type: 'panorama',
-        sunPosition: new THREE.Vector3(100, 45, 0) // Sun at 45 degrees elevation
-    });
 
-    // Initialize camera
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 10, 20);
-    camera.lookAt(0, 0, 0);
-
-    // Initialize renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
-    document.getElementById('container').appendChild(renderer.domElement);
-
-    // Handle window resizing
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Add lights
-    const ambientLight = new THREE.AmbientLight(0x404040);
-    scene.add(ambientLight);
-    
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    directionalLight.position.set(100, 300, 100);
-    directionalLight.castShadow = true;
-    directionalLight.shadow.mapSize.width = 2048;
-    directionalLight.shadow.mapSize.height = 2048;
-    directionalLight.shadow.camera.near = 0.5;
-    directionalLight.shadow.camera.far = 500;
-    directionalLight.shadow.camera.left = -200;
-    directionalLight.shadow.camera.right = 200;
-    directionalLight.shadow.camera.top = 200;
-    directionalLight.shadow.camera.bottom = -200;
-    scene.add(directionalLight);
-    
+    // Initialize managers first
     try {
+        // Initialize UI first
+        window.ui = new UI();
+
         // Initialize managers and make them globally accessible
         window.terrainManager = new TerrainManager(scene);
         window.courseManager = new CourseManager(scene);
         window.playerManager = new PlayerManager(scene);
         window.celebrationEffects = new CelebrationEffects(scene);
-        window.portalManager = new PortalManager(scene);
 
-        // Initialize UI components
-        window.ui = new UI();
+        // Initialize settings UI after player manager
         const settingsUI = new SettingsUI(window.playerManager);
+
+        // Load initial course through course manager
+        await window.courseManager.loadCourseFromFile('beginner');
+        
+        // Get course size after course is loaded
+        const currentCourse = window.courseManager.getCurrentCourse();
+        const courseSize = currentCourse?.courseSize || { width: 300, length: 400 };
+
+        // Create sky with course dimensions and store it globally
+        window.sky = new Sky(scene, {
+            type: 'panorama',
+            sunPosition: new THREE.Vector3(100, 45, 0),
+            courseSize: courseSize
+        });
+
+        // Initialize camera
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(0, 10, 20);
+        camera.lookAt(0, 0, 0);
+
+        // Initialize renderer
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.getElementById('container').appendChild(renderer.domElement);
+
+        // Initialize camera controller after renderer is created
+        window.cameraController = new CameraController(camera, scene, renderer.domElement);
+
+        // Handle window resizing
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Add lights
+        const ambientLight = new THREE.AmbientLight(0x404040);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(100, 300, 100);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        directionalLight.shadow.camera.near = 0.5;
+        directionalLight.shadow.camera.far = 500;
+        directionalLight.shadow.camera.left = -200;
+        directionalLight.shadow.camera.right = 200;
+        directionalLight.shadow.camera.top = 200;
+        directionalLight.shadow.camera.bottom = -200;
+        scene.add(directionalLight);
         
         // Initialize hitbox toggle in courses section
         const showHitboxesCheckbox = document.getElementById('show-hitboxes');
@@ -163,10 +177,6 @@ async function initGame() {
             () => window.gameState.discInHand
         );
 
-        // Load initial course through course manager
-        console.log('Loading initial course...');
-        await window.courseManager.loadCourseFromFile('beginner');
-        
         // Update UI with total holes
         if (window.courseManager.getCurrentCourse()) {
             const course = window.courseManager.getCurrentCourse();
@@ -174,15 +184,17 @@ async function initGame() {
             window.ui.updateHole(course.currentHoleIndex + 1, totalHoles);
         }
 
-        // Initialize portal manager before players
-        // This ensures portals are in place when players spawn
-        console.log('Initializing portal manager...');
-        window.portalManager.initialize();
-
         // Initialize player after course is loaded and portals are set
-        console.log('Initializing players...');
         window.playerManager.initializePlayers(playerName);
         const firstPlayer = window.playerManager.getCurrentPlayer();
+
+        // Wait a frame to ensure everything is initialized
+        await new Promise(resolve => requestAnimationFrame(resolve));
+
+        // Set initial camera focus on first player
+        if (firstPlayer) {
+            window.cameraController.focusOnPlayer(firstPlayer);
+        }
 
         // Create initial disc for first player
         if (firstPlayer && firstPlayer.bag) {
@@ -195,16 +207,8 @@ async function initGame() {
             }
         }
 
-        // Initialize camera controller after renderer is created
-        window.cameraController = new CameraController(scene, camera, renderer.domElement);
-        
-        // Wait a frame to ensure everything is initialized
-        await new Promise(resolve => requestAnimationFrame(resolve));
-
-        // Set initial camera focus on first player
-        if (firstPlayer) {
-            window.cameraController.focusOnPlayer(firstPlayer);
-        }
+        // Initialize clock for animation timing
+        const clock = new THREE.Clock();
 
         // Animation loop
         function animate() {
@@ -215,26 +219,22 @@ async function initGame() {
                 updateThrowPower();
             }
             
-            // Update disc physics and check portal collisions
+            // Update disc physics
             if (window.gameState.currentDisc) {
                 window.gameState.currentDisc.update(0.016); // Assuming 60fps
-                
-                // Check for portal collisions
-                if (window.portalManager) {
-                    window.portalManager.checkPortalCollisions(window.gameState.currentDisc);
-                }
             }
             
             // Update terrain
             if (window.terrainManager) {
                 window.terrainManager.update(0.016); // Assuming 60fps
             }
-            
+
             // Update camera
             if (window.cameraController) {
                 window.cameraController.update();
             }
-            
+
+            // Render scene
             renderer.render(scene, camera);
         }
 

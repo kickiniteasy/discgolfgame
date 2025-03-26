@@ -205,6 +205,26 @@
             },
             "variant": "default",
             "tags": ["vegetation"]
+        },
+        {
+            "id": "exit-portal-1",
+            "type": "portal",
+            "position": { "x": 15, "y": 2, "z": 35 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "isEntry": false,
+                "label": "VIBEVERSE PORTAL",
+                "targetUrl": "https://portal.pieter.com"
+            },
+            "visualProperties": {
+                "color": "#00ff00",
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["portal", "exit"]
         }
     ]
 }

@@ -62,10 +62,6 @@ class PlayerManager {
         if (portalColor) {
             // Parse the color from portal parameter
             playerColor = this.parseColor(portalColor);
-            console.log('Parsed portal color:', {
-                input: portalColor,
-                parsed: '#' + playerColor.toString(16).padStart(6, '0')
-            });
         } else {
             const savedColor = localStorage.getItem('discGolfPlayerColor');
             if (savedColor) {

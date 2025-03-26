@@ -17,6 +17,8 @@ class SettingsUI {
         this.courseSelect = document.getElementById('course-select');
         this.courseUrlInput = document.getElementById('course-url');
         this.loadUrlButton = document.getElementById('load-course-url');
+        this.courseFileInput = document.getElementById('course-file');
+        this.uploadCourseButton = document.getElementById('upload-course-button');
         this.courseJsonInput = document.getElementById('course-json');
         this.loadJsonButton = document.getElementById('load-course-json');
         this.copyCourseButton = document.getElementById('copy-course');
@@ -156,13 +158,14 @@ class SettingsUI {
 
         // Save players button
         this.savePlayersButton.addEventListener('click', () => {
-            console.log('Save button clicked');
             this.savePlayerSettings();
         });
 
         // Course management listeners
         this.courseSelect.addEventListener('change', () => this.handleCourseSelect());
         this.loadUrlButton.addEventListener('click', () => this.handleLoadCourseUrl());
+        this.uploadCourseButton.addEventListener('click', () => this.courseFileInput.click());
+        this.courseFileInput.addEventListener('change', () => this.handleLoadCourseFile());
         this.loadJsonButton.addEventListener('click', () => this.handleLoadCourseJson());
         this.copyCourseButton.addEventListener('click', () => this.handleCopyCourse());
         this.saveCourseButton.addEventListener('click', () => this.handleSaveCourse());
@@ -325,7 +328,6 @@ class SettingsUI {
     }
 
     savePlayerSettings() {
-        console.log('savePlayerSettings called');
         const nameInputs = this.playerSettingsList.querySelectorAll('.name-input');
         const colorInputs = this.playerSettingsList.querySelectorAll('input[type="color"]');
         let anyChanges = false;
@@ -336,7 +338,6 @@ class SettingsUI {
             if (newName && newName !== player.name) {
                 player.name = newName;
                 if (i === 0) { // If it's the main player
-                    console.log('Saving name:', newName);
                     localStorage.setItem('discGolfPlayerName', newName);
                 }
                 anyChanges = true;
@@ -346,16 +347,12 @@ class SettingsUI {
         colorInputs.forEach((input, i) => {
             const player = this.playerManager.players[i];
             const newColor = parseInt(input.value.substring(1), 16);
-            console.log('Processing color input:', input.value, 'for player', i);
             if (newColor !== player.color) {
                 player.updateColor(newColor);
                 if (i === 0) { // If it's the main player
                     const colorToSave = input.value.substring(1);
-                    console.log('Saving color to localStorage:', colorToSave);
-                    localStorage.setItem('discGolfPlayerColor', colorToSave);
-                    // Verify it was saved
-                    const savedColor = localStorage.getItem('discGolfPlayerColor');
-                    console.log('Immediately after saving, color in localStorage:', savedColor);
+                    localStorage.setItem(`discGolfPlayerColor${i + 1}`, colorToSave);
+                    const savedColor = localStorage.getItem(`discGolfPlayerColor${i + 1}`);
                 }
                 anyChanges = true;
             }
@@ -499,6 +496,43 @@ class SettingsUI {
             this.hideModal();
         } else {
             this.showMessage('Failed to load course from URL.', 'error');
+        }
+    }
+
+    async handleLoadCourseFile() {
+        const file = this.courseFileInput.files[0];
+        if (!file) {
+            this.showMessage('Please select a file to upload.', 'error');
+            return;
+        }
+
+        try {
+            const fileContent = await file.text();
+            let success = false;
+
+            if (file.name.toLowerCase().endsWith('.json')) {
+                // Handle JSON file
+                const courseData = JSON.parse(fileContent);
+                success = await this.courseManager.loadCourseFromJSON(courseData);
+            } else if (file.name.toLowerCase().endsWith('.svg')) {
+                // Handle SVG file
+                const converter = new SVGCourseConverter();
+                const courseData = converter.convertSVGToCourse(fileContent, { limitSize: true });
+                success = await this.courseManager.loadCourseFromJSON(courseData);
+            } else {
+                this.showMessage('Unsupported file type. Please upload a .json or .svg file.', 'error');
+                return;
+            }
+
+            if (success) {
+                this.showMessage('Course loaded successfully!', 'success');
+                this.hideModal();
+            } else {
+                this.showMessage('Failed to load course from file.', 'error');
+            }
+        } catch (error) {
+            console.error('Error loading course file:', error);
+            this.showMessage('Error loading course file: ' + error.message, 'error');
         }
     }
 

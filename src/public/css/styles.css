@@ -301,18 +301,17 @@ canvas {
 /* Message Display */
 #message {
     position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    top: 20px;
+    left: 20px;
+    right: 20px;
     background: rgba(0, 0, 0, 0.8);
     color: white;
     padding: 15px 30px;
     border-radius: 10px;
     font-size: 18px;
     display: none;
-    z-index: 3000;
+    z-index: 5000;
     text-align: center;
-    min-width: 200px;
     opacity: 0;
     transition: opacity 0.2s ease-out;
     pointer-events: none;
@@ -320,6 +319,36 @@ canvas {
 
 #message.visible {
     opacity: 1;
+}
+
+.message {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    right: 20px;
+    padding: 1rem;
+    border-radius: 4px;
+    color: white;
+    z-index: 5000;
+    animation: fadeIn 0.3s ease-in-out;
+    text-align: center;
+}
+
+.message.success {
+    background-color: #28a745;
+}
+
+.message.error {
+    background-color: #dc3545;
+}
+
+.message.info {
+    background-color: #17a2b8;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Throw Button */
@@ -822,10 +851,29 @@ canvas {
 .input-group {
     display: flex;
     gap: 8px;
+    align-items: center;
 }
 
-.input-group input {
+.input-group input[type="file"] {
     flex: 1;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #fff;
+    font-size: 14px;
+}
+
+.input-group input[type="file"]::-webkit-file-upload-button {
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 4px 12px;
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+.input-group input[type="file"]::-webkit-file-upload-button:hover {
+    background-color: #e0e0e0;
 }
 
 .input-group button,
@@ -884,34 +932,6 @@ canvas {
 
 .course-actions button {
     flex: 1;
-}
-
-.message {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 1rem;
-    border-radius: 4px;
-    color: white;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-in-out;
-}
-
-.message.success {
-    background-color: #28a745;
-}
-
-.message.error {
-    background-color: #dc3545;
-}
-
-.message.info {
-    background-color: #17a2b8;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
 }
 
 /* Game Complete Modal styles */
@@ -1237,4 +1257,33 @@ canvas {
     width: 16px;
     height: 16px;
     cursor: pointer;
+}
+
+#upload-course-button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+    font-size: 16px;
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    background-color: #f8f9fa;
+    color: #333;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#upload-course-button:hover {
+    border-color: #4CAF50;
+    background-color: #f0f8f0;
+    color: #4CAF50;
+}
+
+#upload-course-button:active {
+    transform: translateY(1px);
+}
+
+#upload-course-button .upload-icon {
+    margin-right: 8px;
 } 
