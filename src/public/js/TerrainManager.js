@@ -3,6 +3,15 @@ class TerrainManager {
         this.scene = scene;
         this.terrainObjects = new Map(); // Using Map to store terrain by ID
         this.groundPlane = null;
+        this.registerTerrainTypes();
+    }
+
+    // Register all terrain types
+    registerTerrainTypes() {
+        // Register portal terrain type if it exists
+        if (typeof PortalTerrain !== 'undefined') {
+            Terrain.typeMap['portal'] = PortalTerrain;
+        }
     }
 
     // Create the base ground plane that covers the entire level
@@ -99,7 +108,8 @@ class TerrainManager {
             variant: terrainData.variant || 'default',
             tags: terrainData.tags || [],
             properties: terrainData.properties || {},
-            customProperties: terrainData.customProperties || {}
+            customProperties: terrainData.customProperties || {},
+            showHitboxes: window.gameState?.showHitboxes || false
         };
 
         const terrain = new TerrainClass(this.scene, options);
@@ -358,5 +368,11 @@ class TerrainManager {
         }
 
         return { collided: false };
+    }
+
+    setAllHitboxesVisibility(visible) {
+        this.terrainObjects.forEach(terrain => {
+            terrain.setHitboxVisibility(visible);
+        });
     }
 } 

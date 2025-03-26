@@ -1,5 +1,10 @@
 // Game initialization and utility functions
 document.addEventListener('DOMContentLoaded', () => {
+    // Wait for Three.js to load
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js not loaded');
+        return;
+    }
     initGame();
 });
 
@@ -19,7 +24,8 @@ async function initGame() {
         powerIncreasing: true,
         discInHand: true,
         currentDisc: null,
-        celebrationInProgress: false
+        celebrationInProgress: false,
+        showHitboxes: false // Add hitbox visibility state
     };
 
     // Initialize scene
@@ -61,172 +67,195 @@ async function initGame() {
     directionalLight.shadow.camera.bottom = -200;
     scene.add(directionalLight);
     
-    // Initialize managers and make them globally accessible
-    window.terrainManager = new TerrainManager(scene);
-    window.courseManager = new CourseManager(scene);
-    window.playerManager = new PlayerManager(scene);
-    window.celebrationEffects = new CelebrationEffects(scene);
+    try {
+        // Initialize managers and make them globally accessible
+        window.terrainManager = new TerrainManager(scene);
+        window.courseManager = new CourseManager(scene);
+        window.playerManager = new PlayerManager(scene);
+        window.celebrationEffects = new CelebrationEffects(scene);
+        window.portalManager = new PortalManager(scene);
 
-    // Initialize UI components
-    window.ui = new UI();
-    const settingsUI = new SettingsUI(window.playerManager);
-    
-    // Create BagUI with current player's bag
-    const bagUI = new BagUI(null, (selectedDisc) => {
-        // Handle disc selection
-        if (window.gameState && window.gameState.currentDisc) {
-            window.gameState.currentDisc.remove();
-            window.gameState.currentDisc = null;
-        }
+        // Initialize UI components
+        window.ui = new UI();
+        const settingsUI = new SettingsUI(window.playerManager);
         
-        // Create new disc with selected properties
-        if (window.gameState) {
-            const currentPlayer = window.playerManager.getCurrentPlayer();
-            if (currentPlayer) {
-                // Create new disc with the scene reference
-                window.gameState.currentDisc = new Disc(scene, selectedDisc);
-                // Position disc above player
-                const discPosition = currentPlayer.position.clone().add(new THREE.Vector3(0, 1, 0));
+        // Add hitbox toggle to settings
+        settingsUI.addSetting('showHitboxes', 'Show Hitboxes', 'checkbox', window.gameState.showHitboxes, (value) => {
+            window.gameState.showHitboxes = value;
+            window.terrainManager.setAllHitboxesVisibility(value);
+        });
+
+        // Create BagUI with current player's bag
+        const bagUI = new BagUI(null, (selectedDisc) => {
+            // Handle disc selection
+            if (window.gameState && window.gameState.currentDisc) {
+                window.gameState.currentDisc.remove();
+                window.gameState.currentDisc = null;
+            }
+            
+            // Create new disc with selected properties
+            if (window.gameState) {
+                const currentPlayer = window.playerManager.getCurrentPlayer();
+                if (currentPlayer) {
+                    // Create new disc with the scene reference
+                    window.gameState.currentDisc = new Disc(scene, selectedDisc);
+                    // Position disc above player
+                    const discPosition = currentPlayer.position.clone().add(new THREE.Vector3(0, 1, 0));
+                    window.gameState.currentDisc.setPosition(discPosition);
+                    window.gameState.discInHand = true;
+                }
+            }
+        });
+        
+        // Update BagUI when player changes
+        window.playerManager.onPlayerChange = (player) => {
+            bagUI.setBag(player.bag);
+        };
+
+        // Set up throw handlers
+        window.ui.setThrowHandlers(
+            // Start throw
+            () => {
+                window.gameState.throwing = true;
+                window.gameState.power = 0;
+                window.gameState.powerIncreasing = true;
+                window.ui.showPowerMeter();
+            },
+            // Complete throw
+            () => {
+                if (!window.gameState.throwing) return;
+                
+                const currentPlayer = window.playerManager.getCurrentPlayer();
+                if (!currentPlayer) return;
+
+                const throwPower = window.gameState.power;
+                const throwDirection = window.cameraController.getDirection();
+                
+                // Create new disc if needed
+                if (!window.gameState.currentDisc) {
+                    const discData = currentPlayer.getSelectedDisc();
+                    window.gameState.currentDisc = new Disc(scene, discData);
+                    window.gameState.currentDisc.setPosition(currentPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
+                }
+                
+                // Throw the disc
+                window.gameState.currentDisc.throw(throwDirection, throwPower);
+                window.gameState.discInHand = false;  // Set disc as not in hand
+                
+                // Reset throw state
+                window.gameState.throwing = false;
+                window.gameState.power = 0;
+                window.ui.hidePowerMeter();
+                
+                // Update player stats
+                currentPlayer.incrementThrows();
+                window.ui.updateThrows(currentPlayer.throws);
+            },
+            // Can throw check
+            () => window.gameState.discInHand
+        );
+
+        // Load initial course through course manager
+        console.log('Loading initial course...');
+        await window.courseManager.loadCourseFromFile('beginner');
+        
+        // Update UI with total holes
+        if (window.courseManager.getCurrentCourse()) {
+            const course = window.courseManager.getCurrentCourse();
+            const totalHoles = course.holes.length;
+            window.ui.updateHole(course.currentHoleIndex + 1, totalHoles);
+        }
+
+        // Initialize portal manager before players
+        // This ensures portals are in place when players spawn
+        console.log('Initializing portal manager...');
+        window.portalManager.initialize();
+
+        // Initialize player after course is loaded and portals are set
+        console.log('Initializing players...');
+        window.playerManager.initializePlayers(playerName);
+        const firstPlayer = window.playerManager.getCurrentPlayer();
+
+        // Create initial disc for first player
+        if (firstPlayer && firstPlayer.bag) {
+            const initialDisc = firstPlayer.bag.discs[0];
+            if (initialDisc) {
+                window.gameState.currentDisc = new Disc(scene, initialDisc);
+                const discPosition = firstPlayer.position.clone().add(new THREE.Vector3(0, 1, 0));
                 window.gameState.currentDisc.setPosition(discPosition);
                 window.gameState.discInHand = true;
             }
         }
-    });
-    
-    // Update BagUI when player changes
-    window.playerManager.onPlayerChange = (player) => {
-        bagUI.setBag(player.bag);
-    };
 
-    // Set up throw handlers
-    window.ui.setThrowHandlers(
-        // Start throw
-        () => {
-            window.gameState.throwing = true;
-            window.gameState.power = 0;
-            window.gameState.powerIncreasing = true;
-            window.ui.showPowerMeter();
-        },
-        // Complete throw
-        () => {
-            if (!window.gameState.throwing) return;
-            
-            const currentPlayer = window.playerManager.getCurrentPlayer();
-            if (!currentPlayer) return;
+        // Initialize camera controller after renderer is created
+        window.cameraController = new CameraController(scene, camera, renderer.domElement);
+        
+        // Wait a frame to ensure everything is initialized
+        await new Promise(resolve => requestAnimationFrame(resolve));
 
-            const throwPower = window.gameState.power;
-            const throwDirection = window.cameraController.getDirection();
-            
-            // Create new disc if needed
-            if (!window.gameState.currentDisc) {
-                const discData = currentPlayer.getSelectedDisc();
-                window.gameState.currentDisc = new Disc(scene, discData);
-                window.gameState.currentDisc.setPosition(currentPlayer.position.clone().add(new THREE.Vector3(0, 1, 0)));
-            }
-            
-            // Throw the disc
-            window.gameState.currentDisc.throw(throwDirection, throwPower);
-            window.gameState.discInHand = false;  // Set disc as not in hand
-            
-            // Reset throw state
-            window.gameState.throwing = false;
-            window.gameState.power = 0;
-            window.ui.hidePowerMeter();
-            
-            // Update player stats
-            currentPlayer.incrementThrows();
-            window.ui.updateThrows(currentPlayer.throws);
-        },
-        // Can throw check
-        () => window.gameState.discInHand
-    );
-
-    // Load initial course through course manager
-    await window.courseManager.loadCourseFromFile('beginner');
-    
-    // Update UI with total holes
-    if (window.courseManager.getCurrentCourse()) {
-        const course = window.courseManager.getCurrentCourse();
-        const totalHoles = course.holes.length;
-        window.ui.updateHole(course.currentHoleIndex + 1, totalHoles);
-    }
-
-    // Initialize player after course is loaded
-    window.playerManager.initializePlayers(playerName);
-    const firstPlayer = window.playerManager.getCurrentPlayer();
-
-    // Create initial disc for first player
-    if (firstPlayer && firstPlayer.bag) {
-        const initialDisc = firstPlayer.bag.discs[0];
-        if (initialDisc) {
-            window.gameState.currentDisc = new Disc(scene, initialDisc);
-            const discPosition = firstPlayer.position.clone().add(new THREE.Vector3(0, 1, 0));
-            window.gameState.currentDisc.setPosition(discPosition);
-            window.gameState.discInHand = true;
-        }
-    }
-
-    // Initialize camera controller after renderer is created
-    window.cameraController = new CameraController(scene, camera, renderer.domElement);
-    
-    // Wait a frame to ensure everything is initialized
-    requestAnimationFrame(() => {
         // Set initial camera focus on first player
         if (firstPlayer) {
             window.cameraController.focusOnPlayer(firstPlayer);
         }
-    });
 
-    // Animation loop
-    function animate() {
-        requestAnimationFrame(animate);
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
 
-        // Update game state
-        if (window.gameState.throwing) {
-            updateThrowPower();
-        }
-        
-        // Update disc physics
-        if (window.gameState.currentDisc) {
-            window.gameState.currentDisc.update(0.016); // Assuming 60fps
-        }
-        
-        // Update terrain
-        if (window.terrainManager) {
-            window.terrainManager.update(0.016); // Assuming 60fps
-        }
-        
-        // Update camera
-        if (window.cameraController) {
-            window.cameraController.update();
-        }
-        
-        renderer.render(scene, camera);
-    }
-
-    // Function to update throw power
-    function updateThrowPower() {
-        if (!window.gameState.throwing) return;
-        
-        const powerChangeRate = 2; // Power change per frame
-        if (window.gameState.powerIncreasing) {
-            window.gameState.power += powerChangeRate;
-            if (window.gameState.power >= 100) {
-                window.gameState.power = 100;
-                window.gameState.powerIncreasing = false;
+            // Update game state
+            if (window.gameState.throwing) {
+                updateThrowPower();
             }
-        } else {
-            window.gameState.power -= powerChangeRate;
-            if (window.gameState.power <= 0) {
-                window.gameState.power = 0;
-                window.gameState.powerIncreasing = true;
+            
+            // Update disc physics and check portal collisions
+            if (window.gameState.currentDisc) {
+                window.gameState.currentDisc.update(0.016); // Assuming 60fps
+                
+                // Check for portal collisions
+                if (window.portalManager) {
+                    window.portalManager.checkPortalCollisions(window.gameState.currentDisc);
+                }
             }
+            
+            // Update terrain
+            if (window.terrainManager) {
+                window.terrainManager.update(0.016); // Assuming 60fps
+            }
+            
+            // Update camera
+            if (window.cameraController) {
+                window.cameraController.update();
+            }
+            
+            renderer.render(scene, camera);
+        }
+
+        // Function to update throw power
+        function updateThrowPower() {
+            if (!window.gameState.throwing) return;
+            
+            const powerChangeRate = 2; // Power change per frame
+            if (window.gameState.powerIncreasing) {
+                window.gameState.power += powerChangeRate;
+                if (window.gameState.power >= 100) {
+                    window.gameState.power = 100;
+                    window.gameState.powerIncreasing = false;
+                }
+            } else {
+                window.gameState.power -= powerChangeRate;
+                if (window.gameState.power <= 0) {
+                    window.gameState.power = 0;
+                    window.gameState.powerIncreasing = true;
+                }
+            }
+            
+            window.ui.updatePowerMeter(window.gameState.power);
         }
         
-        window.ui.updatePowerMeter(window.gameState.power);
+        animate();
+    } catch (error) {
+        console.error('Error during game initialization:', error);
     }
-    
-    animate();
 }
 
 // Add these helper functions at the end of initGame but before animate()

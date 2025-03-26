@@ -7,27 +7,30 @@
     <meta name="mobile-web-app-capable" content="yes">
     <title>Disc Golf Game</title>
     <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/UI.js"></script>
+    <script src="js/Terrain.js"></script>
+    <script src="js/Portal.js"></script>
     <script src="js/Disc.js"></script>
     <script src="js/Hole.js"></script>
     <script src="js/Teebox.js"></script>
     <script src="js/Course.js"></script>
     <script src="js/Bag.js"></script>
     <script src="js/BagUI.js"></script>
+    <script src="js/SettingsUI.js"></script>
     <script src="js/Player.js"></script>
     <script src="js/PlayerManager.js"></script>
-    <script src="js/Terrain.js"></script>
     <script src="js/TerrainManager.js"></script>
     <script src="js/CourseManager.js"></script>
-    <script src="js/SettingsUI.js"></script>
+    <script src="js/PortalManager.js"></script>
     <script src="js/CameraController.js"></script>
     <script src="js/CelebrationEffects.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/game.js"></script>
 </head>
 <body>
     <div id="container">
+        <a target="_blank" href="https://jam.pieter.com" class="game-jam-link">🕹️ Vibe Jam 2025</a>
         <button id="settings-button">
             <img src="img/icons/settings.svg" alt="Settings" />
         </button>

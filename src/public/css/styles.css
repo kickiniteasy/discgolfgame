@@ -64,6 +64,7 @@ canvas {
     align-items: center;
     min-width: 50px;
     padding: 4px 8px;
+    gap: 0;
 }
 
 .hole-number {
@@ -464,24 +465,19 @@ canvas {
 /* Settings Button */
 #settings-button {
     position: fixed;
-    top: 10px;
+    top: 45px;
     right: 10px;
     background: rgba(0, 0, 0, 0.8);
-    color: white;
-    border: 2px solid rgba(255, 255, 255, 0.3);
+    border: none;
     border-radius: 10px;
     padding: 10px;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     transition: all 0.3s ease;
     z-index: 1000;
 }
 
 #settings-button:hover {
     background: rgba(0, 0, 0, 0.9);
-    border-color: rgba(255, 255, 255, 0.5);
 }
 
 #settings-button img {
@@ -1124,4 +1120,70 @@ canvas {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Game Jam Link */
+.game-jam-link {
+    font-family: 'system-ui', sans-serif;
+    position: fixed;
+    top: -1px;
+    right: -1px;
+    padding: 7px;
+    font-size: 14px;
+    font-weight: bold;
+    background: #fff;
+    color: #000;
+    text-decoration: none;
+    border-bottom-left-radius: 12px;
+    z-index: 1500;
+    border: 1px solid #fff;
+}
+
+.settings-container {
+    margin: 1rem 0;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+}
+
+.setting-item label {
+    flex: 1;
+    margin-right: 1rem;
+    color: #fff;
+}
+
+.setting-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.setting-item input[type="text"],
+.setting-item select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 0.5rem;
+    color: #fff;
+    width: 150px;
+}
+
+.setting-item input[type="text"]:focus,
+.setting-item select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.5);
 } 

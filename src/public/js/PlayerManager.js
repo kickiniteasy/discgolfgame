@@ -21,16 +21,60 @@ class PlayerManager {
         ];
     }
     
-    initializePlayers(username = 'You') {
-        // Get saved color from localStorage or use default
-        let playerColor = this.playerColors[0];
-        const savedColor = localStorage.getItem('discGolfPlayerColor');
-        if (savedColor) {
-            // Parse the hex color string directly
-            playerColor = parseInt(savedColor, 16);
+    // Helper method to convert various color formats to numeric color value
+    parseColor(color) {
+        if (!color) return this.playerColors[0];
+
+        // If it's already a number, return it
+        if (typeof color === 'number') return color;
+
+        // Remove hash if present
+        const colorString = color.replace('#', '');
+
+        // Check if it's a valid hex color
+        if (/^[0-9A-F]{6}$/i.test(colorString)) {
+            return parseInt(colorString, 16);
         }
 
-        // Create main player with user's name and saved color
+        // Try parsing as a CSS color name
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = color;
+        
+        // If it's a valid CSS color, ctx.fillStyle will be converted to hex
+        if (ctx.fillStyle !== '#000000' || color.toLowerCase() === 'black') {
+            // Remove the # and convert to number
+            return parseInt(ctx.fillStyle.slice(1), 16);
+        }
+
+        // If all else fails, return default color
+        return this.playerColors[0];
+    }
+    
+    initializePlayers(defaultUsername = 'You') {
+        // Check for portal parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const portalUsername = urlParams.get('username');
+        const portalColor = urlParams.get('color');
+
+        // Get saved color from localStorage or use portal color or default
+        let playerColor = this.playerColors[0];
+        if (portalColor) {
+            // Parse the color from portal parameter
+            playerColor = this.parseColor(portalColor);
+            console.log('Parsed portal color:', {
+                input: portalColor,
+                parsed: '#' + playerColor.toString(16).padStart(6, '0')
+            });
+        } else {
+            const savedColor = localStorage.getItem('discGolfPlayerColor');
+            if (savedColor) {
+                playerColor = parseInt(savedColor, 16);
+            }
+        }
+
+        // Create main player with portal name or default
+        const username = portalUsername || defaultUsername;
         this.addPlayer(username, playerColor, 'human');
         
         // Get saved player count or default to 4
@@ -78,6 +122,14 @@ class PlayerManager {
             }
             // Update scoreboard to ensure everything is in sync
             window.ui.updateScoreboard(this.getScorecard());
+        }
+
+        // Log portal parameters if they exist
+        if (urlParams.get('portal') === 'true') {
+            console.log('Initialized player from portal:', {
+                username: username,
+                color: '#' + playerColor.toString(16).padStart(6, '0')
+            });
         }
     }
     
@@ -672,5 +724,39 @@ class PlayerManager {
             type: player.type
         }));
         localStorage.setItem('discGolfAIPlayers', JSON.stringify(aiPlayers));
+    }
+
+    resetPlayers() {
+        // Reset all players to initial state
+        this.players.forEach(player => {
+            player.score = 0;
+            player.throws = 0;
+            player.hasCompletedHole = false;
+            player.lastDiscPosition = null;
+            player.setCurrentTurn(false);
+        });
+
+        // Reset current player index
+        this.currentPlayerIndex = 0;
+        
+        // Set first player as current
+        const firstPlayer = this.getCurrentPlayer();
+        if (firstPlayer) {
+            firstPlayer.setCurrentTurn(true);
+        }
+
+        // Position players at teebox if course is available
+        if (window.courseManager && window.courseManager.getCurrentCourse()) {
+            const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
+            const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+            if (teePosition && holePosition) {
+                this.positionPlayersAtTeebox(teePosition, holePosition, true);
+            }
+        }
+
+        // Update UI
+        if (window.ui) {
+            window.ui.updateScoreboard(this.getScorecard());
+        }
     }
 } 

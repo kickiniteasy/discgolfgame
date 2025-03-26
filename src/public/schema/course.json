@@ -275,6 +275,7 @@
               "bush",
               "rock",
               "path",
+              "portal",
               "custom"
             ],
             "description": "Type of terrain feature"
@@ -381,6 +382,25 @@
                 "enum": ["none", "casual", "penalty"],
                 "default": "none",
                 "description": "Whether the terrain is a hazard and its type"
+              },
+              "portalType": {
+                "type": "string",
+                "enum": ["entry", "exit"],
+                "description": "Type of portal (entry or exit)"
+              },
+              "label": {
+                "type": "string",
+                "description": "Label text for exit portals"
+              },
+              "targetUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "Target URL for exit portals"
+              },
+              "ref": {
+                "type": "string",
+                "format": "uri",
+                "description": "Reference URL for entry portals to return to"
               }
             }
           },

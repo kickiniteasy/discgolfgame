@@ -180,42 +180,25 @@ class CourseManager {
     resetGameState() {
         // Reset course to first hole
         if (this.currentCourse) {
-            this.currentCourse.resetCourse();
-        }
-
-        // Reset player position to first tee
-        if (window.playerManager && this.currentCourse) {
-            const currentPlayer = window.playerManager.getCurrentPlayer();
-            const firstTeePosition = this.currentCourse.getCurrentTeeboxPosition();
-            const firstHolePosition = this.currentCourse.getCurrentHolePosition();
+            this.currentCourse.currentHoleIndex = 0;
             
-            if (currentPlayer && firstTeePosition) {
-                // Position player at first tee, ensuring proper height
-                const teePosition = new THREE.Vector3(
-                    firstTeePosition.x,
-                    0.5, // Fixed player height above ground
-                    firstTeePosition.z
-                );
-                currentPlayer.moveToPosition(teePosition);
+            // Get first hole position
+            const firstHolePosition = this.currentCourse.getCurrentHolePosition();
+            const teePosition = this.currentCourse.getCurrentTeeboxPosition();
+            
+            // Reset all players
+            if (window.playerManager) {
+                window.playerManager.resetPlayers();
                 
-                // Rotate player to face the first hole
-                if (firstHolePosition) {
-                    const holePos = new THREE.Vector3(
-                        firstHolePosition.x,
-                        firstHolePosition.y || 0,
-                        firstHolePosition.z
-                    );
-                    currentPlayer.rotateToFacePosition(holePos);
-
-                    // Calculate and update distance to hole
-                    if (window.ui) {
-                        const distance = new THREE.Vector2(
-                            firstHolePosition.x - firstTeePosition.x,
-                            firstHolePosition.z - firstTeePosition.z
-                        ).length();
-                        window.ui.updateDistance(distance);
-                    }
+                // Position players at first tee
+                if (teePosition && firstHolePosition) {
+                    window.playerManager.positionPlayersAtTeebox(teePosition, firstHolePosition, true);
                 }
+            }
+            
+            // Update UI
+            if (window.ui) {
+                window.ui.updateHole(1, this.currentCourse.holes.length);
             }
         }
 
@@ -247,5 +230,11 @@ class CourseManager {
             powerIncreasing: true,
             discInHand: true
         };
+
+        // Reinitialize portals
+        if (window.portalManager) {
+            window.portalManager.removeAllPortals();
+            window.portalManager.initialize();
+        }
     }
 } 

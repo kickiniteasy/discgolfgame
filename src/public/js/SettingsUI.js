@@ -10,6 +10,14 @@ class SettingsUI {
         this.playerSettingsList = document.getElementById('player-settings-list');
         this.savePlayersButton = document.getElementById('save-players-button');
         
+        // Create settings container if it doesn't exist
+        this.settingsContainer = document.createElement('div');
+        this.settingsContainer.className = 'settings-container';
+        const playersTab = document.getElementById('players-tab');
+        if (playersTab) {
+            playersTab.insertBefore(this.settingsContainer, this.playerSettingsList);
+        }
+        
         // Create confirmation modal
         this.createConfirmationModal();
         
@@ -703,5 +711,52 @@ class SettingsUI {
         
         // Show success message
         this.showMessage('All data reset successfully!', 'success');
+    }
+
+    addSetting(id, label, type, defaultValue, onChange) {
+        const settingContainer = document.createElement('div');
+        settingContainer.className = 'setting-item';
+
+        const settingLabel = document.createElement('label');
+        settingLabel.htmlFor = id;
+        settingLabel.textContent = label;
+
+        let input;
+        switch (type) {
+            case 'checkbox':
+                input = document.createElement('input');
+                input.type = 'checkbox';
+                input.id = id;
+                input.checked = defaultValue;
+                input.addEventListener('change', () => onChange(input.checked));
+                break;
+            case 'select':
+                input = document.createElement('select');
+                input.id = id;
+                // Add options if provided in defaultValue
+                if (Array.isArray(defaultValue)) {
+                    defaultValue.forEach(option => {
+                        const opt = document.createElement('option');
+                        opt.value = option.value;
+                        opt.textContent = option.label;
+                        input.appendChild(opt);
+                    });
+                }
+                input.addEventListener('change', () => onChange(input.value));
+                break;
+            default: // text input
+                input = document.createElement('input');
+                input.type = 'text';
+                input.id = id;
+                input.value = defaultValue;
+                input.addEventListener('input', () => onChange(input.value));
+                break;
+        }
+
+        settingContainer.appendChild(settingLabel);
+        settingContainer.appendChild(input);
+        this.settingsContainer.appendChild(settingContainer);
+
+        return input;
     }
 } 

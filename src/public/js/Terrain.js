@@ -15,10 +15,12 @@ class Terrain {
             variant: options.variant || 'default',
             tags: options.tags || [],
             properties: options.properties || {},
-            customProperties: options.customProperties || {}
+            customProperties: options.customProperties || {},
+            showHitboxes: options.showHitboxes || false
         };
         
         this.mesh = null;
+        this.hitboxMesh = null;
         this.createMesh();
     }
 
@@ -170,6 +172,32 @@ class Terrain {
             properties: this.options.properties,
             customProperties: this.options.customProperties
         };
+    }
+
+    setHitboxVisibility(visible) {
+        if (this.hitboxMesh) {
+            this.hitboxMesh.visible = visible;
+        }
+    }
+
+    createHitbox(size = new THREE.Vector3(1, 1, 1), color = 0xffff00) {
+        if (this.hitboxMesh) {
+            this.mesh.remove(this.hitboxMesh);
+        }
+
+        const hitboxGeometry = new THREE.BoxGeometry(size.x, size.y, size.z);
+        const hitboxMaterial = new THREE.MeshBasicMaterial({
+            color: color,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3,
+            visible: this.options.showHitboxes
+        });
+
+        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+        if (this.mesh) {
+            this.mesh.add(this.hitboxMesh);
+        }
     }
 }
 
