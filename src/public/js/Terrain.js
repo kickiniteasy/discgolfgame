@@ -1,13 +1,3 @@
-/*
-Required CDN scripts (add these to your HTML before this script):
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FBXLoader.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
-*/
-
 class Terrain {
     constructor(scene, options = {}) {
         this.scene = scene;
@@ -25,7 +15,6 @@ class Terrain {
             variant: options.variant || 'default',
             tags: options.tags || [],
             properties: options.properties || {},
-            customProperties: options.customProperties || {},
             showHitboxes: options.showHitboxes || false
         };
         
@@ -204,7 +193,6 @@ class Terrain {
             variant: this.options.variant,
             tags: this.options.tags,
             properties: this.options.properties,
-            customProperties: this.options.customProperties
         };
     }
 
@@ -287,7 +275,7 @@ class Terrain {
         const loader = new THREE.GLTFLoader();
         
         // Add draco compression support if specified
-        if (this.options.customProperties.useDraco) {
+        if (this.options.properties.useDraco) {
             const dracoLoader = new THREE.DRACOLoader();
             dracoLoader.setDecoderPath('/js/libs/draco/');
             loader.setDRACOLoader(dracoLoader);
@@ -295,7 +283,7 @@ class Terrain {
 
         const gltf = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -315,7 +303,7 @@ class Terrain {
             this.animations = gltf.animations;
             
             // Auto-play first animation if specified
-            if (this.options.customProperties.autoPlayAnimation) {
+            if (this.options.properties.autoPlayAnimation) {
                 const action = this.mixer.clipAction(this.animations[0]);
                 action.play();
             }
@@ -326,8 +314,8 @@ class Terrain {
         const loader = new THREE.OBJLoader();
         
         // If the model URL ends with 'model.obj', try to load the corresponding MTL file
-        if (this.options.customProperties.modelUrl.endsWith('model.obj')) {
-            const mtlUrl = this.options.customProperties.modelUrl.replace('model.obj', 'materials.mtl');
+        if (this.options.properties.modelUrl.endsWith('model.obj')) {
+            const mtlUrl = this.options.properties.modelUrl.replace('model.obj', 'materials.mtl');
             try {
                 const mtlLoader = new THREE.MTLLoader();
                 const materials = await new Promise((resolve, reject) => {
@@ -347,7 +335,7 @@ class Terrain {
 
         const obj = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -366,7 +354,7 @@ class Terrain {
         const loader = new THREE.FBXLoader();
         const fbx = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -386,7 +374,7 @@ class Terrain {
             this.animations = fbx.animations;
             
             // Auto-play first animation if specified
-            if (this.options.customProperties.autoPlayAnimation) {
+            if (this.options.properties.autoPlayAnimation) {
                 const action = this.mixer.clipAction(this.animations[0]);
                 action.play();
             }
@@ -397,7 +385,7 @@ class Terrain {
         const loader = new THREE.STLLoader();
         const geometry = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -425,7 +413,7 @@ class Terrain {
     applyCustomMaterials() {
         if (!this.mesh) return;
 
-        const materials = this.options.customProperties.materials;
+        const materials = this.options.properties.materials;
         this.mesh.traverse((child) => {
             if (child.isMesh) {
                 // If material is specified for this mesh name
@@ -601,11 +589,11 @@ class TreeTerrain extends Terrain {
         this.mesh.add(trunk);
         this.mesh.add(foliage);
 
-        // Create hitbox group
+        // Create hitbox group - NOT parented to mesh so it can extend independently
         this.hitboxMesh = new THREE.Group();
         
-        // Create trunk hitbox - exactly matching cylinder
-        const trunkHitboxGeometry = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
+        // Create trunk hitbox - will be resized in updateHitboxes()
+        const trunkHitboxGeometry = new THREE.CylinderGeometry(0.2, 0.3, 1, 8); // Height will be dynamic
         const hitboxMaterial = new THREE.LineBasicMaterial({
             color: 0xffff00,
             transparent: true,
@@ -618,7 +606,6 @@ class TreeTerrain extends Terrain {
             new THREE.EdgesGeometry(trunkHitboxGeometry),
             hitboxMaterial
         );
-        trunkHitbox.position.y = 1;  // Center of trunk
         trunkHitbox.name = 'trunkHitbox';
 
         // Create foliage hitbox - exactly matching cone
@@ -627,15 +614,56 @@ class TreeTerrain extends Terrain {
             new THREE.EdgesGeometry(foliageHitboxGeometry),
             hitboxMaterial
         );
-        foliageHitbox.position.y = 2;  // Base at top of trunk
         foliageHitbox.name = 'foliageHitbox';
 
         // Add hitboxes to group
         this.hitboxMesh.add(trunkHitbox);
         this.hitboxMesh.add(foliageHitbox);
-        this.mesh.add(this.hitboxMesh);
+        
+        // Add hitbox group to scene (not to mesh)
+        this.scene.add(this.hitboxMesh);
 
         return Promise.resolve();
+    }
+
+    updateHitboxes() {
+        if (!this.hitboxMesh || !this.mesh) return;
+
+        // Get world position of the tree mesh
+        const worldPos = new THREE.Vector3();
+        this.mesh.getWorldPosition(worldPos);
+        
+        // Get world scale
+        const worldScale = new THREE.Vector3();
+        this.mesh.getWorldScale(worldScale);
+
+        // Update trunk hitbox
+        const trunkHitbox = this.hitboxMesh.children.find(c => c.name === 'trunkHitbox');
+        const foliageHitbox = this.hitboxMesh.children.find(c => c.name === 'foliageHitbox');
+        
+        if (trunkHitbox && foliageHitbox) {
+            // Position hitbox group at world origin
+            this.hitboxMesh.position.set(worldPos.x, 0, worldPos.z);
+            
+            // Scale hitboxes
+            const xzScale = Math.max(worldScale.x, worldScale.z);
+            
+            // Update trunk hitbox
+            trunkHitbox.scale.set(xzScale, 1, xzScale);
+            // Make trunk stretch from ground (y=0) to tree position
+            const trunkHeight = worldPos.y + (2 * worldScale.y); // Original trunk height was 2
+            trunkHitbox.scale.y = trunkHeight;
+            trunkHitbox.position.y = trunkHeight / 2; // Center the trunk vertically
+            
+            // Update foliage hitbox
+            foliageHitbox.scale.set(xzScale, worldScale.y, xzScale);
+            foliageHitbox.position.y = worldPos.y + (2 * worldScale.y); // Position at top of trunk
+        }
+    }
+
+    applyTransforms() {
+        super.applyTransforms();
+        this.updateHitboxes();
     }
 }
 
@@ -717,8 +745,8 @@ class CustomTerrain extends Terrain {
     static type = 'custom';
     
     async createMesh() {
-        if (!this.options.customProperties?.modelUrl) {
-            console.error('CustomTerrain requires a modelUrl in customProperties');
+        if (!this.options.properties?.modelUrl) {
+            console.error('CustomTerrain requires a modelUrl in properties');
             return;
         }
 
@@ -734,7 +762,7 @@ class CustomTerrain extends Terrain {
 
         try {
             // Determine file extension
-            const fileExt = this.options.customProperties.modelUrl.split('.').pop().toLowerCase();
+            const fileExt = this.options.properties.modelUrl.split('.').pop().toLowerCase();
             
             // Load the appropriate model based on file type
             switch (fileExt) {
@@ -757,7 +785,7 @@ class CustomTerrain extends Terrain {
             }
 
             // Apply any custom materials if specified
-            if (this.options.customProperties.materials) {
+            if (this.options.properties.materials) {
                 this.applyCustomMaterials();
             }
 
@@ -773,7 +801,7 @@ class CustomTerrain extends Terrain {
         const loader = new THREE.GLTFLoader();
         
         // Add draco compression support if specified
-        if (this.options.customProperties.useDraco) {
+        if (this.options.properties.useDraco) {
             const dracoLoader = new THREE.DRACOLoader();
             dracoLoader.setDecoderPath('/js/libs/draco/');
             loader.setDRACOLoader(dracoLoader);
@@ -781,7 +809,7 @@ class CustomTerrain extends Terrain {
 
         const gltf = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -801,7 +829,7 @@ class CustomTerrain extends Terrain {
             this.animations = gltf.animations;
             
             // Auto-play first animation if specified
-            if (this.options.customProperties.autoPlayAnimation) {
+            if (this.options.properties.autoPlayAnimation) {
                 const action = this.mixer.clipAction(this.animations[0]);
                 action.play();
             }
@@ -812,8 +840,8 @@ class CustomTerrain extends Terrain {
         const loader = new THREE.OBJLoader();
         
         // If the model URL ends with 'model.obj', try to load the corresponding MTL file
-        if (this.options.customProperties.modelUrl.endsWith('model.obj')) {
-            const mtlUrl = this.options.customProperties.modelUrl.replace('model.obj', 'materials.mtl');
+        if (this.options.properties.modelUrl.endsWith('model.obj')) {
+            const mtlUrl = this.options.properties.modelUrl.replace('model.obj', 'materials.mtl');
             try {
                 const mtlLoader = new THREE.MTLLoader();
                 const materials = await new Promise((resolve, reject) => {
@@ -833,7 +861,7 @@ class CustomTerrain extends Terrain {
 
         const obj = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -852,7 +880,7 @@ class CustomTerrain extends Terrain {
         const loader = new THREE.FBXLoader();
         const fbx = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -872,7 +900,7 @@ class CustomTerrain extends Terrain {
             this.animations = fbx.animations;
             
             // Auto-play first animation if specified
-            if (this.options.customProperties.autoPlayAnimation) {
+            if (this.options.properties.autoPlayAnimation) {
                 const action = this.mixer.clipAction(this.animations[0]);
                 action.play();
             }
@@ -883,7 +911,7 @@ class CustomTerrain extends Terrain {
         const loader = new THREE.STLLoader();
         const geometry = await new Promise((resolve, reject) => {
             loader.load(
-                this.options.customProperties.modelUrl,
+                this.options.properties.modelUrl,
                 resolve,
                 undefined,
                 reject
@@ -911,7 +939,7 @@ class CustomTerrain extends Terrain {
     applyCustomMaterials() {
         if (!this.mesh) return;
 
-        const materials = this.options.customProperties.materials;
+        const materials = this.options.properties.materials;
         this.mesh.traverse((child) => {
             if (child.isMesh) {
                 // If material is specified for this mesh name

@@ -178,7 +178,7 @@
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["holeNumber", "par", "teebox", "basket", "outOfBounds", "fairway"],
+        "required": ["holeNumber", "par", "teebox", "basket"],
         "properties": {
           "holeNumber": {
             "type": "integer",
@@ -241,64 +241,6 @@
                   "y": { "type": "number" },
                   "z": { "type": "number" }
                 }
-              }
-            }
-          },
-          "outOfBounds": {
-            "type": "array",
-            "description": "Areas designated as out of bounds",
-            "items": {
-              "type": "object",
-              "required": ["type", "points"],
-              "properties": {
-                "type": {
-                  "type": "string",
-                  "enum": ["polygon", "circle"],
-                  "description": "Shape type of the OB area"
-                },
-                "points": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": ["x", "z"],
-                    "properties": {
-                      "x": { "type": "number" },
-                      "z": { "type": "number" }
-                    }
-                  },
-                  "description": "For polygon: array of points defining the OB area. For circle: single point as center"
-                },
-                "radius": {
-                  "type": "number",
-                  "description": "Required for circle type OB areas - defines the radius"
-                }
-              }
-            }
-          },
-          "fairway": {
-            "type": "object",
-            "required": ["shape", "width"],
-            "properties": {
-              "shape": {
-                "type": "array",
-                "description": "Array of points defining the centerline of the fairway",
-                "items": {
-                  "type": "object",
-                  "required": ["x", "z"],
-                  "properties": {
-                    "x": { "type": "number" },
-                    "z": { "type": "number" }
-                  }
-                }
-              },
-              "width": {
-                "type": "number",
-                "description": "Width of the fairway in meters"
-              },
-              "textureUrl": {
-                "type": "string",
-                "format": "uri",
-                "description": "Optional custom texture for this specific fairway"
               }
             }
           }
@@ -436,6 +378,10 @@
                 "type": "string",
                 "format": "uri",
                 "description": "For portal type: The URL to return to when an entry portal is hit"
+              },
+              "modelUrl": {
+                "type": "string",
+                "description": "For custom type: URL to the 3D model file"
               }
             }
           }
