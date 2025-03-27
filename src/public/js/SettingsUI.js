@@ -611,15 +611,7 @@ class SettingsUI {
     }
 
     showMessage(text, type = 'info') {
-        const message = document.createElement('div');
-        message.className = `message ${type}`;
-        message.textContent = text;
-        document.body.appendChild(message);
-        
-        setTimeout(() => {
-            message.style.opacity = '0';
-            setTimeout(() => message.remove(), 300);
-        }, 3000);
+        ToasterMessage.show(text, type);
     }
 
     resetGame() {

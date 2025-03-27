@@ -21,16 +21,21 @@ class TerrainManager {
 
         // Load textures with error handling
         const grassTexture = this.textureLoader.load(
-            'textures/grass/grass_diffuse.png',
+            'textures/ground/tile.png',
             undefined,
             undefined,
             (error) => console.error('Error loading grass texture:', error)
         );
-        const grassNormal = this.textureLoader.load(
-            'textures/grass/grass_normal.png',
+
+        // Try to load grayscale map for normal mapping
+        const grassGrayscale = this.textureLoader.load(
+            'textures/ground/grayscale.png',
             undefined,
             undefined,
-            (error) => console.error('Error loading normal map:', error)
+            (error) => {
+                // Just log as debug since grayscale map is optional
+                console.debug('Could not load ground grayscale map:', error);
+            }
         );
         
         // Configure texture repeat based on size
@@ -45,16 +50,18 @@ class TerrainManager {
         grassTexture.minFilter = THREE.LinearMipmapLinearFilter;
         grassTexture.encoding = THREE.sRGBEncoding; // Proper color space
         
-        grassNormal.wrapS = grassNormal.wrapT = THREE.RepeatWrapping;
-        grassNormal.repeat.set(repeatX, repeatY);
-        grassNormal.anisotropy = 4;
-        grassNormal.magFilter = THREE.LinearFilter;
-        grassNormal.minFilter = THREE.LinearMipmapLinearFilter;
+        if (grassGrayscale) {
+            grassGrayscale.wrapS = grassGrayscale.wrapT = THREE.RepeatWrapping;
+            grassGrayscale.repeat.set(repeatX, repeatY);
+            grassGrayscale.anisotropy = 4;
+            grassGrayscale.magFilter = THREE.LinearFilter;
+            grassGrayscale.minFilter = THREE.LinearMipmapLinearFilter;
+        }
 
         const geometry = new THREE.PlaneGeometry(width, length, 32, 32);
         const material = new THREE.MeshStandardMaterial({
             map: grassTexture,
-            normalMap: grassNormal,
+            normalMap: grassGrayscale || null,
             normalScale: new THREE.Vector2(0.8, 0.8), // Reduced normal map effect
             color: 0x7ea04d, // Adjusted green tint
             roughness: 0.9,
@@ -70,27 +77,10 @@ class TerrainManager {
 
     // Load terrain from course JSON data
     async loadFromCourseData(courseData) {
-        // Preserve existing portals before clearing
-        const existingPortals = Array.from(this.terrainObjects.values())
-            .filter(t => t.constructor.type === 'portal')
-            .map(p => ({
-                type: 'portal',
-                id: p.id,
-                position: p.options.position,
-                rotation: p.options.rotation,
-                scale: p.options.scale,
-                properties: p.options.properties,
-                visualProperties: p.options.visualProperties,
-                variant: p.options.variant,
-                tags: p.options.tags
-            }));
-
-        // Clear non-portal terrain
+        // Clear ALL terrain including portals
         this.terrainObjects.forEach((terrain, id) => {
-            if (terrain.constructor.type !== 'portal') {
-                terrain.removeFromScene();
-                this.terrainObjects.delete(id);
-            }
+            terrain.removeFromScene();
+            this.terrainObjects.delete(id);
         });
 
         // Remove ground plane if it exists
@@ -109,47 +99,52 @@ class TerrainManager {
             return;
         }
 
-        // Sort terrain by type to ensure proper rendering order
-        const sortedTerrain = [...courseData.terrain].sort((a, b) => {
-            const order = {
-                'fairway': 2,
-                'rough': 4,
-                'water': 5,
-                'sand': 7,
-                'tree': 8,
-                'bush': 9,
-                'rock': 10,
-                'path': 12,
-                'custom': 15
-            };
-            return (order[a.type] || 99) - (order[b.type] || 99);
-        });
-
-        // Create all terrain objects
-        for (const terrainData of sortedTerrain) {
-            // Skip portal terrain if we already have a portal of the same type
-            if (terrainData.type === 'portal') {
-                const isEntry = terrainData.properties?.isEntry;
-                const hasPortalOfType = existingPortals.some(p => 
-                    p.properties?.isEntry === isEntry);
-                if (hasPortalOfType) continue;
-            }
-
-            // Small y-offset for each layer to prevent z-fighting
+        // Create all terrain objects in the order they appear in the JSON
+        for (const terrainData of courseData.terrain) {
+            // Add position if not present
             if (!terrainData.position) terrainData.position = { x: 0, y: 0, z: 0 };
-            terrainData.position.y += sortedTerrain.indexOf(terrainData) * 0.01;
-            await this.createTerrainFromData(terrainData);
+            
+            // Create the terrain object
+            const terrain = await this.createTerrainFromData(terrainData);
+            
+            // Configure ground-type terrain for proper layering
+            if (terrain?.mesh?.material) {
+                const material = terrain.mesh.material;
+                if (['fairway', 'rough', 'path', 'water', 'sand'].includes(terrainData.type)) {
+                    // Set render order based on type
+                    switch (terrainData.type) {
+                        case 'water':
+                            terrain.mesh.renderOrder = 1;
+                            material.transparent = true;
+                            material.opacity = material.opacity || 0.8;
+                            break;
+                        case 'sand':
+                            terrain.mesh.renderOrder = 2;
+                            break;
+                        case 'rough':
+                            terrain.mesh.renderOrder = 3;
+                            break;
+                        case 'fairway':
+                            terrain.mesh.renderOrder = 4;
+                            break;
+                        case 'path':
+                            terrain.mesh.renderOrder = 5;
+                            break;
+                    }
+                    
+                    // Disable depth writing for all ground planes except water
+                    // This allows them to render in order without z-fighting
+                    if (terrainData.type !== 'water') {
+                        material.depthWrite = false;
+                    }
+                }
+            }
         }
 
-        // Restore any existing portals that weren't in the course data
-        for (const portalData of existingPortals) {
-            const isEntry = portalData.properties?.isEntry;
-            const hasPortalOfType = Array.from(this.terrainObjects.values())
-                .some(t => t.constructor.type === 'portal' && 
-                      t.options.properties?.isEntry === isEntry);
-            if (!hasPortalOfType) {
-                await this.createTerrainFromData(portalData);
-            }
+        // Set the base ground plane to render first
+        if (this.groundPlane) {
+            this.groundPlane.renderOrder = 0;
+            this.groundPlane.material.depthWrite = false;
         }
     }
 
@@ -189,7 +184,9 @@ class TerrainManager {
             tags: terrainData.tags || [],
             properties: terrainData.properties || {},
             customProperties: terrainData.customProperties || {},
-            showHitboxes: window.gameState?.showHitboxes || false
+            showHitboxes: window.gameState?.showHitboxes || false,
+            shape: terrainData.shape,
+            textureSettings: terrainData.textureSettings
         };
 
         const terrain = new TerrainClass(this.scene, options);

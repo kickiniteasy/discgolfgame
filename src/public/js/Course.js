@@ -20,6 +20,7 @@ class Course {
         this.par = this.holePars.reduce((total, par) => total + par, 0);
         
         this.initCourse(courseData.holes);
+        this.updateArrowVisibility(); // Show arrow for first hole
     }
 
     initCourse(holesData) {
@@ -63,6 +64,16 @@ class Course {
         });
     }
 
+    updateArrowVisibility() {
+        // Hide all arrows first
+        this.holes.forEach(hole => hole.hideArrow());
+        // Show only current hole's arrow
+        const currentHole = this.getCurrentHole();
+        if (currentHole) {
+            currentHole.showArrow();
+        }
+    }
+
     getCurrentHole() {
         return this.holes[this.currentHoleIndex];
     }
@@ -88,6 +99,7 @@ class Course {
     nextHole() {
         if (this.currentHoleIndex < this.holes.length - 1) {
             this.currentHoleIndex++;
+            this.updateArrowVisibility(); // Update arrow visibility after changing holes
             return true;
         }
         return false; // No more holes
@@ -95,6 +107,7 @@ class Course {
 
     resetCourse() {
         this.currentHoleIndex = 0;
+        this.updateArrowVisibility(); // Update arrow visibility after reset
     }
 
     checkDiscCollision(discPosition) {

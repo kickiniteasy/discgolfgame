@@ -30,6 +30,14 @@ class UI {
         this.initializePlayersModal();
         this.initializeThrowControls();
         this.initializeCameraControls();
+
+        // X Button click handler
+        const socialTwitterButton = document.getElementById('social-twitter-button');
+        if (socialTwitterButton) {
+            socialTwitterButton.addEventListener('click', () => {
+                window.open('https://x.com/kickiniteasy', '_blank');
+            });
+        }
     }
 
     initializePlayersModal() {
@@ -174,21 +182,8 @@ class UI {
     }
 
     showMessage(text, duration = 2000) {
-        if (!this.messageDisplay) return;
-        this.messageDisplay.textContent = text;
-        this.messageDisplay.style.display = 'block';
-        // Use requestAnimationFrame to ensure display: block is processed before adding visible class
-        requestAnimationFrame(() => {
-            this.messageDisplay.classList.add('visible');
-        });
-        
-        setTimeout(() => {
-            this.messageDisplay.classList.remove('visible');
-            // Wait for transition to complete before hiding
-            setTimeout(() => {
-                this.messageDisplay.style.display = 'none';
-            }, 200); // Match the transition duration
-        }, duration);
+        // Use the new ToasterMessage system
+        ToasterMessage.achievement(text, duration);
     }
 
     updateDistance(distance) {

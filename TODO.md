@@ -1,8 +1,16 @@
-- Game completion screen should show everyone's score and it should look nice like the scorecard.
-- make a new icon for the scorecard.
-- make a button to my twitter
+SPONSORS
+- Top of Teebox texture with sponsors
+--- Hole #1 has the logo?
+--- Fly Discs?
+--- Morley Field?
+--- OpenAI?
+--- Vibe Jam?
+--- Sign next to hole with sponsor?
+
+
+
+
 - make a help button and help modal
-- "Hole in One" and all that should use the normal toast situation
 - Loading a new course modal with info about it?
 - Lets the user pick a new course easily after completing the round.
 - User starts with Putter and Advances?
@@ -16,13 +24,14 @@
 - What is the monetization? Allow people to buy high speed discs?
 - Achievements? Goals?
 - How do we store the localdata?
-- Top of Teebox texture with sponsors
---- Hole #1 has the logo?
---- Fly Discs?
---- Morley Field?
---- OpenAI?
---- Vibe Jam?
---- Sign next to hole with sponsor?
 - Link username clicks to Twitter?
 - Can maps have custom grass?
-- Make ground terrain be circular or rectangular, have the size of it
+
+
+
+DONE
+X - Game completion screen should show everyone's score and it should look nice like the scorecard.
+X - make a new icon for the scorecard.
+X - make a button to my twitter
+X - "Hole in One" and all that should use the normal toast situation
+X - Make ground terrain be circular or rectangular, have the size of it

@@ -18,14 +18,6 @@
         "skyImageUrl": "https://example.com/textures/forest_canopy_sky.jpg",
         "backgroundColor": "#324E2D"
     },
-    "defaultTextures": {
-        "fairwayTexture": "https://example.com/textures/forest_grass.jpg",
-        "roughTexture": "https://example.com/textures/forest_rough.jpg",
-        "waterTexture": "https://example.com/textures/forest_water.jpg",
-        "sandTexture": "https://example.com/textures/forest_sand.jpg",
-        "teepadTexture": "https://example.com/textures/concrete.jpg",
-        "groundTexture": "https://example.com/textures/forest_ground.jpg"
-    },
     "courseSize": {
         "width": 400,
         "length": 600
@@ -59,8 +51,7 @@
                     { "x": 0, "z": -130 },
                     { "x": 0, "z": -150 }
                 ],
-                "width": 12,
-                "textureUrl": "https://example.com/textures/mossy_fairway.jpg"
+                "width": 12
             }
         },
         {
@@ -75,7 +66,6 @@
             "basket": {
                 "position": { "x": 120, "y": 0, "z": -80 }
             },
-            "outOfBounds": [],
             "fairway": {
                 "shape": [
                     { "x": 100, "z": -80 },
@@ -97,7 +87,6 @@
             "basket": {
                 "position": { "x": -100, "y": 0, "z": -200 }
             },
-            "outOfBounds": [],
             "fairway": {
                 "shape": [
                     { "x": -80, "z": -200 },
@@ -118,7 +107,6 @@
             "basket": {
                 "position": { "x": 50, "y": 0, "z": -250 }
             },
-            "outOfBounds": [],
             "fairway": {
                 "shape": [
                     { "x": 30, "z": -250 },
@@ -133,109 +121,291 @@
             "id": "fairway-1",
             "type": "fairway",
             "position": { "x": 0, "y": 0, "z": -140 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 15, "y": 1, "z": 30 },
+            "shape": {
+                "type": "rectangle",
+                "width": 15,
+                "length": 30,
+                "rotation": 0
+            },
             "visualProperties": {
                 "color": "#90EE90",
                 "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0,
-                "textureUrl": "https://example.com/textures/forest_fairway1.jpg"
-            },
-            "variant": "default",
-            "tags": ["fairway", "hole1"]
+                "metalness": 0.1
+            }
         },
         {
-            "id": "fairway-2",
-            "type": "fairway",
-            "position": { "x": 110, "y": 0, "z": -80 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 30, "y": 1, "z": 15 },
-            "visualProperties": {
-                "color": "#90EE90",
-                "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0
+            "id": "rough-1",
+            "type": "rough",
+            "position": { "x": -10, "y": 0, "z": -140 },
+            "shape": {
+                "type": "rectangle",
+                "width": 20,
+                "length": 40,
+                "rotation": 0
             },
-            "variant": "default",
-            "tags": ["fairway", "hole2"]
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
         },
         {
-            "id": "fairway-3",
-            "type": "fairway",
-            "position": { "x": -90, "y": 0, "z": -200 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 30, "y": 1, "z": 15 },
-            "visualProperties": {
-                "color": "#90EE90",
-                "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0
+            "id": "rough-2",
+            "type": "rough",
+            "position": { "x": 10, "y": 0, "z": -140 },
+            "shape": {
+                "type": "rectangle",
+                "width": 20,
+                "length": 40,
+                "rotation": 0
             },
-            "variant": "default",
-            "tags": ["fairway", "hole3"]
-        },
-        {
-            "id": "fairway-4",
-            "type": "fairway",
-            "position": { "x": 40, "y": 0, "z": -250 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 30, "y": 1, "z": 15 },
             "visualProperties": {
-                "color": "#90EE90",
-                "roughness": 0.8,
-                "metalness": 0.1,
-                "opacity": 1.0
-            },
-            "variant": "default",
-            "tags": ["fairway", "hole4"]
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
         },
         {
             "id": "water-1",
             "type": "water",
             "position": { "x": 15, "y": 0, "z": -150 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 15, "y": 1, "z": 40 },
+            "shape": {
+                "type": "rectangle",
+                "width": 15,
+                "length": 40,
+                "rotation": 0
+            },
             "visualProperties": {
                 "color": "#4169E1",
                 "roughness": 0.2,
                 "metalness": 0.8,
-                "opacity": 0.8,
-                "textureUrl": "https://example.com/textures/forest_creek.jpg"
+                "opacity": 0.8
+            }
+        },
+        {
+            "id": "fairway-2",
+            "type": "fairway",
+            "position": { "x": 110, "y": 0, "z": -80 },
+            "shape": {
+                "type": "rectangle",
+                "width": 30,
+                "length": 15,
+                "rotation": 0
             },
-            "variant": "default",
-            "tags": ["water", "hazard"],
-            "properties": {
-                "depth": 2,
-                "hazardType": "penalty"
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1
             }
         },
         {
-            "id": "rough_area_1",
+            "id": "rough-3",
             "type": "rough",
-            "position": {"x": 15, "y": 0, "z": -20},
-            "scale": {"x": 8, "y": 1, "z": 12},
-            "properties": {
-                "density": 0.8
+            "position": { "x": 110, "y": 0, "z": -90 },
+            "shape": {
+                "type": "rectangle",
+                "width": 40,
+                "length": 20,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
             }
         },
         {
-            "id": "tree_cluster_1",
-            "type": "tree",
-            "position": {"x": -12, "y": 0, "z": 8},
-            "scale": {"x": 1.2, "y": 1.2, "z": 1.2}
+            "id": "rough-4",
+            "type": "rough",
+            "position": { "x": 110, "y": 0, "z": -70 },
+            "shape": {
+                "type": "rectangle",
+                "width": 40,
+                "length": 20,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
         },
         {
-            "id": "tree_cluster_2",
-            "type": "tree",
-            "position": {"x": -11, "y": 0, "z": 9},
-            "scale": {"x": 1.1, "y": 1.1, "z": 1.1}
+            "id": "fairway-3",
+            "type": "fairway",
+            "position": { "x": -90, "y": 0, "z": -200 },
+            "shape": {
+                "type": "rectangle",
+                "width": 30,
+                "length": 15,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1
+            }
         },
         {
-            "id": "tree_cluster_3",
+            "id": "rough-5",
+            "type": "rough",
+            "position": { "x": -90, "y": 0, "z": -210 },
+            "shape": {
+                "type": "rectangle",
+                "width": 40,
+                "length": 20,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
+        },
+        {
+            "id": "rough-6",
+            "type": "rough",
+            "position": { "x": -90, "y": 0, "z": -190 },
+            "shape": {
+                "type": "rectangle",
+                "width": 40,
+                "length": 20,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
+        },
+        {
+            "id": "fairway-4",
+            "type": "fairway",
+            "position": { "x": 40, "y": 0, "z": -250 },
+            "shape": {
+                "type": "rectangle",
+                "width": 30,
+                "length": 15,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1
+            }
+        },
+        {
+            "id": "rough-7",
+            "type": "rough",
+            "position": { "x": 40, "y": 0, "z": -260 },
+            "shape": {
+                "type": "rectangle",
+                "width": 40,
+                "length": 20,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
+        },
+        {
+            "id": "rough-8",
+            "type": "rough",
+            "position": { "x": 40, "y": 0, "z": -240 },
+            "shape": {
+                "type": "rectangle",
+                "width": 40,
+                "length": 20,
+                "rotation": 0
+            },
+            "visualProperties": {
+                "color": "#355E3B",
+                "roughness": 1.0,
+                "metalness": 0.0
+            }
+        },
+        {
+            "id": "tree-1",
             "type": "tree",
-            "position": {"x": -13, "y": 0, "z": 9},
-            "scale": {"x": 1.3, "y": 1.3, "z": 1.3}
+            "position": { "x": -5, "y": 0, "z": -135 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-2",
+            "type": "tree",
+            "position": { "x": 5, "y": 0, "z": -145 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-3",
+            "type": "tree",
+            "position": { "x": -8, "y": 0, "z": -155 },
+            "scale": { "x": 1.1, "y": 1.3, "z": 1.1 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-4",
+            "type": "tree",
+            "position": { "x": 105, "y": 0, "z": -75 },
+            "scale": { "x": 1.4, "y": 1.6, "z": 1.4 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-5",
+            "type": "tree",
+            "position": { "x": 115, "y": 0, "z": -85 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-6",
+            "type": "tree",
+            "position": { "x": -85, "y": 0, "z": -195 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-7",
+            "type": "tree",
+            "position": { "x": -95, "y": 0, "z": -205 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-8",
+            "type": "tree",
+            "position": { "x": 35, "y": 0, "z": -245 },
+            "scale": { "x": 1.4, "y": 1.6, "z": 1.4 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
+        },
+        {
+            "id": "tree-9",
+            "type": "tree",
+            "position": { "x": 45, "y": 0, "z": -255 },
+            "scale": { "x": 1.3, "y": 1.5, "z": 1.3 },
+            "visualProperties": {
+                "color": "#228B22"
+            }
         }
     ]
 }

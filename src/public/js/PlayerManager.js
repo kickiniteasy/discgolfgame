@@ -288,12 +288,28 @@ class PlayerManager {
                     const playAgainButton = document.getElementById('play-again-button');
                     
                     // Set winner text
-                    winnerDisplay.textContent = `${winner.name} wins with a score of ${winner.score}!`;
+                    winnerDisplay.textContent = `🎉 ${winner.name} wins with a score of ${winner.score}! 🎉`;
                     
-                    // Set final scores
+                    // Set final scores with detailed player information
                     finalScoresDisplay.innerHTML = sortedPlayers
-                        .map((p, i) => `${i + 1}. ${p.name}: ${p.score}`)
-                        .join('<br>');
+                        .map((p, i) => {
+                            const colorHex = p.color.toString(16).padStart(6, '0');
+                            const position = i + 1;
+                            const positionEmoji = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `${position}.`;
+                            
+                            return `
+                                <div class="player-score ${p === winner ? 'winner' : ''}">
+                                    <div class="player-name" style="color: #${colorHex}">
+                                        ${positionEmoji} ${p.name}
+                                    </div>
+                                    <div class="player-stats">
+                                        <span>Final Score: ${p.score}</span>
+                                        <span>Total Throws: ${p.throws}</span>
+                                    </div>
+                                </div>
+                            `;
+                        })
+                        .join('');
                     
                     // Set up play again button
                     playAgainButton.onclick = () => window.location.reload();

@@ -15,7 +15,9 @@ class Terrain {
             variant: options.variant || 'default',
             tags: options.tags || [],
             properties: options.properties || {},
-            showHitboxes: options.showHitboxes || false
+            showHitboxes: options.showHitboxes || false,
+            shape: options.shape || null,
+            textureSettings: options.textureSettings || null
         };
         
         this.mesh = null;
@@ -71,14 +73,15 @@ class Terrain {
             this.constructor.type === 'path' ||
             this.constructor.type === 'water' ||
             this.constructor.type === 'sand') {
-            // Ground planes are rotated -90 degrees on X axis and use only Y rotation
-            this.mesh.rotation.set(-Math.PI / 2, this.options.rotation.y, 0);
+            // First apply the shape rotation around Y axis
+            const shapeRotation = this.options.shape?.rotation || 0;
+            this.mesh.rotation.set(-Math.PI / 2, shapeRotation, 0);
         } else {
             // Other objects use full rotation
             this.mesh.rotation.setFromVector3(this.options.rotation);
         }
         
-        // Apply scale to entire mesh (which includes both the tree and hitbox group)
+        // Apply scale to entire mesh
         this.mesh.scale.copy(this.options.scale);
     }
 
@@ -154,18 +157,6 @@ class Terrain {
                 this.mesh.scale.x *= 1.5;
                 this.mesh.scale.z *= 1.5;
                 break;
-            case 'dense':
-                // For vegetation types
-                if (this instanceof TreeGroupTerrain) {
-                    this.createDenseVariant();
-                }
-                break;
-            case 'sparse':
-                // For vegetation types
-                if (this instanceof TreeGroupTerrain) {
-                    this.createSparseVariant();
-                }
-                break;
         }
     }
 
@@ -193,6 +184,8 @@ class Terrain {
             variant: this.options.variant,
             tags: this.options.tags,
             properties: this.options.properties,
+            shape: this.options.shape,
+            textureSettings: this.options.textureSettings
         };
     }
 
@@ -426,141 +419,196 @@ class Terrain {
     }
 }
 
-class FairwayTerrain extends Terrain {
+class GroundTerrain extends Terrain {
+    async createMesh() {
+        if (!this.options.shape) {
+            console.error('Ground terrain requires shape definition:', this.constructor.type, this.id);
+            return;
+        }
+
+        let geometry;
+        const shape = this.options.shape;
+
+        if (shape.type === 'rectangle') {
+            geometry = new THREE.PlaneGeometry(shape.width || 1, shape.length || 1);
+        } else if (shape.type === 'ellipse') {
+            // Create an elliptical shape using shape geometry
+            const ellipseCurve = new THREE.EllipseCurve(
+                0, 0,                         // Center x, y
+                (shape.width || 1) / 2,       // X radius
+                (shape.length || 1) / 2,      // Y radius
+                0, 2 * Math.PI,               // Start angle, end angle
+                false,                        // Clockwise
+                0                             // Rotation
+            );
+
+            const points = ellipseCurve.getPoints(50);
+            const shape2D = new THREE.Shape();
+            shape2D.moveTo(points[0].x, points[0].y);
+            points.forEach(point => shape2D.lineTo(point.x, point.y));
+
+            geometry = new THREE.ShapeGeometry(shape2D);
+        } else {
+            console.error('Invalid shape type:', shape.type);
+            return;
+        }
+
+        // Load and configure textures if specified
+        const textureSettings = this.options.textureSettings || {};
+        const material = await this.createMaterial(textureSettings);
+
+        this.mesh = new THREE.Mesh(geometry, material);
+        
+        return Promise.resolve();
+    }
+
+    async createMaterial(textureSettings) {
+        const material = new THREE.MeshStandardMaterial({
+            color: this.getDefaultColor(),
+            roughness: this.options.visualProperties?.roughness || 0.8,
+            metalness: this.options.visualProperties?.metalness || 0.1,
+            side: THREE.DoubleSide,
+            flatShading: true
+        });
+
+        // Apply color from visual properties if specified
+        if (this.options.visualProperties?.color) {
+            material.color.setStyle(this.options.visualProperties.color);
+        }
+
+        // Get the default texture path based on terrain type
+        const defaultTexturePath = this.getDefaultTexturePath();
+        const texturePath = textureSettings.textureUrl || defaultTexturePath;
+
+        if (texturePath) {
+            try {
+                const textureLoader = new THREE.TextureLoader();
+                const texture = await new Promise((resolve, reject) => {
+                    textureLoader.load(
+                        texturePath,
+                        resolve,
+                        undefined,
+                        (error) => {
+                            console.warn(`Failed to load texture ${texturePath}:`, error);
+                            reject(error);
+                        }
+                    );
+                });
+
+                // Configure texture settings
+                texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+                const tileSize = textureSettings.tileSize || 5;
+                const repeatX = this.options.shape.width / tileSize;
+                const repeatY = this.options.shape.length / tileSize;
+                texture.repeat.set(repeatX, repeatY);
+                texture.rotation = textureSettings.rotation || 0;
+
+                // Apply texture quality settings
+                texture.anisotropy = 4;
+                texture.magFilter = THREE.LinearFilter;
+                texture.minFilter = THREE.LinearMipmapLinearFilter;
+                texture.encoding = THREE.sRGBEncoding;
+
+                material.map = texture;
+
+                // Try to load grayscale map for normal mapping if it exists
+                const grayscalePath = texturePath.replace('/tile.png', '/grayscale.png');
+                try {
+                    const grayscaleMap = await new Promise((resolve, reject) => {
+                        textureLoader.load(
+                            grayscalePath,
+                            resolve,
+                            undefined,
+                            reject
+                        );
+                    });
+
+                    // Configure grayscale map settings for normal mapping
+                    grayscaleMap.wrapS = grayscaleMap.wrapT = THREE.RepeatWrapping;
+                    grayscaleMap.repeat.copy(texture.repeat);
+                    grayscaleMap.rotation = textureSettings.rotation || 0;
+                    material.normalMap = grayscaleMap;
+                    material.normalScale = new THREE.Vector2(0.8, 0.8);
+                } catch (error) {
+                    // Grayscale map not found - this is fine, just continue without it
+                    console.debug(`No grayscale map found at ${grayscalePath}`);
+                }
+            } catch (error) {
+                // If texture fails to load, just continue with the color material
+                console.warn(`Using fallback color for ${this.constructor.type} (${this.id}) - texture failed to load`);
+            }
+        }
+
+        return material;
+    }
+
+    getDefaultTexturePath() {
+        const type = this.constructor.type;
+        switch (type) {
+            case 'fairway':
+                return 'textures/fairway/tile.png';
+            case 'rough':
+                return 'textures/rough/tile.png';
+            case 'water':
+                return 'textures/water/tile.png';
+            case 'sand':
+                return 'textures/sand/tile.png';
+            case 'path':
+                return 'textures/path/tile.png';
+            default:
+                return null;
+        }
+    }
+
+    getDefaultColor() {
+        return 0x808080; // Override in subclasses
+    }
+}
+
+class FairwayTerrain extends GroundTerrain {
     static type = 'fairway';
     
-    async createMesh() {
-        const geometry = new THREE.PlaneGeometry(1, 1);
-        
-        // Load textures
-        const textureLoader = new THREE.TextureLoader();
-        const fairwayTexture = await new Promise((resolve) => {
-            textureLoader.load(
-                'textures/fairway/fairway_diffuse.png',
-                resolve,
-                undefined,
-                (error) => console.error('Error loading fairway texture:', error)
-            );
-        });
-        
-        const fairwayNormal = await new Promise((resolve) => {
-            textureLoader.load(
-                'textures/fairway/fairway_normal.png',
-                resolve,
-                undefined,
-                (error) => console.error('Error loading fairway normal map:', error)
-            );
-        });
-        
-        // Configure texture settings
-        fairwayTexture.wrapS = fairwayTexture.wrapT = THREE.RepeatWrapping;
-        fairwayTexture.repeat.set(1, 1);
-        fairwayTexture.anisotropy = 4;
-        fairwayTexture.magFilter = THREE.LinearFilter;
-        fairwayTexture.minFilter = THREE.LinearMipmapLinearFilter;
-        fairwayTexture.encoding = THREE.sRGBEncoding;
-        
-        fairwayNormal.wrapS = fairwayNormal.wrapT = THREE.RepeatWrapping;
-        fairwayNormal.repeat.set(1, 1);
-        fairwayNormal.anisotropy = 4;
-        fairwayNormal.magFilter = THREE.LinearFilter;
-        fairwayNormal.minFilter = THREE.LinearMipmapLinearFilter;
-        
-        const material = new THREE.MeshStandardMaterial({
-            map: fairwayTexture,
-            normalMap: fairwayNormal,
-            normalScale: new THREE.Vector2(0.8, 0.8),
-            color: 0x90EE90,
-            roughness: 0.8,
-            metalness: 0.1
-        });
-        
-        this.applyVisualProperties(material);
-        this.mesh = new THREE.Mesh(geometry, material);
-        
-        // Update texture repeat based on scale
-        this.updateTextureRepeat();
-        return Promise.resolve();
-    }
-    
-    applyTransforms() {
-        super.applyTransforms();
-        this.updateTextureRepeat();
-    }
-    
-    updateTextureRepeat() {
-        if (!this.mesh?.material?.map || !this.mesh?.material?.normalMap) return;
-        
-        // Set repeat based on scale (1 repeat per 5 units, similar to ground plane)
-        const repeatX = this.options.scale.x / 5;
-        const repeatY = this.options.scale.z / 5;
-        
-        this.mesh.material.map.repeat.set(repeatX, repeatY);
-        this.mesh.material.normalMap.repeat.set(repeatX, repeatY);
+    getDefaultColor() {
+        return 0x90EE90;
     }
 }
 
-class RoughTerrain extends Terrain {
+class RoughTerrain extends GroundTerrain {
     static type = 'rough';
     
-    async createMesh() {
-        const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x355E3B,
-            roughness: 1.0,
-            metalness: 0.0
-        });
-        
-        this.applyVisualProperties(material);
-        this.mesh = new THREE.Mesh(geometry, material);
-        return Promise.resolve();
+    getDefaultColor() {
+        return 0x355E3B;
     }
 }
 
-class WaterTerrain extends Terrain {
+class WaterTerrain extends GroundTerrain {
     static type = 'water';
     
-    async createMesh() {
-        const geometry = new THREE.PlaneGeometry(
-            this.options.scale.x,
-            this.options.scale.z
-        );
-        const material = new THREE.MeshStandardMaterial({
-            color: 0x4169E1,
-            roughness: 0.2,
-            metalness: 0.8,
-            transparent: true,
-            opacity: 0.8
-        });
-        
-        this.applyVisualProperties(material);
-        this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.rotation.x = -Math.PI / 2;
-        
-        if (this.options.properties.depth) {
-            this.mesh.position.y -= this.options.properties.depth;
-        }
-        return Promise.resolve();
+    getDefaultColor() {
+        return 0x4169E1;
+    }
+
+    async createMaterial(textureSettings) {
+        const material = await super.createMaterial(textureSettings);
+        material.transparent = true;
+        material.opacity = this.options.visualProperties?.opacity || 0.8;
+        return material;
     }
 }
 
-class SandTerrain extends Terrain {
+class SandTerrain extends GroundTerrain {
     static type = 'sand';
     
-    async createMesh() {
-        const geometry = new THREE.PlaneGeometry(
-            this.options.scale.x,
-            this.options.scale.z
-        );
-        const material = new THREE.MeshStandardMaterial({
-            color: 0xF4A460,
-            roughness: 1.0,
-            metalness: 0.0
-        });
-        
-        this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.rotation.x = -Math.PI / 2;
-        return Promise.resolve();
+    getDefaultColor() {
+        return 0xF4A460;
+    }
+}
+
+class PathTerrain extends GroundTerrain {
+    static type = 'path';
+    
+    getDefaultColor() {
+        return 0xD2B48C;
     }
 }
 
@@ -717,26 +765,6 @@ class RockTerrain extends Terrain {
         this.mesh.rotation.x = Math.random() * Math.PI;
         this.mesh.rotation.y = Math.random() * Math.PI;
         this.mesh.rotation.z = Math.random() * Math.PI;
-        return Promise.resolve();
-    }
-}
-
-class PathTerrain extends Terrain {
-    static type = 'path';
-    
-    async createMesh() {
-        const geometry = new THREE.PlaneGeometry(
-            this.options.scale.x,
-            this.options.scale.z
-        );
-        const material = new THREE.MeshStandardMaterial({
-            color: 0xD2B48C,
-            roughness: 0.9,
-            metalness: 0.0
-        });
-        
-        this.mesh = new THREE.Mesh(geometry, material);
-        this.mesh.rotation.x = -Math.PI / 2;
         return Promise.resolve();
     }
 }
@@ -959,8 +987,13 @@ class CustomTerrain extends Terrain {
     }
 }
 
-// Update the terrain types mapping
-Terrain.typeMap = {
+// Initialize the terrain types mapping if it doesn't exist
+if (!Terrain.typeMap) {
+    Terrain.typeMap = {};
+}
+
+// Register all base terrain types
+Object.assign(Terrain.typeMap, {
     fairway: FairwayTerrain,
     rough: RoughTerrain,
     water: WaterTerrain,
@@ -970,4 +1003,4 @@ Terrain.typeMap = {
     rock: RockTerrain,
     path: PathTerrain,
     custom: CustomTerrain
-}; 
+}); 

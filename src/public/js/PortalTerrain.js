@@ -185,5 +185,10 @@ class PortalTerrain extends Terrain {
 }
 
 // Register with terrain system
-Terrain.typeMap = Terrain.typeMap || {};
-Terrain.typeMap['portal'] = PortalTerrain; 
+if (!Terrain.typeMap) {
+    Terrain.typeMap = {};
+}
+// Only register if not already registered
+if (!Terrain.typeMap['portal']) {
+    Terrain.typeMap['portal'] = PortalTerrain;
+} 

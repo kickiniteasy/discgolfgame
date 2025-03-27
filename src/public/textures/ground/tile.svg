@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <title>Ground Texture Tile</title>
+  <desc>A seamless tileable ground texture with natural variations</desc>
+  <defs>
+    <pattern id="pattern_tile_1" x="0" y="0" width="512" height="512" patternUnits="userSpaceOnUse">
+      <!-- Background rectangle representing grass -->
+      <rect id="pattern_bg_1" x="0" y="0" width="512" height="512" fill="#6C8E3B" />
+      
+      <!-- Dirt dots (small circles) -->
+      <circle id="dot_1" cx="100" cy="100" r="10" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_2" cx="200" cy="150" r="8" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_3" cx="350" cy="80" r="7" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_4" cx="450" cy="200" r="9" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_5" cx="120" cy="300" r="8" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_6" cx="300" cy="300" r="10" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_7" cx="400" cy="400" r="12" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_8" cx="250" cy="450" r="9" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_9" cx="150" cy="400" r="7" fill="#A0522D" opacity="0.3" />
+      <circle id="dot_10" cx="320" cy="130" r="8" fill="#A0522D" opacity="0.3" />
+      
+      <!-- Subtle grass variations -->
+      <line x1="50" y1="450" x2="150" y2="470" stroke="#6B8E23" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+      <line x1="300" y1="50" x2="320" y2="100" stroke="#6B8E23" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+      <line x1="460" y1="460" x2="480" y2="480" stroke="#6B8E23" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+      <line x1="400" y1="250" x2="420" y2="270" stroke="#6B8E23" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+      <line x1="250" y1="250" x2="270" y2="260" stroke="#6B8E23" stroke-width="2" stroke-linecap="round" opacity="0.4" />
+      
+      <!-- Additional grass detail -->
+      <circle cx="75" cy="75" r="3" fill="#8FBC8F" opacity="0.3" />
+      <circle cx="175" cy="225" r="2" fill="#8FBC8F" opacity="0.3" />
+      <circle cx="325" cy="175" r="3" fill="#8FBC8F" opacity="0.3" />
+      <circle cx="425" cy="325" r="2" fill="#8FBC8F" opacity="0.3" />
+      <circle cx="275" cy="375" r="3" fill="#8FBC8F" opacity="0.3" />
+    </pattern>
+  </defs>
+  
+  <!-- Main rectangle filled with the pattern -->
+  <rect x="0" y="0" width="512" height="512" fill="url(#pattern_tile_1)" />
+</svg> 

@@ -89,11 +89,11 @@ async function initGame() {
         });
 
         // Add lights
-        const ambientLight = new THREE.AmbientLight(0x404040);
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
         scene.add(ambientLight);
         
-        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
-        directionalLight.position.set(100, 300, 100);
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.0);
+        directionalLight.position.set(100, 100, 100);
         directionalLight.castShadow = true;
         directionalLight.shadow.mapSize.width = 2048;
         directionalLight.shadow.mapSize.height = 2048;
@@ -103,8 +103,13 @@ async function initGame() {
         directionalLight.shadow.camera.right = 200;
         directionalLight.shadow.camera.top = 200;
         directionalLight.shadow.camera.bottom = -200;
+        directionalLight.shadow.bias = -0.001;
         scene.add(directionalLight);
         
+        // Add a hemisphere light for more natural outdoor lighting
+        const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.8);
+        scene.add(hemisphereLight);
+
         // Initialize hitbox toggle in courses section
         const showHitboxesCheckbox = document.getElementById('show-hitboxes');
         if (showHitboxesCheckbox) {
@@ -243,6 +248,14 @@ async function initGame() {
             // Update camera
             if (window.cameraController) {
                 window.cameraController.update();
+            }
+
+            // Update arrow animation
+            if (window.courseManager && window.courseManager.getCurrentCourse()) {
+                const currentHole = window.courseManager.getCurrentCourse().holes[window.courseManager.getCurrentCourse().currentHoleIndex];
+                if (currentHole) {
+                    currentHole.updateArrow(Date.now() * 0.001); // Convert to seconds
+                }
             }
 
             // Render scene

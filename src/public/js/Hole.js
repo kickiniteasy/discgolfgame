@@ -3,9 +3,16 @@ class Hole {
         this.scene = scene;
         this.position = position;
         this.holeNumber = holeNumber;
+        this.arrow = null;
+        this.arrowStartY = 4.0; // Moved back up (flag is at 3.2)
+        this.arrowBounceHeight = 0.2; // How high it bounces
+        this.arrowBounceSpeed = 2; // Speed of bounce animation
+        this.arrowSpinSpeed = 1.5; // Speed of rotation
         
         this.createBasket();
         this.createFlag();
+        this.createArrow();
+        this.hideArrow(); // Initially hide the arrow
     }
 
     createBasket() {
@@ -114,6 +121,55 @@ class Hole {
         this.scene.add(this.flag);
     }
 
+    createArrow() {
+        // Create arrow shape
+        const arrowShape = new THREE.Shape();
+        arrowShape.moveTo(0, 0.3);  // Top point
+        arrowShape.lineTo(-0.15, 0);  // Bottom left
+        arrowShape.lineTo(0.15, 0);  // Bottom right
+        arrowShape.lineTo(0, 0.3);  // Back to top
+
+        const extrudeSettings = {
+            depth: 0.05,
+            bevelEnabled: false
+        };
+
+        const geometry = new THREE.ExtrudeGeometry(arrowShape, extrudeSettings);
+        const material = new THREE.MeshStandardMaterial({
+            color: 0xFFFFFF, // Back to white
+            metalness: 0.3,
+            roughness: 0.4
+        });
+
+        this.arrow = new THREE.Mesh(geometry, material);
+        this.arrow.position.set(this.position.x, this.arrowStartY, this.position.z);
+        this.arrow.rotation.x = Math.PI; // Point downward
+        this.scene.add(this.arrow);
+    }
+
+    showArrow() {
+        if (this.arrow) {
+            this.arrow.visible = true;
+        }
+    }
+
+    hideArrow() {
+        if (this.arrow) {
+            this.arrow.visible = false;
+        }
+    }
+
+    updateArrow(time) {
+        if (this.arrow && this.arrow.visible) {
+            // Vertical bounce
+            const bounce = Math.sin(time * this.arrowBounceSpeed) * this.arrowBounceHeight;
+            this.arrow.position.y = this.arrowStartY + bounce;
+            
+            // Continuous rotation around Y axis
+            this.arrow.rotation.y = time * this.arrowSpinSpeed;
+        }
+    }
+
     remove() {
         this.scene.remove(this.pole);
         this.scene.remove(this.basket);
@@ -121,6 +177,9 @@ class Hole {
         this.scene.remove(this.ring);
         this.scene.remove(this.plate);
         this.scene.remove(this.flag);
+        if (this.arrow) {
+            this.scene.remove(this.arrow);
+        }
     }
 
     getPosition() {

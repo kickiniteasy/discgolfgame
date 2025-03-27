@@ -384,6 +384,54 @@
                 "description": "For custom type: URL to the 3D model file"
               }
             }
+          },
+          "shape": {
+            "type": "object",
+            "description": "Shape definition for ground-type terrains (fairway, rough, water, sand, path)",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["rectangle", "ellipse"],
+                "description": "The shape type - rectangle for rectangular/square areas, ellipse for circular/elliptical areas"
+              },
+              "width": {
+                "type": "number",
+                "description": "Width of the shape in meters"
+              },
+              "length": {
+                "type": "number",
+                "description": "Length of the shape in meters (for rectangle) or height (for ellipse)"
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Rotation of the shape in radians around the Y axis"
+              }
+            }
+          },
+          "textureSettings": {
+            "type": "object",
+            "description": "Advanced texture settings for ground-type terrains",
+            "properties": {
+              "textureUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to the texture to use"
+              },
+              "normalMapUrl": {
+                "type": "string",
+                "format": "uri",
+                "description": "URL to the normal map texture"
+              },
+              "tileSize": {
+                "type": "number",
+                "description": "Size of one texture tile in meters (e.g. 5 means one texture repeat every 5 meters)"
+              },
+              "rotation": {
+                "type": "number",
+                "description": "Rotation of the texture in radians (independent of shape rotation)"
+              }
+            }
           }
         }
       }
