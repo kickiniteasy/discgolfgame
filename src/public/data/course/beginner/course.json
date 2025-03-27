@@ -25,7 +25,7 @@
     "holes": [
         {
             "holeNumber": 1,
-            "par": 3,
+            "par": 2,
             "description": "Straight shot with a gentle downhill slope. Perfect for learning proper form.",
             "teebox": {
                 "position": { "x": 0, "y": 0, "z": 0 },

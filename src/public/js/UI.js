@@ -5,6 +5,7 @@ class UI {
         this.throwsElement = document.getElementById('throws');
         this.holeElement = document.getElementById('hole');
         this.totalHolesElement = document.getElementById('total-holes');
+        this.parElement = document.getElementById('par');
         this.distanceEl = document.getElementById('distance');
         this.powerFill = document.querySelector('.throw-progress-fill');
         this.messageDisplay = document.getElementById('message');
@@ -181,9 +182,9 @@ class UI {
         }
     }
 
-    showMessage(text, duration = 2000) {
-        // Use the new ToasterMessage system
-        ToasterMessage.achievement(text, duration);
+    showMessage(text, duration = 2000, type = 'gold') {
+        // Use the ToasterMessage system with the specified type
+        ToasterMessage[type](text, duration);
     }
 
     updateDistance(distance) {
@@ -199,6 +200,16 @@ class UI {
         if (totalHoles && this.totalHolesElement) {
             this.totalHolesElement.textContent = totalHoles;
         }
+        // Update par for the current hole
+        if (window.courseManager && window.courseManager.getCurrentCourse()) {
+            const currentPar = window.courseManager.getCurrentCourse().getCurrentHolePar();
+            this.updatePar(currentPar);
+        }
+    }
+
+    updatePar(par) {
+        if (!this.parElement) return;
+        this.parElement.textContent = par;
     }
 
     // Power meter methods

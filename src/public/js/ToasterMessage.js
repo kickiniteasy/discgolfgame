@@ -23,8 +23,8 @@ class ToasterMessage {
         this.show(text, 'info', duration);
     }
 
-    static achievement(text, duration = 3000) {
-        // Special styling for achievements like Hole in One, Birdie, etc.
-        this.show(text, 'achievement', duration);
+    static gold(text, duration = 3000) {
+        // Special styling for exceptional plays like Hole in One, Birdie, etc.
+        this.show(text, 'gold', duration);
     }
 } 

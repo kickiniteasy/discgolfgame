@@ -262,6 +262,7 @@ class Disc {
 
                     // Create completion message
                     let message;
+                    let messageType = 'gold';
                     if (currentPlayer.throws === 1) {
                         message = "🌟 HOLE IN ONE! 🌟";
                     } else if (strokesOverPar === -2) {
@@ -270,17 +271,22 @@ class Disc {
                         message = "🐦 BIRDIE! 🐦";
                     } else if (strokesOverPar === 0) {
                         message = "PAR";
+                        messageType = 'success';
                     } else if (strokesOverPar === 1) {
                         message = "BOGEY";
+                        messageType = 'info';
                     } else if (strokesOverPar === 2) {
                         message = "DOUBLE";
+                        messageType = 'info';
                     } else if (strokesOverPar === 3) {
                         message = "TRIPLE";
+                        messageType = 'info';
                     } else {
                         message = `+${strokesOverPar}`;
+                        messageType = 'info';
                     }
 
-                    window.ui.showMessage(message);
+                    window.ui.showMessage(message, 3000, messageType);
                     window.ui.updateScore(currentPlayer.score);
                     
                     // Trigger celebration effects and wait for completion before moving to next turn
