@@ -1,0 +1,241 @@
+{
+    "course_id": "forest_valley",
+    "name": "Forest Valley",
+    "metadata": {
+        "description": "A challenging 4-hole course set in a wooded valley. Features elevation changes, water hazards, and technical shots through dense forest.",
+        "location": {
+            "latitude": 45.5255,
+            "longitude": -122.7189,
+            "address": "456 Forest Valley Road, Portland, OR 97221"
+        },
+        "difficulty": 3,
+        "source": "Disc Golf Game",
+        "author": "Joey",
+        "version": "1.0.0",
+        "creationDate": "2024-03-20T12:00:00Z"
+    },
+    "visualSettings": {
+        "skyImageUrl": "https://example.com/textures/forest_canopy_sky.jpg",
+        "backgroundColor": "#324E2D"
+    },
+    "defaultTextures": {
+        "fairwayTexture": "https://example.com/textures/forest_grass.jpg",
+        "roughTexture": "https://example.com/textures/forest_rough.jpg",
+        "waterTexture": "https://example.com/textures/forest_water.jpg",
+        "sandTexture": "https://example.com/textures/forest_sand.jpg",
+        "teepadTexture": "https://example.com/textures/concrete.jpg",
+        "groundTexture": "https://example.com/textures/forest_ground.jpg"
+    },
+    "courseSize": {
+        "width": 400,
+        "length": 600
+    },
+    "holes": [
+        {
+            "holeNumber": 1,
+            "par": 3,
+            "description": "Downhill shot through a wooded corridor. Watch out for the water hazard on the right.",
+            "teebox": {
+                "position": { "x": 0, "y": 0, "z": -130 },
+                "rotation": { "x": 0, "y": 0, "z": 0 },
+                "type": "pro"
+            },
+            "basket": {
+                "position": { "x": 0, "y": 0, "z": -150 }
+            },
+            "outOfBounds": [
+                {
+                    "type": "polygon",
+                    "points": [
+                        { "x": 10, "z": -135 },
+                        { "x": 20, "z": -145 },
+                        { "x": 20, "z": -155 },
+                        { "x": 10, "z": -165 }
+                    ]
+                }
+            ],
+            "fairway": {
+                "shape": [
+                    { "x": 0, "z": -130 },
+                    { "x": 0, "z": -150 }
+                ],
+                "width": 12,
+                "textureUrl": "https://example.com/textures/mossy_fairway.jpg"
+            }
+        },
+        {
+            "holeNumber": 2,
+            "par": 4,
+            "description": "Long dogleg right through dense forest. Requires precise shot placement and course management.",
+            "teebox": {
+                "position": { "x": 100, "y": 0, "z": -80 },
+                "rotation": { "x": 0, "y": 0, "z": 0 },
+                "type": "pro"
+            },
+            "basket": {
+                "position": { "x": 120, "y": 0, "z": -80 }
+            },
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": 100, "z": -80 },
+                    { "x": 110, "z": -80 },
+                    { "x": 120, "z": -80 }
+                ],
+                "width": 10
+            }
+        },
+        {
+            "holeNumber": 3,
+            "par": 3,
+            "description": "Elevated tee shot over a small valley. Dense rough on both sides punishes errant throws.",
+            "teebox": {
+                "position": { "x": -80, "y": 0, "z": -200 },
+                "rotation": { "x": 0, "y": 0, "z": 0 },
+                "type": "pro"
+            },
+            "basket": {
+                "position": { "x": -100, "y": 0, "z": -200 }
+            },
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": -80, "z": -200 },
+                    { "x": -100, "z": -200 }
+                ],
+                "width": 10
+            }
+        },
+        {
+            "holeNumber": 4,
+            "par": 4,
+            "description": "Challenging uphill finish with multiple elevation changes and strategic tree placement.",
+            "teebox": {
+                "position": { "x": 30, "y": 0, "z": -250 },
+                "rotation": { "x": 0, "y": 0, "z": 0 },
+                "type": "pro"
+            },
+            "basket": {
+                "position": { "x": 50, "y": 0, "z": -250 }
+            },
+            "outOfBounds": [],
+            "fairway": {
+                "shape": [
+                    { "x": 30, "z": -250 },
+                    { "x": 50, "z": -250 }
+                ],
+                "width": 12
+            }
+        }
+    ],
+    "terrain": [
+        {
+            "id": "fairway-1",
+            "type": "fairway",
+            "position": { "x": 0, "y": 0, "z": -140 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 15, "y": 1, "z": 30 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0,
+                "textureUrl": "https://example.com/textures/forest_fairway1.jpg"
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole1"]
+        },
+        {
+            "id": "fairway-2",
+            "type": "fairway",
+            "position": { "x": 110, "y": 0, "z": -80 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 15 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole2"]
+        },
+        {
+            "id": "fairway-3",
+            "type": "fairway",
+            "position": { "x": -90, "y": 0, "z": -200 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 15 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole3"]
+        },
+        {
+            "id": "fairway-4",
+            "type": "fairway",
+            "position": { "x": 40, "y": 0, "z": -250 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 30, "y": 1, "z": 15 },
+            "visualProperties": {
+                "color": "#90EE90",
+                "roughness": 0.8,
+                "metalness": 0.1,
+                "opacity": 1.0
+            },
+            "variant": "default",
+            "tags": ["fairway", "hole4"]
+        },
+        {
+            "id": "water-1",
+            "type": "water",
+            "position": { "x": 15, "y": 0, "z": -150 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 15, "y": 1, "z": 40 },
+            "visualProperties": {
+                "color": "#4169E1",
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8,
+                "textureUrl": "https://example.com/textures/forest_creek.jpg"
+            },
+            "variant": "default",
+            "tags": ["water", "hazard"],
+            "properties": {
+                "depth": 2,
+                "hazardType": "penalty"
+            }
+        },
+        {
+            "id": "rough_area_1",
+            "type": "rough",
+            "position": {"x": 15, "y": 0, "z": -20},
+            "scale": {"x": 8, "y": 1, "z": 12},
+            "properties": {
+                "density": 0.8
+            }
+        },
+        {
+            "id": "tree_cluster_1",
+            "type": "tree",
+            "position": {"x": -12, "y": 0, "z": 8},
+            "scale": {"x": 1.2, "y": 1.2, "z": 1.2}
+        },
+        {
+            "id": "tree_cluster_2",
+            "type": "tree",
+            "position": {"x": -11, "y": 0, "z": 9},
+            "scale": {"x": 1.1, "y": 1.1, "z": 1.1}
+        },
+        {
+            "id": "tree_cluster_3",
+            "type": "tree",
+            "position": {"x": -13, "y": 0, "z": 9},
+            "scale": {"x": 1.3, "y": 1.3, "z": 1.3}
+        }
+    ]
+}

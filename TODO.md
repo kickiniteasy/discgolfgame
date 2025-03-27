@@ -1,0 +1,28 @@
+- Game completion screen should show everyone's score and it should look nice like the scorecard.
+- make a new icon for the scorecard.
+- make a button to my twitter
+- make a help button and help modal
+- "Hole in One" and all that should use the normal toast situation
+- Loading a new course modal with info about it?
+- Lets the user pick a new course easily after completing the round.
+- User starts with Putter and Advances?
+- How to do Multiplayer? Show people lining up at teepad and then throwing?
+- Can we show other Player discs at the same time?
+- Show other players on this map.
+- How do you make a private party with friends?
+- How does it share a custom map with friends?
+- Concurrency?
+- Does it mean anything to be logged in? Logged in to where?
+- What is the monetization? Allow people to buy high speed discs?
+- Achievements? Goals?
+- How do we store the localdata?
+- Top of Teebox texture with sponsors
+--- Hole #1 has the logo?
+--- Fly Discs?
+--- Morley Field?
+--- OpenAI?
+--- Vibe Jam?
+--- Sign next to hole with sponsor?
+- Link username clicks to Twitter?
+- Can maps have custom grass?
+- Make ground terrain be circular or rectangular, have the size of it

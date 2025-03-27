@@ -64,12 +64,12 @@ class CourseManager {
 
     async loadCourseFromFile(courseId) {
         try {
-            // Use relative path from the current page location
-            const response = await fetch(`./data/course/${courseId}.json`);
+            // Try loading from the new directory structure first
+            const response = await fetch(`./data/course/${courseId}/course.json`);
             if (!response.ok) {
-                console.warn(`Failed to load course from ./data/course/, trying ../data/course/`);
+                console.warn(`Failed to load course from ./data/course/${courseId}/, trying ../data/course/${courseId}/`);
                 // Try alternative path as fallback
-                const altResponse = await fetch(`../data/course/${courseId}.json`);
+                const altResponse = await fetch(`../data/course/${courseId}/course.json`);
                 if (!altResponse.ok) throw new Error(`Failed to load course: ${courseId}`);
                 const courseData = await altResponse.json();
                 return await this.loadCourseFromJSON(courseData);
