@@ -38,9 +38,13 @@ class PortalTerrain extends Terrain {
             color: color,
             transparent: true,
             opacity: 0.5,
-            side: THREE.DoubleSide
+            side: THREE.DoubleSide,
+            depthWrite: false,  // Prevent depth buffer issues
+            blending: THREE.AdditiveBlending,  // Better blending for transparent surfaces
+            alphaTest: 0.1  // Help with transparency sorting
         });
         this.inner = new THREE.Mesh(innerGeometry, innerMaterial);
+        this.inner.position.z = 0.01;  // Slight offset to prevent z-fighting
         this.mesh.add(this.inner);
 
         // Create particle system
@@ -112,14 +116,6 @@ class PortalTerrain extends Terrain {
         this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
         this.mesh.add(this.hitboxMesh);
 
-        // Log portal creation
-        console.log('Created portal:', {
-            isEntry,
-            position: this.options.position,
-            color: typeof color === 'number' ? '#' + color.toString(16) : color,
-            hitboxSize
-        });
-
         return true; // Indicate successful mesh creation
     }
 
@@ -141,13 +137,10 @@ class PortalTerrain extends Terrain {
 
     handlePortalCollision() {
         const isEntry = this.options.properties.isEntry;
-        console.log('Portal collision handling. Is entry portal:', isEntry);
         
         if (isEntry && this.options.properties.ref) {
-            console.log('Redirecting to ref:', this.options.properties.ref);
             window.location.href = this.options.properties.ref;
         } else if (!isEntry && this.options.properties.targetUrl) {
-            console.log('Exit portal hit. Target URL:', this.options.properties.targetUrl);
             // Exit portal - redirect with parameters
             const params = new URLSearchParams();
             params.append('portal', 'true');
@@ -184,7 +177,6 @@ class PortalTerrain extends Terrain {
             
             // Reconstruct the URL with all parameters and any existing fragment
             targetUrlObj.search = existingParams.toString();
-            console.log('Redirecting to:', targetUrlObj.toString());
             window.location.href = targetUrlObj.toString();
         } else {
             console.warn('Portal collision but no valid ref/targetUrl found:', this.options.properties);

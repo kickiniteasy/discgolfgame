@@ -11,9 +11,6 @@ class TerrainManager {
     registerTerrainTypes() {
         // Register portal terrain type
         Terrain.typeMap['portal'] = PortalTerrain;
-        
-        // Log registration to verify
-        console.log('Registered terrain types:', Object.keys(Terrain.typeMap));
     }
 
     // Create the base ground plane that covers the entire level
@@ -24,13 +21,13 @@ class TerrainManager {
 
         // Load textures with error handling
         const grassTexture = this.textureLoader.load(
-            'textures/grass/grass_diffuse.png', // Changed to .png and removed leading slash
+            'textures/grass/grass_diffuse.png',
             undefined,
             undefined,
             (error) => console.error('Error loading grass texture:', error)
         );
         const grassNormal = this.textureLoader.load(
-            'textures/grass/grass_normal.png', // Changed to .png and removed leading slash
+            'textures/grass/grass_normal.png',
             undefined,
             undefined,
             (error) => console.error('Error loading normal map:', error)
@@ -73,18 +70,6 @@ class TerrainManager {
 
     // Load terrain from course JSON data
     async loadFromCourseData(courseData) {
-        // Log all portals before course loading
-        console.log('Portals before course loading:', 
-            Array.from(this.terrainObjects.values())
-                .filter(t => t.constructor.type === 'portal')
-                .map(p => ({
-                    id: p.id,
-                    isEntry: p.options.properties.isEntry,
-                    position: p.options.position,
-                    targetUrl: p.options.properties.targetUrl
-                }))
-        );
-
         // Preserve existing portals before clearing
         const existingPortals = Array.from(this.terrainObjects.values())
             .filter(t => t.constructor.type === 'portal')
@@ -147,10 +132,7 @@ class TerrainManager {
                 const isEntry = terrainData.properties?.isEntry;
                 const hasPortalOfType = existingPortals.some(p => 
                     p.properties?.isEntry === isEntry);
-                if (hasPortalOfType) {
-                    console.log('Skipping portal creation, already exists:', terrainData.id);
-                    continue;
-                }
+                if (hasPortalOfType) continue;
             }
 
             // Small y-offset for each layer to prevent z-fighting
@@ -166,7 +148,6 @@ class TerrainManager {
                 .some(t => t.constructor.type === 'portal' && 
                       t.options.properties?.isEntry === isEntry);
             if (!hasPortalOfType) {
-                console.log('Restoring preserved portal:', portalData.id);
                 await this.createTerrainFromData(portalData);
             }
         }
@@ -174,22 +155,12 @@ class TerrainManager {
 
     // Create a single terrain object from JSON data
     async createTerrainFromData(terrainData) {
-        console.log('createTerrainFromData start, current portals:', 
-            Array.from(this.terrainObjects.values())
-                .filter(t => t.constructor.type === 'portal')
-                .map(p => ({
-                    id: p.id,
-                    isEntry: p.options.properties.isEntry
-                }))
-        );
-
         const TerrainClass = Terrain.typeMap[terrainData.type];
         if (!TerrainClass) {
             console.warn(`Unknown terrain type: ${terrainData.type}`);
             return;
         }
 
-        // Create position, rotation, and scale vectors
         const position = new THREE.Vector3(
             terrainData.position?.x || 0,
             terrainData.position?.y || 0,
@@ -221,54 +192,11 @@ class TerrainManager {
             showHitboxes: window.gameState?.showHitboxes || false
         };
 
-        // Debug log for portal creation
-        if (terrainData.type === 'portal') {
-            console.log('Creating terrain from data:', {
-                type: terrainData.type,
-                id: terrainData.id,
-                position,
-                properties: terrainData.properties,
-                visualProperties: terrainData.visualProperties
-            });
-        }
-
         const terrain = new TerrainClass(this.scene, options);
-        // Wait for terrain to be fully initialized before adding to map
         const success = await terrain.init();
-        console.log('Terrain init result:', {
-            id: terrainData.id,
-            type: terrainData.type,
-            success: success,
-            hasMesh: !!terrain.mesh
-        });
         
-        // Only add to map if initialization was successful
         if (terrain.mesh) {
             this.terrainObjects.set(terrain.id, terrain);
-            console.log('Added terrain to map:', {
-                id: terrain.id,
-                type: terrain.constructor.type,
-                currentPortals: Array.from(this.terrainObjects.values())
-                    .filter(t => t.constructor.type === 'portal')
-                    .map(p => ({
-                        id: p.id,
-                        isEntry: p.options.properties.isEntry
-                    }))
-            });
-
-            // Debug log all portals after adding new terrain
-            if (terrainData.type === 'portal') {
-                console.log('Current portals in TerrainManager:', 
-                    Array.from(this.terrainObjects.values())
-                        .filter(t => t.constructor.type === 'portal')
-                        .map(p => ({
-                            id: p.id,
-                            isEntry: p.options.properties.isEntry,
-                            position: p.options.position,
-                            targetUrl: p.options.properties.targetUrl
-                        }))
-                );
-            }
         } else {
             console.warn(`Failed to initialize terrain: ${terrainData.id} (${terrainData.type})`);
         }
@@ -344,24 +272,11 @@ class TerrainManager {
     }
 
     clearTerrain() {
-        console.log('clearTerrain called, current portals:', 
-            Array.from(this.terrainObjects.values())
-                .filter(t => t.constructor.type === 'portal')
-                .map(p => ({
-                    id: p.id,
-                    isEntry: p.options.properties.isEntry
-                }))
-        );
-        // Remove all terrain objects
         this.terrainObjects.forEach(terrain => {
-            if (terrain.constructor.type === 'portal') {
-                console.log('Removing portal in clearTerrain:', terrain.id);
-            }
             terrain.removeFromScene();
         });
         this.terrainObjects.clear();
 
-        // Remove ground plane if it exists
         if (this.groundPlane) {
             this.scene.remove(this.groundPlane);
             if (this.groundPlane.geometry) this.groundPlane.geometry.dispose();
@@ -429,7 +344,6 @@ class TerrainManager {
                 isVisible: p.mesh?.visible,
                 isAnimating: !!p.update
             }));
-        console.log('All portals during collision check:', allPortals);
 
         for (const terrain of this.terrainObjects.values()) {
             if (!terrain.mesh) {
@@ -454,24 +368,7 @@ class TerrainManager {
                     portalBox.expandByScalar(0.5); // Make hitbox slightly larger for better collision detection
                     
                     // Debug logging for portal collision checks
-                    console.log('Checking portal collision:', {
-                        portalId: terrain.id,
-                        isEntry: terrain.options.properties.isEntry,
-                        discPosition: position.clone(),
-                        portalBox: {
-                            min: portalBox.min.clone(),
-                            max: portalBox.max.clone()
-                        },
-                        portalPosition: terrain.mesh.position.clone(),
-                        hitboxPosition: terrain.hitboxMesh.position.clone()
-                    });
-                    
                     if (portalBox.containsPoint(position)) {
-                        console.log('Portal collision detected!', {
-                            portalId: terrain.id,
-                            isEntry: terrain.options.properties.isEntry,
-                            position: position.clone()
-                        });
                         return { collided: true, terrain: terrain, point: position.clone(), isPortal: true };
                     }
                     break;
@@ -571,27 +468,6 @@ class TerrainManager {
 
     // Helper method to create and add terrain directly
     async addTerrain(type, options) {
-        console.log('addTerrain start, type:', type, 'current portals:', 
-            Array.from(this.terrainObjects.values())
-                .filter(t => t.constructor.type === 'portal')
-                .map(p => ({
-                    id: p.id,
-                    isEntry: p.options.properties.isEntry
-                }))
-        );
-
-        // Log existing portals before any changes
-        const existingPortals = Array.from(this.terrainObjects.values())
-            .filter(t => t.constructor.type === 'portal')
-            .map(p => ({
-                id: p.id,
-                isEntry: p.options.properties.isEntry,
-                position: p.options.position,
-                targetUrl: p.options.properties.targetUrl
-            }));
-            
-        console.log('Existing portals before adding new portal:', existingPortals);
-
         // If adding a portal, preserve existing portals of opposite type
         if (type === 'portal') {
             const isEntry = options.properties?.isEntry;
@@ -611,13 +487,10 @@ class TerrainManager {
                     tags: p.options.tags
                 }));
 
-            console.log('Preserving portals:', preservedPortals);
-
             // Remove only portals of the same type
             this.terrainObjects.forEach((terrain, id) => {
                 if (terrain.constructor.type === 'portal' && 
                     terrain.options.properties.isEntry === isEntry) {
-                    console.log('Removing portal of same type:', terrain.id);
                     terrain.removeFromScene();
                     this.terrainObjects.delete(id);
                 }
@@ -635,31 +508,15 @@ class TerrainManager {
                 variant: options.variant || 'default',
                 tags: options.tags || []
             };
-            
-            console.log('Creating new portal:', terrainData);
-            const newPortal = await this.createTerrainFromData(terrainData);
 
-            // Wait for the new portal to be fully initialized and added
-            if (newPortal && newPortal.mesh) {
-                console.log('New portal created successfully:', newPortal.id);
-            }
+            const newPortal = await this.createTerrainFromData(terrainData);
 
             // Restore preserved portals of opposite type
             for (const portalData of preservedPortals) {
                 if (portalData.properties.isEntry !== isEntry) {
-                    console.log('Restoring preserved portal:', portalData.id);
                     await this.createTerrainFromData(portalData);
                 }
             }
-
-            // Log final state
-            console.log('Final portal state:', Array.from(this.terrainObjects.values())
-                .filter(t => t.constructor.type === 'portal')
-                .map(p => ({
-                    id: p.id,
-                    isEntry: p.options.properties.isEntry,
-                    position: p.options.position
-                })));
 
             return newPortal;
         } else {

@@ -89,17 +89,8 @@ class Terrain {
             this.mesh.rotation.setFromVector3(this.options.rotation);
         }
         
-        // Apply scale
+        // Apply scale to entire mesh (which includes both the tree and hitbox group)
         this.mesh.scale.copy(this.options.scale);
-
-        // Update hitbox scale if it exists
-        if (this.hitboxMesh) {
-            // For custom hitboxes (like trees and bushes), we want to scale them proportionally
-            if (['tree', 'bush'].includes(this.constructor.type)) {
-                const scale = Math.max(this.options.scale.x, this.options.scale.y, this.options.scale.z);
-                this.hitboxMesh.scale.multiplyScalar(scale);
-            }
-        }
     }
 
     removeFromScene() {
@@ -139,7 +130,10 @@ class Terrain {
     }
 
     update(deltaTime) {
-        // Override in child classes if needed
+        // Update animation mixer if it exists
+        if (this.mixer) {
+            this.mixer.update(deltaTime);
+        }
     }
 
     applyVisualProperties(material) {
@@ -288,6 +282,160 @@ class Terrain {
         // Add hitbox to mesh
         this.mesh.add(this.hitboxMesh);
     }
+
+    async loadGLTF() {
+        const loader = new THREE.GLTFLoader();
+        
+        // Add draco compression support if specified
+        if (this.options.customProperties.useDraco) {
+            const dracoLoader = new THREE.DRACOLoader();
+            dracoLoader.setDecoderPath('/js/libs/draco/');
+            loader.setDRACOLoader(dracoLoader);
+        }
+
+        const gltf = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = gltf.scene;
+        
+        // Handle animations if present
+        if (gltf.animations && gltf.animations.length > 0) {
+            this.mixer = new THREE.AnimationMixer(this.mesh);
+            this.animations = gltf.animations;
+            
+            // Auto-play first animation if specified
+            if (this.options.customProperties.autoPlayAnimation) {
+                const action = this.mixer.clipAction(this.animations[0]);
+                action.play();
+            }
+        }
+    }
+
+    async loadOBJ() {
+        const loader = new THREE.OBJLoader();
+        
+        // If the model URL ends with 'model.obj', try to load the corresponding MTL file
+        if (this.options.customProperties.modelUrl.endsWith('model.obj')) {
+            const mtlUrl = this.options.customProperties.modelUrl.replace('model.obj', 'materials.mtl');
+            try {
+                const mtlLoader = new THREE.MTLLoader();
+                const materials = await new Promise((resolve, reject) => {
+                    mtlLoader.load(
+                        mtlUrl,
+                        resolve,
+                        undefined,
+                        reject
+                    );
+                });
+                materials.preload();
+                loader.setMaterials(materials);
+            } catch (error) {
+                console.warn('Could not load MTL file:', error);
+            }
+        }
+
+        const obj = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = obj;
+    }
+
+    async loadFBX() {
+        const loader = new THREE.FBXLoader();
+        const fbx = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = fbx;
+
+        // Handle animations if present
+        if (fbx.animations && fbx.animations.length > 0) {
+            this.mixer = new THREE.AnimationMixer(this.mesh);
+            this.animations = fbx.animations;
+            
+            // Auto-play first animation if specified
+            if (this.options.customProperties.autoPlayAnimation) {
+                const action = this.mixer.clipAction(this.animations[0]);
+                action.play();
+            }
+        }
+    }
+
+    async loadSTL() {
+        const loader = new THREE.STLLoader();
+        const geometry = await new Promise((resolve, reject) => {
+            loader.load(
+                this.options.customProperties.modelUrl,
+                resolve,
+                undefined,
+                reject
+            );
+        });
+
+        // Create default material if none specified
+        const material = new THREE.MeshStandardMaterial({
+            color: 0x808080,
+            roughness: 0.8,
+            metalness: 0.2
+        });
+        
+        // Apply custom visual properties
+        this.applyVisualProperties(material);
+
+        // Remove temporary mesh
+        if (this.mesh) {
+            this.scene.remove(this.mesh);
+        }
+
+        this.mesh = new THREE.Mesh(geometry, material);
+    }
+
+    applyCustomMaterials() {
+        if (!this.mesh) return;
+
+        const materials = this.options.customProperties.materials;
+        this.mesh.traverse((child) => {
+            if (child.isMesh) {
+                // If material is specified for this mesh name
+                const materialConfig = materials[child.name];
+                if (materialConfig) {
+                    child.material = new THREE.MeshStandardMaterial(materialConfig);
+                }
+            }
+        });
+    }
 }
 
 class FairwayTerrain extends Terrain {
@@ -432,6 +580,7 @@ class TreeTerrain extends Terrain {
     static type = 'tree';
     
     async createMesh() {
+        // Trunk is a cylinder with radius 0.2 at top, 0.3 at bottom, height 2
         const trunkGeometry = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
         const trunkMaterial = new THREE.MeshStandardMaterial({
             color: 0x8B4513,
@@ -439,21 +588,24 @@ class TreeTerrain extends Terrain {
         });
         const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
         
+        // Foliage is a cone with radius 1 at base, height 2
         const foliageGeometry = new THREE.ConeGeometry(1, 2, 8);
         const foliageMaterial = new THREE.MeshStandardMaterial({
             color: 0x228B22,
             roughness: 1.0
         });
         const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
-        foliage.position.y = 2;
+        foliage.position.y = 2;  // Positioned on top of trunk
         
         this.mesh = new THREE.Group();
         this.mesh.add(trunk);
         this.mesh.add(foliage);
 
-        // Create a compound hitbox for the tree
-        // Trunk hitbox
-        const trunkHitboxGeometry = new THREE.BoxGeometry(0.4, 2, 0.4);
+        // Create hitbox group
+        this.hitboxMesh = new THREE.Group();
+        
+        // Create trunk hitbox - exactly matching cylinder
+        const trunkHitboxGeometry = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
         const hitboxMaterial = new THREE.LineBasicMaterial({
             color: 0xffff00,
             transparent: true,
@@ -466,18 +618,19 @@ class TreeTerrain extends Terrain {
             new THREE.EdgesGeometry(trunkHitboxGeometry),
             hitboxMaterial
         );
-        trunkHitbox.position.y = 1;
+        trunkHitbox.position.y = 1;  // Center of trunk
+        trunkHitbox.name = 'trunkHitbox';
 
-        // Create foliage hitbox (cone-shaped)
-        const foliageHitboxGeometry = new THREE.CylinderGeometry(0.2, 0.8, 2, 8);
+        // Create foliage hitbox - exactly matching cone
+        const foliageHitboxGeometry = new THREE.ConeGeometry(1, 2, 8);
         const foliageHitbox = new THREE.LineSegments(
             new THREE.EdgesGeometry(foliageHitboxGeometry),
             hitboxMaterial
         );
-        foliageHitbox.position.y = 2.5;
+        foliageHitbox.position.y = 2;  // Base at top of trunk
+        foliageHitbox.name = 'foliageHitbox';
 
-        // Create a group for hitboxes
-        this.hitboxMesh = new THREE.Group();
+        // Add hitboxes to group
         this.hitboxMesh.add(trunkHitbox);
         this.hitboxMesh.add(foliageHitbox);
         this.mesh.add(this.hitboxMesh);
@@ -771,8 +924,6 @@ class CustomTerrain extends Terrain {
     }
 
     update(deltaTime) {
-        super.update(deltaTime);
-        
         // Update animation mixer if it exists
         if (this.mixer) {
             this.mixer.update(deltaTime);
