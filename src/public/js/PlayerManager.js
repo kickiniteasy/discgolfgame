@@ -317,12 +317,19 @@ class PlayerManager {
                         .join('');
                     
                     // Set up replay course button
-                    replayCourseButton.onclick = () => {
+                    replayCourseButton.onclick = async () => {
                         modal.style.display = 'none';
                         if (window.courseManager) {
-                            // Reset game state
-                            if (window.settingsUI) {
-                                window.settingsUI.resetGame();
+                            const currentCourse = window.courseManager.getCurrentCourse();
+                            if (currentCourse && currentCourse.id) {
+                                // Reload the current course
+                                const success = await window.courseManager.loadCourseFromFile(currentCourse.id);
+                                if (success) {
+                                    // Reset game state for the reloaded course
+                                    if (window.settingsUI) {
+                                        window.settingsUI.resetGame();
+                                    }
+                                }
                             }
                         }
                     };

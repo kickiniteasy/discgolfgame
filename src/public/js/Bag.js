@@ -2,15 +2,15 @@ class Bag {
     constructor() {
         this.discs = [
             {
-                id: 'driver1',
-                type: 'driver',
-                name: 'Star Destroyer',
-                speed: 10,
-                glide: 5,
-                turn: -1,
-                fade: 3,
-                color: '#ff7043',  // Orange
-                image: 'img/icons/discs/driver.svg'
+                id: 'putter1',
+                type: 'putter',
+                name: 'Aviar',
+                speed: 3,
+                glide: 3,
+                turn: 0,
+                fade: 1,
+                color: '#ffd54f',  // Yellow
+                image: 'img/icons/discs/putter.svg'
             },
             {
                 id: 'midrange1',
@@ -24,15 +24,15 @@ class Bag {
                 image: 'img/icons/discs/midrange.svg'
             },
             {
-                id: 'putter1',
-                type: 'putter',
-                name: 'Aviar',
-                speed: 3,
-                glide: 3,
-                turn: 0,
-                fade: 1,
-                color: '#ffd54f',  // Yellow
-                image: 'img/icons/discs/putter.svg'
+                id: 'driver1',
+                type: 'driver',
+                name: 'Star Destroyer',
+                speed: 10,
+                glide: 5,
+                turn: -1,
+                fade: 3,
+                color: '#ff7043',  // Orange
+                image: 'img/icons/discs/driver.svg'
             }
         ];
 

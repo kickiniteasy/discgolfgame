@@ -1,3 +1,5 @@
+LAUNCH LIST
+
 SPONSORS
 - Top of Teebox texture with sponsors
 --- Hole #1 has the logo?
@@ -6,13 +8,13 @@ SPONSORS
 --- OpenAI?
 --- Vibe Jam?
 --- Sign next to hole with sponsor?
-
-
-
-
 - make a help button and help modal
+- make 5 bite sized, engaging course
+
+
+
+NICE TO HAVE
 - Loading a new course modal with info about it?
-- Lets the user pick a new course easily after completing the round.
 - User starts with Putter and Advances?
 - How to do Multiplayer? Show people lining up at teepad and then throwing?
 - Can we show other Player discs at the same time?
@@ -30,6 +32,7 @@ SPONSORS
 
 
 DONE
+X - Lets the user pick a new course easily after completing the round.
 X - Game completion screen should show everyone's score and it should look nice like the scorecard.
 X - make a new icon for the scorecard.
 X - make a button to my twitter

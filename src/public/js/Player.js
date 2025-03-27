@@ -13,9 +13,9 @@ class Player {
         this.lastDiscPosition = null; // Track where their disc landed
         this.selectedDiscIndex = 0;
         this.discs = [
-            { name: 'Driver', speed: 11, glide: 5, turn: -1, fade: 3 },
+            { name: 'Putter', speed: 2, glide: 3, turn: 0, fade: 1 },
             { name: 'Mid-Range', speed: 5, glide: 5, turn: -1, fade: 1 },
-            { name: 'Putter', speed: 2, glide: 3, turn: 0, fade: 1 }
+            { name: 'Driver', speed: 11, glide: 5, turn: -1, fade: 3 }
         ];
         
         // Create player model

@@ -46,7 +46,7 @@
         },
         {
             "holeNumber": 2,
-            "par": 3,
+            "par": 2,
             "description": "Gentle right turn with scattered trees. Teaches controlled throws around obstacles.",
             "teebox": {
                 "position": { "x": 30, "y": 0, "z": 0 },
@@ -67,7 +67,7 @@
         },
         {
             "holeNumber": 3,
-            "par": 3,
+            "par": 2,
             "description": "Slight left turn with a small elevation change. Introduces uphill putting.",
             "teebox": {
                 "position": { "x": 30, "y": 0, "z": 30 },
