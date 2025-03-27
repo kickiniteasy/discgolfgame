@@ -186,7 +186,7 @@ class Course {
                 ]
             },
             {
-                id: 'intermediate',
+                id: 'forest_valley',
                 name: 'Forest Valley',
                 par: 12,
                 holes: [
@@ -231,42 +231,6 @@ class Course {
                         },
                         teebox: {
                             position: { x: 30, z: -250 },
-                            rotation: { x: 0, y: 0, z: 0 }
-                        }
-                    }
-                ]
-            },
-            {
-                id: 'editor',
-                name: 'Course Editor',
-                par: 3,
-                holes: [
-                    {
-                        holeNumber: 1,
-                        par: 3,
-                        basket: {
-                            position: { x: 0, z: -100 }
-                        },
-                        teebox: {
-                            position: { x: 0, z: -80 },
-                            rotation: { x: 0, y: 0, z: 0 }
-                        }
-                    }
-                ]
-            },
-            {
-                id: 'custom',
-                name: 'Custom Course',
-                par: 3,
-                holes: [
-                    {
-                        holeNumber: 1,
-                        par: 3,
-                        basket: {
-                            position: { x: 0, z: -100 }
-                        },
-                        teebox: {
-                            position: { x: 0, z: -80 },
                             rotation: { x: 0, y: 0, z: 0 }
                         }
                     }

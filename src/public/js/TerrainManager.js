@@ -66,12 +66,14 @@ class TerrainManager {
             color: 0x7ea04d, // Adjusted green tint
             roughness: 0.9,
             metalness: 0.0,
-            envMapIntensity: 1.0 // Reset to default
+            envMapIntensity: 1.0, // Reset to default
+            depthWrite: true // Base ground plane should write to depth buffer
         });
 
         this.groundPlane = new THREE.Mesh(geometry, material);
         this.groundPlane.rotation.x = -Math.PI / 2; // Lay flat
         this.groundPlane.receiveShadow = true;
+        this.groundPlane.renderOrder = -1; // Ensure ground plane renders first
         this.scene.add(this.groundPlane);
     }
 
@@ -117,25 +119,34 @@ class TerrainManager {
                             terrain.mesh.renderOrder = 1;
                             material.transparent = true;
                             material.opacity = material.opacity || 0.8;
+                            material.depthWrite = true; // Water should write to depth buffer
+                            material.polygonOffset = true;
+                            material.polygonOffsetFactor = -1;
                             break;
                         case 'sand':
                             terrain.mesh.renderOrder = 2;
+                            material.depthWrite = false; // Prevent z-fighting
+                            material.polygonOffset = true;
+                            material.polygonOffsetFactor = -2;
                             break;
                         case 'rough':
                             terrain.mesh.renderOrder = 3;
+                            material.depthWrite = false; // Prevent z-fighting
+                            material.polygonOffset = true;
+                            material.polygonOffsetFactor = -3;
                             break;
                         case 'fairway':
                             terrain.mesh.renderOrder = 4;
+                            material.depthWrite = false; // Prevent z-fighting
+                            material.polygonOffset = true;
+                            material.polygonOffsetFactor = -4;
                             break;
                         case 'path':
                             terrain.mesh.renderOrder = 5;
+                            material.depthWrite = false; // Prevent z-fighting
+                            material.polygonOffset = true;
+                            material.polygonOffsetFactor = -5;
                             break;
-                    }
-                    
-                    // Disable depth writing for all ground planes except water
-                    // This allows them to render in order without z-fighting
-                    if (terrainData.type !== 'water') {
-                        material.depthWrite = false;
                     }
                 }
             }
@@ -143,8 +154,7 @@ class TerrainManager {
 
         // Set the base ground plane to render first
         if (this.groundPlane) {
-            this.groundPlane.renderOrder = 0;
-            this.groundPlane.material.depthWrite = false;
+            this.groundPlane.renderOrder = -1; // Keep consistent with initial setting
         }
     }
 

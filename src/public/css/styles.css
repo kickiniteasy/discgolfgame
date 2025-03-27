@@ -1063,10 +1063,9 @@ canvas {
 }
 
 #game-complete-modal .modal-header h2 {
-    font-size: 28px;
+    font-size: 24px;
     margin: 0;
     color: #4CAF50;
-    text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
 }
 
 #game-complete-modal .modal-body {
@@ -1074,10 +1073,9 @@ canvas {
 }
 
 #winner-display {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 20px;
     color: #fff;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     padding: 15px;
     background: rgba(76, 175, 80, 0.1);
     border-radius: 8px;
@@ -1097,7 +1095,7 @@ canvas {
     padding: 12px;
     border-radius: 5px;
     background: rgba(255, 255, 255, 0.1);
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
 }
 
 .final-scores .player-score:last-child {
@@ -1105,7 +1103,7 @@ canvas {
 }
 
 .final-scores .player-score.winner {
-    background: rgba(76, 175, 80, 0.2);
+    background: rgba(76, 175, 80, 0.15);
     border: 1px solid rgba(76, 175, 80, 0.3);
 }
 
@@ -1122,30 +1120,40 @@ canvas {
     color: rgba(255, 255, 255, 0.9);
 }
 
-#play-again-button {
-    font-size: 20px;
-    padding: 15px 30px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
+.game-complete-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    justify-content: center;
+}
+
+.game-complete-button {
+    font-size: 16px;
+    padding: 12px 24px;
     border-radius: 5px;
     cursor: pointer;
     transition: all 0.2s ease;
-    width: 100%;
-    margin-top: 20px;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
 }
 
-#play-again-button:hover {
-    background-color: #45a049;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2);
+.game-complete-button.outline {
+    background: transparent;
+    border: 1px solid #4CAF50;
+    color: #4CAF50;
 }
 
-#play-again-button:active {
-    transform: translateY(1px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+.game-complete-button.outline:hover {
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.game-complete-button.primary {
+    background: #4CAF50;
+    border: none;
+    color: white;
+}
+
+.game-complete-button.primary:hover {
+    background: #45a049;
 }
 
 /* Camera Controls */

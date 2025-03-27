@@ -285,10 +285,13 @@ class PlayerManager {
                     const modal = document.getElementById('game-complete-modal');
                     const winnerDisplay = document.getElementById('winner-display');
                     const finalScoresDisplay = document.getElementById('final-scores');
-                    const playAgainButton = document.getElementById('play-again-button');
+                    const replayCourseButton = document.getElementById('replay-course-button');
+                    const nextCourseButton = document.getElementById('next-course-button');
                     
-                    // Set winner text
-                    winnerDisplay.textContent = `🎉 ${winner.name} wins with a score of ${winner.score}! 🎉`;
+                    // Set winner text with more exciting presentation
+                    const score = winner.score;
+                    const scoreText = score <= 0 ? `${score}` : `+${score}`;
+                    winnerDisplay.textContent = `${winner.name} Wins! (${scoreText})`;
                     
                     // Set final scores with detailed player information
                     finalScoresDisplay.innerHTML = sortedPlayers
@@ -296,6 +299,8 @@ class PlayerManager {
                             const colorHex = p.color.toString(16).padStart(6, '0');
                             const position = i + 1;
                             const positionEmoji = position === 1 ? '🥇' : position === 2 ? '🥈' : position === 3 ? '🥉' : `${position}.`;
+                            const score = p.score;
+                            const scoreText = score <= 0 ? `${score}` : `+${score}`;
                             
                             return `
                                 <div class="player-score ${p === winner ? 'winner' : ''}">
@@ -303,7 +308,7 @@ class PlayerManager {
                                         ${positionEmoji} ${p.name}
                                     </div>
                                     <div class="player-stats">
-                                        <span>Final Score: ${p.score}</span>
+                                        <span>Final Score: ${scoreText}</span>
                                         <span>Total Throws: ${p.throws}</span>
                                     </div>
                                 </div>
@@ -311,8 +316,56 @@ class PlayerManager {
                         })
                         .join('');
                     
-                    // Set up play again button
-                    playAgainButton.onclick = () => window.location.reload();
+                    // Set up replay course button
+                    replayCourseButton.onclick = () => {
+                        modal.style.display = 'none';
+                        if (window.courseManager) {
+                            // Reset game state
+                            if (window.settingsUI) {
+                                window.settingsUI.resetGame();
+                            }
+                        }
+                    };
+                    
+                    // Set up next course button
+                    nextCourseButton.onclick = async () => {
+                        if (window.courseManager) {
+                            const currentCourse = window.courseManager.getCurrentCourse();
+                            const prebuiltCourses = ['beginner', 'forest_valley', 'honey_i_shrunk', 'meme_course', 'morley_field', 'whispering_pines']; // Only actual playable courses
+                            
+                            let nextCourseId;
+                            
+                            if (currentCourse && currentCourse.id) {
+                                const currentIndex = prebuiltCourses.indexOf(currentCourse.id);
+                                if (currentIndex === prebuiltCourses.length - 1) {
+                                    // If we're on the last course, wrap around to beginner
+                                    nextCourseId = 'beginner';
+                                } else {
+                                    // Otherwise go to next course (or beginner if current course isn't in the list)
+                                    nextCourseId = currentIndex === -1 ? 'beginner' : prebuiltCourses[currentIndex + 1];
+                                }
+                            } else {
+                                nextCourseId = 'beginner';
+                            }
+                            
+                            console.log('Current course:', currentCourse?.id, 'Next course:', nextCourseId); // Debug log
+                            
+                            // Load the next course
+                            const success = await window.courseManager.loadCourseFromFile(nextCourseId);
+                            if (success) {
+                                // Update the course select dropdown to reflect the new course
+                                if (window.settingsUI && window.settingsUI.courseSelect) {
+                                    window.settingsUI.courseSelect.value = nextCourseId;
+                                }
+                                
+                                // Reset game state for new course
+                                if (window.settingsUI) {
+                                    window.settingsUI.resetGame();
+                                }
+                                modal.style.display = 'none';
+                            }
+                        }
+                    };
                     
                     // Show the modal
                     modal.style.display = 'block';

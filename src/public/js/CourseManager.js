@@ -2,7 +2,7 @@ class CourseManager {
     constructor(scene) {
         this.scene = scene;
         this.currentCourse = null;
-        this.prebuiltCourses = ['beginner', 'forest_valley', 'whispering_pines', 'editor', 'custom'];
+        this.prebuiltCourses = ['beginner', 'forest_valley', 'honey_i_shrunk', 'meme_course', 'morley_field', 'whispering_pines'];
         // Use existing TerrainManager if available, otherwise create new one
         this.terrainManager = window.terrainManager || new TerrainManager(scene);
         // Ensure global terrainManager is set
@@ -16,6 +16,11 @@ class CourseManager {
             // Validate course data
             if (!this.validateCourseData(courseData)) {
                 throw new Error('Invalid course data format');
+            }
+
+            // Ensure we always use 'id' property (convert from course_id if needed)
+            if (courseData.course_id && !courseData.id) {
+                courseData.id = courseData.course_id;
             }
 
             // Clear current course if it exists
@@ -72,9 +77,13 @@ class CourseManager {
                 const altResponse = await fetch(`../data/course/${courseId}/course.json`);
                 if (!altResponse.ok) throw new Error(`Failed to load course: ${courseId}`);
                 const courseData = await altResponse.json();
+                // Ensure course ID is set
+                courseData.id = courseId;
                 return await this.loadCourseFromJSON(courseData);
             }
             const courseData = await response.json();
+            // Ensure course ID is set
+            courseData.id = courseId;
             return await this.loadCourseFromJSON(courseData);
         } catch (error) {
             console.error('Error loading course file:', error);
@@ -95,17 +104,17 @@ class CourseManager {
     }
 
     validateCourseData(courseData) {
-        // Check if it's a static course from getCourseList()
-        if (courseData.id && courseData.name && Array.isArray(courseData.holes)) {
-            return true;
+        // Basic validation - must have a name and holes array
+        if (!courseData.name || !Array.isArray(courseData.holes)) {
+            return false;
         }
-        
-        // Check if it's a course from file (new schema)
-        if (courseData.course_id && courseData.name && Array.isArray(courseData.holes)) {
-            return true;
+
+        // Must have either id or course_id
+        if (!courseData.id && !courseData.course_id) {
+            return false;
         }
-        
-        return false;
+
+        return true;
     }
 
     getCurrentCourse() {
