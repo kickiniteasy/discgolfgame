@@ -113,37 +113,41 @@ class TerrainManager {
             if (terrain?.mesh?.material) {
                 const material = terrain.mesh.material;
                 if (['fairway', 'rough', 'path', 'water', 'sand'].includes(terrainData.type)) {
-                    // Set render order based on type
+                    // Set render order based on type - using negative values to render before other objects
                     switch (terrainData.type) {
                         case 'water':
-                            terrain.mesh.renderOrder = 1;
+                            terrain.mesh.renderOrder = -5;
                             material.transparent = true;
                             material.opacity = material.opacity || 0.8;
-                            material.depthWrite = true; // Water should write to depth buffer
+                            material.depthWrite = true;
                             material.polygonOffset = true;
                             material.polygonOffsetFactor = -1;
                             break;
                         case 'sand':
-                            terrain.mesh.renderOrder = 2;
-                            material.depthWrite = false; // Prevent z-fighting
+                            terrain.mesh.renderOrder = -4;
+                            material.transparent = true;
+                            material.depthWrite = true;
                             material.polygonOffset = true;
                             material.polygonOffsetFactor = -2;
                             break;
                         case 'rough':
-                            terrain.mesh.renderOrder = 3;
-                            material.depthWrite = false; // Prevent z-fighting
+                            terrain.mesh.renderOrder = -3;
+                            material.transparent = true;
+                            material.depthWrite = true;
                             material.polygonOffset = true;
                             material.polygonOffsetFactor = -3;
                             break;
                         case 'fairway':
-                            terrain.mesh.renderOrder = 4;
-                            material.depthWrite = false; // Prevent z-fighting
+                            terrain.mesh.renderOrder = -2;
+                            material.transparent = true;
+                            material.depthWrite = true;
                             material.polygonOffset = true;
                             material.polygonOffsetFactor = -4;
                             break;
                         case 'path':
-                            terrain.mesh.renderOrder = 5;
-                            material.depthWrite = false; // Prevent z-fighting
+                            terrain.mesh.renderOrder = -1;
+                            material.transparent = true;
+                            material.depthWrite = true;
                             material.polygonOffset = true;
                             material.polygonOffsetFactor = -5;
                             break;
@@ -154,7 +158,13 @@ class TerrainManager {
 
         // Set the base ground plane to render first
         if (this.groundPlane) {
-            this.groundPlane.renderOrder = -1; // Keep consistent with initial setting
+            this.groundPlane.renderOrder = -10; // Render before all other terrain
+            if (this.groundPlane.material) {
+                this.groundPlane.material.transparent = true;
+                this.groundPlane.material.side = THREE.FrontSide;
+                this.groundPlane.material.depthWrite = true;
+                this.groundPlane.material.alphaTest = 0.1;
+            }
         }
     }
 
@@ -279,11 +289,15 @@ class TerrainManager {
     }
 
     clearTerrain() {
+        // First remove and cleanup all terrain objects
         this.terrainObjects.forEach(terrain => {
+            // Remove from scene and dispose resources
             terrain.removeFromScene();
         });
+        // Clear the terrain objects map
         this.terrainObjects.clear();
 
+        // Clean up ground plane
         if (this.groundPlane) {
             this.scene.remove(this.groundPlane);
             if (this.groundPlane.geometry) this.groundPlane.geometry.dispose();
@@ -359,7 +373,7 @@ class TerrainManager {
             }
 
             // Skip ground-type terrain (fairway, rough, etc)
-            if (['fairway', 'rough', 'path'].includes(terrain.constructor.type)) {
+            if (['fairway', 'rough', 'path', 'water', 'sand'].includes(terrain.constructor.type)) {
                 continue;
             }
 
@@ -467,14 +481,6 @@ class TerrainManager {
                         return { collided: true, terrain: terrain, point: position.clone() };
                     }
                     break;
-
-                case 'elevation':
-                    // Elevations need full collision boxes
-                    const elevBox = new THREE.Box3().setFromObject(terrain.mesh);
-                    if (elevBox.containsPoint(position)) {
-                        return { collided: true, terrain: terrain, point: position.clone() };
-                    }
-                    break;
             }
         }
 
@@ -499,73 +505,21 @@ class TerrainManager {
 
     // Helper method to create and add terrain directly
     async addTerrain(type, options) {
+
         // If adding a portal, preserve existing portals of opposite type
-        if (type === 'portal') {
-            const isEntry = options.properties?.isEntry;
+        const terrainData = {
+            id: crypto.randomUUID(),
+            type: type,
+            position: options.position,
+            rotation: options.rotation,
+            scale: options.scale,
+            properties: options.properties || {},
+            visualProperties: options.visualProperties || {},
+            variant: options.variant || 'default',
+            tags: options.tags || []
+        };
             
-            // Store ALL existing portals before making any changes
-            const preservedPortals = Array.from(this.terrainObjects.values())
-                .filter(t => t.constructor.type === 'portal')
-                .map(p => ({
-                    type: 'portal',
-                    id: p.id,
-                    position: p.options.position,
-                    rotation: p.options.rotation,
-                    scale: p.options.scale,
-                    properties: p.options.properties,
-                    visualProperties: p.options.visualProperties,
-                    variant: p.options.variant,
-                    tags: p.options.tags
-                }));
-
-            // Remove only portals of the same type
-            this.terrainObjects.forEach((terrain, id) => {
-                if (terrain.constructor.type === 'portal' && 
-                    terrain.options.properties.isEntry === isEntry) {
-                    terrain.removeFromScene();
-                    this.terrainObjects.delete(id);
-                }
-            });
-
-            // Create the new portal
-            const terrainData = {
-                id: crypto.randomUUID(),
-                type: type,
-                position: options.position,
-                rotation: options.rotation,
-                scale: options.scale,
-                properties: options.properties || {},
-                visualProperties: options.visualProperties || {},
-                variant: options.variant || 'default',
-                tags: options.tags || []
-            };
-
-            const newPortal = await this.createTerrainFromData(terrainData);
-
-            // Restore preserved portals of opposite type
-            for (const portalData of preservedPortals) {
-                if (portalData.properties.isEntry !== isEntry) {
-                    await this.createTerrainFromData(portalData);
-                }
-            }
-
-            return newPortal;
-        } else {
-            // For non-portal terrain, proceed as normal
-            const terrainData = {
-                id: crypto.randomUUID(),
-                type: type,
-                position: options.position,
-                rotation: options.rotation,
-                scale: options.scale,
-                properties: options.properties || {},
-                visualProperties: options.visualProperties || {},
-                variant: options.variant || 'default',
-                tags: options.tags || []
-            };
-            
-            return await this.createTerrainFromData(terrainData);
-        }
+        return await this.createTerrainFromData(terrainData);
     }
 
     setGrassTexturesEnabled(enabled) {

@@ -62,9 +62,9 @@ async function initGame() {
 
         // Create sky with course dimensions and store it globally
         window.sky = new Sky(scene, {
-            type: 'panorama',
-            sunPosition: new THREE.Vector3(100, 45, 0),
-            courseSize: courseSize
+            type: 'panorama', 
+            textureUrl: 'textures/sky/skybox_4k.png',
+            courseSize: courseSize // Use the actual course size
         });
 
         // Initialize camera

@@ -37,7 +37,7 @@ class PortalTerrain extends Terrain {
         const innerMaterial = new THREE.MeshBasicMaterial({
             color: color,
             transparent: true,
-            opacity: 0.5,
+            opacity: 0.2,
             side: THREE.DoubleSide,
             depthWrite: false,  // Prevent depth buffer issues
             blending: THREE.AdditiveBlending,  // Better blending for transparent surfaces
@@ -80,8 +80,8 @@ class PortalTerrain extends Terrain {
         this.mesh.add(this.particles);
 
         // Add label for exit portals
-        if (!isEntry) {
-            const label = this.options.properties.label || 'VIBEVERSE PORTAL';
+        //if (!isEntry) {
+            const label = this.options.properties.label || 'RETURN PORTAL';
             const canvas = document.createElement('canvas');
             const context = canvas.getContext('2d');
             canvas.width = 512;
@@ -99,9 +99,9 @@ class PortalTerrain extends Terrain {
                 side: THREE.DoubleSide
             });
             const labelMesh = new THREE.Mesh(labelGeometry, labelMaterial);
-            labelMesh.position.y = 2;
+            labelMesh.position.y = 0.2;
             this.mesh.add(labelMesh);
-        }
+        //}
 
         // Create hitbox
         const hitboxSize = new THREE.Vector3(2, 3, 1);
@@ -180,6 +180,14 @@ class PortalTerrain extends Terrain {
             window.location.href = targetUrlObj.toString();
         } else {
             console.warn('Portal collision but no valid ref/targetUrl found:', this.options.properties);
+        }
+    }
+
+    removeFromScene() {
+        super.removeFromScene();
+        if (this.particles) {
+            this.particles.geometry.dispose();
+            this.particles.material.dispose();
         }
     }
 }

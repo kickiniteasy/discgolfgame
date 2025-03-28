@@ -186,7 +186,7 @@ class CourseManager {
             });
         }
 
-        // Clear terrain
+        // Clear terrain using TerrainManager's method
         if (this.terrainManager) {
             this.terrainManager.clearTerrain();
         }

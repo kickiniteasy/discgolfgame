@@ -1,0 +1,1770 @@
+{
+  "course_id": "course_2jgx3a5g3",
+  "name": "Converted SVG Course",
+  "metadata": {
+    "description": "Course converted from SVG file",
+    "location": {
+      "latitude": 0,
+      "longitude": 0,
+      "address": "Unknown"
+    },
+    "difficulty": 3,
+    "source": "SVG Converter",
+    "author": "SVG Converter",
+    "version": "1.0.0",
+    "creationDate": "2025-03-27T18:45:34.370Z",
+    "name": "Custom Loader (8)"
+  },
+  "courseSize": {
+    "width": 500.00000000000006,
+    "length": 375
+  },
+  "holes": [
+    {
+      "holeNumber": 1,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -239.86978125000002,
+          "y": 0,
+          "z": -172.10329166666668
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.007387717468893617,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -240.70639583333337,
+          "y": 0,
+          "z": -58.86136458333334
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -239.86978125000002,
+            "z": -172.10329166666668
+          },
+          {
+            "x": -240.70639583333337,
+            "z": -58.86136458333334
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 2,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -199.30282031250002,
+          "y": 0,
+          "z": -64.90631770833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -3.133321978843676,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -200.13943489583335,
+          "y": 0,
+          "z": -166.05834375
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -199.30282031250002,
+            "z": -64.90631770833332
+          },
+          {
+            "x": -200.13943489583335,
+            "z": -166.05834375
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 3,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -156.53645312500004,
+          "y": 0,
+          "z": -172.10329166666668
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.007387671478426645,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -157.37306250000003,
+          "y": 0,
+          "z": -58.86136458333334
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -156.53645312500004,
+            "z": -172.10329166666668
+          },
+          {
+            "x": -157.37306250000003,
+            "z": -58.86136458333334
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 4,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -115.9694791666667,
+          "y": 0,
+          "z": -64.90631770833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -3.1333218758704136,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -116.80610416666667,
+          "y": 0,
+          "z": -166.05834375
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -115.9694791666667,
+            "z": -64.90631770833332
+          },
+          {
+            "x": -116.80610416666667,
+            "z": -166.05834375
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 5,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -73.20312500000003,
+          "y": 0,
+          "z": -172.10329166666668
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.0073876254879596415,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -74.03972916666666,
+          "y": 0,
+          "z": -58.86136458333334
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -73.20312500000003,
+            "z": -172.10329166666668
+          },
+          {
+            "x": -74.03972916666666,
+            "z": -58.86136458333334
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 6,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": -32.63614583333336,
+          "y": 0,
+          "z": -64.90631770833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -3.1333218243837826,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": -33.47277604166666,
+          "y": 0,
+          "z": -166.05834375
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": -32.63614583333336,
+            "z": -64.90631770833332
+          },
+          {
+            "x": -33.47277604166666,
+            "z": -166.05834375
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 7,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 5.963541666666657,
+          "y": 0,
+          "z": -172.10329166666668
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.007387625487959892,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 5.126937499999997,
+          "y": 0,
+          "z": -58.86136458333334
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 5.963541666666657,
+            "z": -172.10329166666668
+          },
+          {
+            "x": 5.126937499999997,
+            "z": -58.86136458333334
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 8,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 46.53049999999999,
+          "y": 0,
+          "z": -64.90631770833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -3.133322184790201,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 45.69390624999997,
+          "y": 0,
+          "z": -166.05834375
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 46.53049999999999,
+            "z": -64.90631770833332
+          },
+          {
+            "x": 45.69390624999997,
+            "z": -166.05834375
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 9,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 89.29687500000003,
+          "y": 0,
+          "z": -172.10329166666668
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.007387487516559698,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 88.46028645833334,
+          "y": 0,
+          "z": -58.86136458333334
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 89.29687500000003,
+            "z": -172.10329166666668
+          },
+          {
+            "x": 88.46028645833334,
+            "z": -58.86136458333334
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 10,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 129.86383333333336,
+          "y": 0,
+          "z": -64.90631770833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -3.133322184790201,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 129.02723958333334,
+          "y": 0,
+          "z": -166.05834375
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 129.86383333333336,
+            "z": -64.90631770833332
+          },
+          {
+            "x": 129.02723958333334,
+            "z": -166.05834375
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 11,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 172.63020833333334,
+          "y": 0,
+          "z": -172.10329166666668
+        },
+        "rotation": {
+          "x": 0,
+          "y": -0.007387487516559698,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 171.79361979166666,
+          "y": 0,
+          "z": -58.86136458333334
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 172.63020833333334,
+            "z": -172.10329166666668
+          },
+          {
+            "x": 171.79361979166666,
+            "z": -58.86136458333334
+          }
+        ],
+        "width": 10
+      }
+    },
+    {
+      "holeNumber": 12,
+      "par": 3,
+      "teebox": {
+        "position": {
+          "x": 213.19716666666667,
+          "y": 0,
+          "z": -64.90631770833332
+        },
+        "rotation": {
+          "x": 0,
+          "y": -3.133322184790201,
+          "z": 0
+        },
+        "type": "recreational"
+      },
+      "basket": {
+        "position": {
+          "x": 212.36057291666665,
+          "y": 0,
+          "z": -166.05834375
+        }
+      },
+      "outOfBounds": [],
+      "fairway": {
+        "shape": [
+          {
+            "x": 213.19716666666667,
+            "z": -64.90631770833332
+          },
+          {
+            "x": 212.36057291666665,
+            "z": -166.05834375
+          }
+        ],
+        "width": 10
+      }
+    }
+  ],
+  "terrain": [
+    {
+      "id": "custom_0",
+      "type": "custom",
+      "position": {
+        "x": -245.53362552083337,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_1",
+      "type": "custom",
+      "position": {
+        "x": -235.9052447916667,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_2",
+      "type": "custom",
+      "position": {
+        "x": -203.86695833333334,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ea9999",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant2/model.fbx"
+      }
+    },
+    {
+      "id": "custom_3",
+      "type": "custom",
+      "position": {
+        "x": -195.0268666666667,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ea9999",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant2/model.fbx"
+      }
+    },
+    {
+      "id": "custom_4",
+      "type": "custom",
+      "position": {
+        "x": -163.04489062500002,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_5",
+      "type": "custom",
+      "position": {
+        "x": -152.57190625000004,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_6",
+      "type": "custom",
+      "position": {
+        "x": -120.53362500000003,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#f4cccc",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant1/model.fbx"
+      }
+    },
+    {
+      "id": "custom_7",
+      "type": "custom",
+      "position": {
+        "x": -111.69354166666668,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#f4cccc",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant1/model.fbx"
+      }
+    },
+    {
+      "id": "custom_8",
+      "type": "custom",
+      "position": {
+        "x": -79.71154687500004,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_9",
+      "type": "custom",
+      "position": {
+        "x": -69.23858333333337,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_10",
+      "type": "custom",
+      "position": {
+        "x": -37.200291666666686,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ea9999",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant2/model.fbx"
+      }
+    },
+    {
+      "id": "custom_11",
+      "type": "custom",
+      "position": {
+        "x": -28.360208333333333,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ea9999",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant2/model.fbx"
+      }
+    },
+    {
+      "id": "custom_12",
+      "type": "custom",
+      "position": {
+        "x": -0.5448802083333533,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_13",
+      "type": "custom",
+      "position": {
+        "x": 9.92808333333332,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_14",
+      "type": "custom",
+      "position": {
+        "x": 41.96637499999994,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#f4cccc",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant1/model.fbx"
+      }
+    },
+    {
+      "id": "custom_15",
+      "type": "custom",
+      "position": {
+        "x": 50.806458333333325,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#f4cccc",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant1/model.fbx"
+      }
+    },
+    {
+      "id": "custom_16",
+      "type": "custom",
+      "position": {
+        "x": 82.78843750000001,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_17",
+      "type": "custom",
+      "position": {
+        "x": 93.2614322916667,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_18",
+      "type": "custom",
+      "position": {
+        "x": 125.29970833333331,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ea9999",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant2/model.fbx"
+      }
+    },
+    {
+      "id": "custom_19",
+      "type": "custom",
+      "position": {
+        "x": 134.1397916666667,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ea9999",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant2/model.fbx"
+      }
+    },
+    {
+      "id": "custom_20",
+      "type": "custom",
+      "position": {
+        "x": 166.12177083333333,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_21",
+      "type": "custom",
+      "position": {
+        "x": 176.594765625,
+        "y": 3,
+        "z": -167.03302604166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#ff0000",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant0/model.fbx"
+      }
+    },
+    {
+      "id": "custom_22",
+      "type": "custom",
+      "position": {
+        "x": 208.63304166666663,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#f4cccc",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant1/model.fbx"
+      }
+    },
+    {
+      "id": "custom_23",
+      "type": "custom",
+      "position": {
+        "x": 217.473125,
+        "y": 0,
+        "z": -72.11082812499998
+      },
+      "scale": {
+        "x": 0.05,
+        "y": 0.05,
+        "z": 0.05
+      },
+      "rotation": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "color": "#f4cccc",
+      "properties": {
+        "modelUrl": "./models/pack/houseplant1/model.fbx"
+      }
+    },
+    {
+      "id": "custom_24",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -66.23091145833332
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_25",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -114.59049479166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_26",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -102.50059895833333
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_27",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -90.410703125
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_28",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -78.32080729166665
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_29",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -124.56424479166665
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_30",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -172.923825
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_31",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -160.83393072916667
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_32",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -148.7440364583333
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_33",
+      "type": "custom",
+      "position": {
+        "x": -229.13385833333336,
+        "y": 4,
+        "z": -136.65413854166667
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_34",
+      "type": "custom",
+      "position": {
+        "x": -247.59678468750002,
+        "y": 4,
+        "z": -111.65414062499998
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_35",
+      "type": "custom",
+      "position": {
+        "x": -249.47506562500004,
+        "y": 4,
+        "z": -94.075671875
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_36",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -53.320807291666654
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_37",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -101.68039062499999
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_38",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -89.59049479166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_39",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -77.50059895833333
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_40",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -65.41070312499998
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_41",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -111.65414062499998
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_42",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -160.01371875
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_43",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -147.923828125
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_44",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -135.83393229166666
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_45",
+      "type": "custom",
+      "position": {
+        "x": -181.59244270833335,
+        "y": 4,
+        "z": -123.74403645833333
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_46",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -39.42918750000001
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_47",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -87.788765625
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_48",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -75.69886979166665
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_49",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -63.60897395833332
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_50",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -51.51907812499999
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_51",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -97.76252083333333
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_52",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -146.12209895833334
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_53",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -134.032203125
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_54",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -121.94230729166667
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    },
+    {
+      "id": "custom_55",
+      "type": "custom",
+      "position": {
+        "x": -143.8060416666667,
+        "y": 4,
+        "z": -109.85241145833332
+      },
+      "scale": {
+        "x": 10,
+        "y": 10,
+        "z": 10
+      },
+      "rotation": {
+        "x": 0,
+        "y": 1.57,
+        "z": 0
+      },
+      "color": "#ff9900",
+      "properties": {
+        "modelUrl": "./models/pack/littlebookcase/model.obj"
+      }
+    }
+  ]
+}

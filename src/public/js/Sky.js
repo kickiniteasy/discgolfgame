@@ -8,152 +8,119 @@ class Sky {
         };
         this.walls = [];
         this.createSky();
+        
+        // Log all scene children to debug
+        console.log("Scene children:", this.scene.children.map(child => child.name || "unnamed"));
     }
 
     createSky() {
-        if (this.options.type === 'panorama') {
-            this.createPanoramaWalls();
-        }
+        // Simplest approach possible
+        console.log("Creating minimal sky with:", this.options.textureUrl);
+        
+        // Clean up existing
+        this.dispose();
+        
+        // Create a fixed color sky that will definitely show up
+        // This isn't pretty but will help us debug
+        const blueColor = new THREE.Color(0x3a7bd5);
+        
+        // Create a sphere slightly bigger than the course
+        const size = Math.max(
+            this.options.courseSize.width, 
+            this.options.courseSize.length
+        ) * 1.5;
+        
+        // Super simple geometry with minimum segments
+        const geometry = new THREE.SphereGeometry(size, 16, 12);
+        
+        // Make sure we're seeing the inside
+        geometry.scale(-1, 1, -1);
+        
+        // Use a pure color material - no textures yet
+        const material = new THREE.MeshBasicMaterial({
+            color: blueColor,
+            side: THREE.BackSide,
+            transparent: false,
+            fog: false,
+            depthWrite: false,
+            depthTest: false  // Disable depth testing
+        });
+        
+        // Create mesh with the absolute minimum complexity
+        const sky = new THREE.Mesh(geometry, material);
+        sky.name = "MinimalSky";
+        
+        // Position at the origin
+        sky.position.set(0, 0, 0);
+        
+        // Override any rendering settings
+        sky.renderOrder = -9999;  // Render before anything else
+        
+        // Add to scene first before any other objects
+        this.scene.children.unshift(sky);
+        this.scene.add(sky);
+        
+        this.walls = [sky];
+        
+        console.log("Simple blue sky created, checking visibility:", sky.visible);
+        console.log("Sky position:", sky.position);
+        console.log("Sky in scene:", this.scene.children.includes(sky));
+        
+        // Try loading texture next
+        this.tryLoadingTexture(sky);
     }
-
-    createPanoramaWalls() {
+    
+    tryLoadingTexture(skyMesh) {
+        // Let's try loading the texture separately after confirming geometry works
         const textureLoader = new THREE.TextureLoader();
-        
-        // Create a gradient background first
-        const canvas = document.createElement('canvas');
-        canvas.width = 2;
-        canvas.height = 512;
-        const context = canvas.getContext('2d');
-        const gradient = context.createLinearGradient(0, 0, 0, 512);
-        gradient.addColorStop(0, '#0077ff'); // Deep sky blue
-        gradient.addColorStop(0.7, '#6eb5ff'); // Lighter blue
-        gradient.addColorStop(1, '#FFFFFF'); // White
-        context.fillStyle = gradient;
-        context.fillRect(0, 0, 2, 512);
-        const backgroundTexture = new THREE.CanvasTexture(canvas);
-        this.scene.background = backgroundTexture;
-        
         textureLoader.load(
             this.options.textureUrl,
             (texture) => {
-                // Configure texture
-                texture.minFilter = THREE.LinearFilter;
-                texture.magFilter = THREE.LinearFilter;
-                texture.generateMipmaps = false;
-                texture.needsUpdate = true;
+                console.log("Texture loaded, dimensions:", 
+                            texture.image ? 
+                            `${texture.image.width}x${texture.image.height}` : 
+                            "unknown");
                 
-                // Wall dimensions - match course size exactly
-                const frontWidth = this.options.courseSize.width;
-                const wallHeight = 100;   // Height of all walls
-                const depth = this.options.courseSize.length;
+                // Apply the texture to our existing sky
+                skyMesh.material.map = texture;
+                skyMesh.material.color.set(0xFFFFFF); // Reset color to white to show texture
+                skyMesh.material.needsUpdate = true;
                 
-                // Create gradient texture for alpha
-                const gradientCanvas = document.createElement('canvas');
-                gradientCanvas.width = 1;
-                gradientCanvas.height = 512;
-                const gradientCtx = gradientCanvas.getContext('2d');
-                const alphaGradient = gradientCtx.createLinearGradient(0, 0, 0, 512);
-                alphaGradient.addColorStop(0, 'rgba(255,255,255,0)'); // Transparent at top
-                alphaGradient.addColorStop(0.3, 'rgba(255,255,255,1)'); // Solid at bottom
-                gradientCtx.fillStyle = alphaGradient;
-                gradientCtx.fillRect(0, 0, 1, 512);
-                const alphaMap = new THREE.CanvasTexture(gradientCanvas);
-                alphaMap.needsUpdate = true;
-                
-                // Material that won't cast or receive shadows
-                const wallMaterial = new THREE.MeshBasicMaterial({
-                    map: texture,
-                    side: THREE.DoubleSide,
-                    depthWrite: false,
-                    transparent: true,
-                    alphaMap: alphaMap
-                });
-                
-                // Create walls
-                const walls = [];
-                
-                // Position walls exactly at ground level
-                const yOffset = wallHeight / 2;  // Center point of wall height
-                
-                // North wall (front)
-                const northWall = new THREE.Mesh(
-                    new THREE.PlaneGeometry(frontWidth, wallHeight),
-                    wallMaterial.clone()
-                );
-                northWall.position.set(0, yOffset, -depth/2);
-                walls.push(northWall);
-                
-                // South wall (back)
-                const southWall = new THREE.Mesh(
-                    new THREE.PlaneGeometry(frontWidth, wallHeight),
-                    wallMaterial.clone()
-                );
-                southWall.position.set(0, yOffset, depth/2);
-                southWall.rotation.y = Math.PI;
-                walls.push(southWall);
-                
-                // East wall (right)
-                const eastWall = new THREE.Mesh(
-                    new THREE.PlaneGeometry(depth, wallHeight),
-                    wallMaterial.clone()
-                );
-                eastWall.position.set(frontWidth/2, yOffset, 0);
-                eastWall.rotation.y = -Math.PI/2;
-                walls.push(eastWall);
-                
-                // West wall (left)
-                const westWall = new THREE.Mesh(
-                    new THREE.PlaneGeometry(depth, wallHeight),
-                    wallMaterial.clone()
-                );
-                westWall.position.set(-frontWidth/2, yOffset, 0);
-                westWall.rotation.y = Math.PI/2;
-                walls.push(westWall);
-                
-                // Add all walls to scene
-                walls.forEach((wall, index) => {
-                    wall.name = ['North', 'South', 'East', 'West'][index] + ' Wall';
-                    this.scene.add(wall);
-                    this.walls.push(wall);
-                });
+                console.log("Texture applied to sky");
             },
-            (progress) => {
-                // Optional: Handle progress silently
-            },
+            null,
             (error) => {
-                console.error('Error loading wall texture:', error);
+                console.error("Error loading texture:", error);
             }
         );
     }
-
+    
     updateCourseSize(newSize) {
         if (!newSize || !newSize.width || !newSize.length) return;
-        
-        // Update the stored course size
         this.options.courseSize = newSize;
-        
-        // Remove existing walls
-        this.dispose();
-        
-        // Recreate walls with new size
-        this.walls = [];
         this.createSky();
     }
 
     dispose() {
-        if (this.walls) {
+        if (this.walls && this.walls.length > 0) {
             this.walls.forEach(wall => {
-                wall.geometry.dispose();
-                wall.material.dispose();
+                if (wall.geometry) wall.geometry.dispose();
+                if (wall.material) {
+                    if (wall.material.map) wall.material.map.dispose();
+                    wall.material.dispose();
+                }
                 this.scene.remove(wall);
             });
-            this.walls = null;
+            this.walls = [];
         }
     }
 
     setWallsVisible(visible) {
-        this.walls.forEach(wall => {
-            wall.visible = visible;
-        });
+        if (this.walls && this.walls.length > 0) {
+            this.walls.forEach(wall => {
+                wall.visible = visible;
+                console.log(`Sky visibility set to: ${visible}`);
+            });
+        }
     }
-} 
+}

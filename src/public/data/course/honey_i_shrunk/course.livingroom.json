@@ -1,0 +1,87 @@
+{
+    "course_id": "course_eewh0a8wj",
+    "name": "Converted SVG Course",
+    "metadata": {
+      "description": "Course converted from SVG file",
+      "location": {
+        "latitude": 0,
+        "longitude": 0,
+        "address": "Unknown"
+      },
+      "difficulty": 3,
+      "source": "SVG Converter",
+      "author": "SVG Converter",
+      "version": "1.0.0",
+      "creationDate": "2025-03-27T21:30:34.528Z",
+      "name": "Untitled drawing (16)"
+    },
+    "courseSize": {
+      "width": 500.00000000000006,
+      "length": 375
+    },
+    "holes": [
+      {
+        "holeNumber": 1,
+        "par": 3,
+        "teebox": {
+          "position": {
+            "x": -100.773281250000025,
+            "y": 5,
+            "z": 160.749078125000011
+          },
+          "rotation": {
+            "x": 0,
+            "y": -1.450517299447183,
+            "z": 0
+          },
+          "type": "recreational"
+        },
+        "basket": {
+          "position": {
+            "x": -85.04347916666669,
+            "y": 0,
+            "z": 11.000380208333326
+          }
+        },
+        "outOfBounds": [],
+        "fairway": {
+          "shape": [
+            {
+              "x": -16.773281250000025,
+              "z": 2.749078125000011
+            },
+            {
+              "x": -85.04347916666669,
+              "z": 11.000380208333326
+            }
+          ],
+          "width": 10
+        }
+      }
+    ],
+    "terrain": [
+      {
+        "id": "custom_0",
+        "type": "custom",
+        "position": {
+          "x": -170,
+          "y": 38,
+          "z": -25
+        },
+        "scale": {
+          "x": 80,
+          "y": 80,
+          "z": 80
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "color": "#980000",
+        "properties": {
+          "modelUrl": "./models/pack/livingroom/model.obj"
+        }
+      }
+    ]
+  }
