@@ -1,6 +1,6 @@
 LAUNCH LIST
 X - background for index.html with logo so not just whitescreen when loading
-- make a help button and help modal
+X - make a help button and help modal
 - make 3 bite sized, engaging courses
 - Can maps have custom grass?
 - Custom skybox for all levels?

@@ -154,21 +154,23 @@ class UI {
 
     initializeCameraControls() {
         // Reset camera button
-        this.resetCameraButton.addEventListener('click', () => {
+        const handleCameraReset = () => {
             const currentPlayer = window.playerManager.getCurrentPlayer();
             if (currentPlayer && window.cameraController) {
                 // Always target hole when manually resetting camera
                 window.cameraController.focusOnPlayer(currentPlayer, true);
             }
-        });
+        };
 
         // Long press handling for reset camera button
         let longPressTimer;
+        let isLongPress = false;
         const longPressDuration = 500; // 500ms for long press
 
         const handleLongPressStart = (e) => {
-            e.preventDefault(); // Prevent default behavior
+            isLongPress = false;
             longPressTimer = setTimeout(() => {
+                isLongPress = true;
                 this.resetCameraButton.classList.toggle('auto-target');
                 // Toggle auto-target mode in camera controller
                 if (window.cameraController) {
@@ -179,8 +181,12 @@ class UI {
             }, longPressDuration);
         };
 
-        const handleLongPressEnd = () => {
+        const handleLongPressEnd = (e) => {
             clearTimeout(longPressTimer);
+            // Only trigger camera reset if it wasn't a long press
+            if (!isLongPress) {
+                handleCameraReset();
+            }
         };
 
         // Mouse events
@@ -189,7 +195,10 @@ class UI {
         this.resetCameraButton.addEventListener('mouseleave', handleLongPressEnd);
 
         // Touch events
-        this.resetCameraButton.addEventListener('touchstart', handleLongPressStart);
+        this.resetCameraButton.addEventListener('touchstart', (e) => {
+            e.preventDefault(); // Prevent scrolling/zooming while touching the button
+            handleLongPressStart(e);
+        });
         this.resetCameraButton.addEventListener('touchend', handleLongPressEnd);
         this.resetCameraButton.addEventListener('touchcancel', handleLongPressEnd);
 
