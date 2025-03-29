@@ -167,7 +167,11 @@ class BaseModel {
 
     // Helper to track parts for cleanup
     addPart(mesh) {
-        this.parts.push(mesh);
+        if (typeof this.parts.push === 'function') {
+            this.parts.push(mesh);
+        } else if (typeof this.parts === 'object') {
+            this.parts[this.parts.length] = mesh;
+        }
         if (this.mesh) {
             this.mesh.add(mesh);
         }

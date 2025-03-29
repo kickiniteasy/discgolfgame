@@ -458,7 +458,7 @@
         {
             "id": "rocket-2",
             "type": "custom",
-            "position": { "x": 3, "y": 0.2, "z": 2 },
+            "position": { "x": 30, "y": 0.2, "z": 2 },
             "rotation": { "x": 0, "y": 0, "z": 0 },
             "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
             "properties": {
@@ -476,7 +476,7 @@
         {
             "id": "rocket-2",
             "type": "custom",
-            "position": { "x": 3, "y": 0, "z": 7 },
+            "position": { "x": 30, "y": 0, "z": 7 },
             "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
@@ -494,7 +494,7 @@
         {
             "id": "rocket-2",
             "type": "custom",
-            "position": { "x": -3, "y": 1, "z": 7 },
+            "position": { "x": 30, "y": 1, "z": 7 },
             "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
             "properties": {
@@ -512,11 +512,101 @@
         {
             "id": "rocket-2",
             "type": "custom",
-            "position": { "x": -3, "y": 1, "z": 1 },
+            "position": { "x": 2, "y": 0, "z": 0 },
             "rotation": { "x": 0, "y": 3, "z": 0 },
-            "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
-                "modelUrl": "./models/js/portal-gateway.js",
+                "modelUrl": "./models/js/ant-model.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -3, "y": 0, "z": 1 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/cat-model.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": 4, "y": 1, "z": 2 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/forest-deer.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": 0, "y": 2, "z": 1 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/forest-faery.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -2, "y": 0, "z": 10 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/palm-tree-model.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": 0, "y": 1, "z": 2 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/ufo-model.js",
                 "animated": true
             },
             "visualProperties": {
