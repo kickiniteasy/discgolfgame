@@ -91,6 +91,11 @@
         <button id="social-twitter-button">
             <img src="img/icons/social-x-logo.svg" alt="X (Twitter)" />
         </button>
+        <button id="help-button">
+            <svg viewBox="0 0 24 24" width="24" height="24">
+                <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+            </svg>
+        </button>
 
         <div id="ui">
             <div class="game-stats">
@@ -292,6 +297,56 @@
         </div>
 
         <div id="message"></div>
+
+        <div id="help-modal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="help-logo">
+                        <img src="img/logo.svg" alt="Vibe Disc Logo">
+                        <h2>Vibe Disc</h2>
+                    </div>
+                    <button class="close-button">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="help-section">
+                        <h3>How to Play</h3>
+                        <ul>
+                            <li>Hold SPACE or tap/click THROW to charge your throw</li>
+                            <li>Release to throw the disc</li>
+                            <li>Use the camera controls to look around</li>
+                            <li>Click <img src="img/icons/bag.svg" alt="Bag" class="inline-icon"> to change discs</li>
+                            <li>Click <img src="img/icons/scorecard.svg" alt="Score" class="inline-icon"> to view scores</li>
+                            <li>Try to get the disc in the basket in the fewest throws!</li>
+                        </ul>
+                    </div>
+                    <div class="help-section">
+                        <h3>Controls</h3>
+                        <ul>
+                            <li><svg viewBox="0 0 1024 1024" class="inline-icon"><circle cx="512" cy="512" r="480" stroke="currentColor" stroke-width="40" fill="none"/><circle cx="512" cy="512" r="320" stroke="currentColor" stroke-width="40" fill="none"/><circle cx="512" cy="512" r="160" stroke="currentColor" stroke-width="40" fill="none"/><circle cx="760" cy="760" r="160" stroke="currentColor" stroke-width="40" fill="none"/><line x1="650" y1="650" x2="850" y2="850" stroke="currentColor" stroke-width="40" /></svg> Show Hole - Center camera on the hole</li>
+                            <li><svg viewBox="0 0 1024 1024" class="inline-icon"><circle cx="512" cy="512" r="400" stroke="currentColor" stroke-width="20" fill="none" /><path d="M848 512c0 58.7-20.4 112-54.1 154.3l-19.2-25.7c25.5-28.2 41.2-65 41.2-108.3" stroke="currentColor" stroke-width="20" fill="none" /><path d="M176 512c0-58.7 20.4-112 54.1-154.3l19.2 25.7C225.8 505.9 210 542.7 210 586c0 43.3 15.8 80.1 41.2 108.3" stroke="currentColor" stroke-width="20" fill="none" /><rect x="412" y="412" width="200" height="130" rx="20" ry="20" stroke="currentColor" stroke-width="12" fill="none"/><circle cx="512" cy="477" r="40" stroke="currentColor" stroke-width="12" fill="none" /></svg> Reset Camera - Reset camera to player view</li>
+                            <li>Long press <svg viewBox="0 0 1024 1024" class="inline-icon"><circle cx="512" cy="512" r="400" stroke="currentColor" stroke-width="20" fill="none" /><path d="M848 512c0 58.7-20.4 112-54.1 154.3l-19.2-25.7c25.5-28.2 41.2-65 41.2-108.3" stroke="currentColor" stroke-width="20" fill="none" /><path d="M176 512c0-58.7 20.4-112 54.1-154.3l19.2 25.7C225.8 505.9 210 542.7 210 586c0 43.3 15.8 80.1 41.2 108.3" stroke="currentColor" stroke-width="20" fill="none" /><rect x="412" y="412" width="200" height="130" rx="20" ry="20" stroke="currentColor" stroke-width="12" fill="none"/><circle cx="512" cy="477" r="40" stroke="currentColor" stroke-width="12" fill="none" /></svg> - Toggle auto-target mode</li>
+                            <li>Mouse/Touch drag - Look around</li>
+                            <li>Mouse wheel/Pinch - Zoom in/out</li>
+                        </ul>
+                    </div>
+                    <div class="help-section">
+                        <h3>Multiplayer & Custom Courses</h3>
+                        <ul>
+                            <li>Click <img src="img/icons/settings.svg" alt="Settings" class="inline-icon"> and go to Players tab to add local players</li>
+                            <li>Each player can customize their name and color</li>
+                            <li>Create custom courses using any SVG editor (like Inkscape)</li>
+                            <li>Upload your course in Settings → Courses tab</li>
+                            <li>See the <a href="https://github.com/kickiniteasy/discgolfgame/blob/main/docs/course_schema.md" target="_blank">course creation guide</a> for details</li>
+                        </ul>
+                    </div>
+                    <div class="help-section">
+                        <h3>About</h3>
+                        <p>Vibe Disc is a casual disc golf game that combines the thrill of disc golf with the fun of mini golf. Created with AI and good vibes, it's perfect for both casual players and disc golf enthusiasts!</p>
+                        <p class="about-credits">Created for <a href="https://jam.pieter.com" target="_blank">Vibe Jam 2025</a> by <a href="https://x.com/kickiniteasy" target="_blank">@kickiniteasy</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

@@ -17,6 +17,10 @@ class UI {
         this.playersModal = document.getElementById('players-modal');
         this.playersList = document.getElementById('players-list');
         
+        // Help modal elements
+        this.helpButton = document.getElementById('help-button');
+        this.helpModal = document.getElementById('help-modal');
+        
         // Camera control elements
         this.resetCameraButton = document.getElementById('reset-camera-button');
         // Set initial auto-target state - on by default with orange border
@@ -33,6 +37,7 @@ class UI {
 
         // Initialize modals and controls
         this.initializePlayersModal();
+        this.initializeHelpModal();
         this.initializeThrowControls();
         this.initializeCameraControls();
 
@@ -61,6 +66,33 @@ class UI {
         this.playersModal.addEventListener('click', (e) => {
             if (e.target === this.playersModal) {
                 this.playersModal.style.display = 'none';
+            }
+        });
+    }
+
+    initializeHelpModal() {
+        // Show modal on button click
+        this.helpButton.addEventListener('click', () => {
+            this.helpModal.style.display = 'block';
+        });
+
+        // Close modal when clicking close button
+        const closeButton = this.helpModal.querySelector('.close-button');
+        closeButton.addEventListener('click', () => {
+            this.helpModal.style.display = 'none';
+        });
+
+        // Close modal when clicking outside
+        this.helpModal.addEventListener('click', (e) => {
+            if (e.target === this.helpModal) {
+                this.helpModal.style.display = 'none';
+            }
+        });
+
+        // Add keyboard shortcut (h key) to toggle help
+        document.addEventListener('keydown', (e) => {
+            if (e.key.toLowerCase() === 'h') {
+                this.helpModal.style.display = this.helpModal.style.display === 'block' ? 'none' : 'block';
             }
         });
     }

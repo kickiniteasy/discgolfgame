@@ -646,6 +646,34 @@ canvas {
     filter: brightness(0) invert(1);
 }
 
+/* Help Button */
+#help-button {
+    position: fixed;
+    top: 140px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    border: none;
+    border-radius: 10px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#help-button svg {
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+}
+
+#social-twitter-button:hover,
+#help-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+}
+
 /* Stats.js panel */
 #stats-panel {
     position: fixed;
@@ -1535,4 +1563,106 @@ canvas {
 
 #upload-course-button .upload-icon {
     margin-right: 8px;
+}
+
+/* Help Modal Styles */
+.help-section {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    color: white;
+}
+
+.help-section:last-child {
+    margin-bottom: 0;
+}
+
+.help-section h3 {
+    font-size: 18px;
+    margin: 0 0 12px 0;
+    color: #4CAF50;
+}
+
+.help-section ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.help-section li {
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+    line-height: 1.5;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.help-section li:last-child {
+    margin-bottom: 0;
+}
+
+.help-section li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #4CAF50;
+}
+
+.help-section p {
+    margin: 0;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.help-section a {
+    color: #4CAF50;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.help-section a:hover {
+    color: #45a049;
+    text-decoration: underline;
+}
+
+.help-section .inline-icon {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+    margin: 0 2px;
+    filter: brightness(0) invert(1);
+}
+
+.help-section svg.inline-icon {
+    stroke: currentColor;
+    fill: none;
+    filter: none;
+}
+
+.about-credits {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.9em;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.help-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.help-logo img {
+    width: 40px;
+    height: 40px;
+}
+
+.help-logo h2 {
+    margin: 0;
+    font-size: 24px;
+    color: white;
 } 
