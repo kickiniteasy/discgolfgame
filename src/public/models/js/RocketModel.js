@@ -36,6 +36,14 @@ export default class RocketShipModel extends BaseModel {
         this.engineColor = options.visualProperties?.engineColor || 
                            options.properties?.engineColor || 
                            "#e67e22"; // Orange engine glow
+
+        this.blastingOff = false;
+        this.blastOffSpeed = 0.1;
+        this.blastOffY = 0;
+
+        this.landing = false;
+        this.landingSpeed = 0.1;
+
     }
 
     async init() {
@@ -258,31 +266,50 @@ export default class RocketShipModel extends BaseModel {
             const material = this.engineGlow.material;
             material.emissiveIntensity = 1 + Math.sin(this.engineFlicker * 2) * 0.3;
         }
+
+        if (this.blastingOff) {
+            console.log("blasting off in loop", this.blastOffSpeed, this.mesh.position.y);
+            this.mesh.position.y += this.blastOffSpeed;
+            this.originalY = this.mesh.position.y;
+        }
+        if (this.landing) {
+            console.log("landing in loop", this.landingSpeed, this.mesh.position.y);
+            this.mesh.position.y -= this.landingSpeed;
+            this.originalY = this.mesh.position.y;
+            if (this.mesh.position.y <= this.blastOffY) {
+                this.landing = false;
+                this.landingSpeed = 0;
+            }
+        }
+        
     }
     
     // Custom collision detection for the rocket
     handleCollision(point) {
-        // Create a bounding box for the rocket
-        const boundingBox = new THREE.Box3().setFromObject(this.mesh);
-        
-        // Check if point is inside the bounding box
-        const isInside = boundingBox.containsPoint(point);
-        
-        return {
-            collided: isInside,
-            point: point.clone()
-        };
+        const collision = super.handleCollision(point);
+        collision.isRocket = true;
+        if (collision.collided) {
+            // make the rocket blast off!
+            this.blastOff();
+        }
+        return collision;
     }
     
     // Make the rocket blast off!
     blastOff() {
-        // Store the current position as the new original
+        this.blastingOff = true;
+        this.blastOffY = this.mesh.position.y;
+        
+        // make the rocket move up
+        this.blastOffSpeed += 0.02;
         this.originalY = this.mesh.position.y;
+        setTimeout(() => {
+            this.blastingOff = false;
+            this.blastOffSpeed = 0;
+            // start the landing animation
+            this.landing = true;
+            this.landingSpeed = 0.2;
+        }, 5000);
         
-        // Ensure animations are enabled
-        this.animated = true;
-        
-        // This function could be expanded to create more elaborate animations
-        console.log('Rocket is blasting off!');
     }
 }

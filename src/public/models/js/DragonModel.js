@@ -315,17 +315,16 @@ export default class DragonModel extends BaseModel {
         }
     }
     
-    // Custom collision detection for the dragon
     handleCollision(point) {
-        // Create a bounding box for the dragon
-        const boundingBox = new THREE.Box3().setFromObject(this.mesh);
-        
-        // Check if point is inside the bounding box
-        const isInside = boundingBox.containsPoint(point);
-        
-        return {
-            collided: isInside,
-            point: point.clone()
-        };
+        const collision = super.handleCollision(point);
+        if (collision.collided) {
+            // increase the speed of the dragon for 1 second
+            this.wingFlapSpeed += 0.4;
+            
+            setTimeout(() => {
+                this.wingFlapSpeed -= 0.4;
+            }, 1000);
+        }
+        return collision;
     }
 }

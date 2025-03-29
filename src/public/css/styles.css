@@ -1190,12 +1190,23 @@ canvas {
     align-items: center;
     justify-content: center;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.camera-controls button.auto-target {
+    border-color: #ff8c00; /* Orange border for auto-target mode */
 }
 
 .camera-controls button:hover {
     transform: scale(1.05);
     background-color: rgba(0, 0, 0, 0.9);
     border-color: rgba(255, 255, 255, 0.5);
+}
+
+.camera-controls button.auto-target:hover {
+    border-color: #ffa500; /* Lighter orange on hover for auto-target mode */
 }
 
 .camera-controls button:active {

@@ -54,9 +54,7 @@ export default class WindmillModel extends BaseModel {
             new THREE.MeshStandardMaterial({ 
                 color: this.baseColor,
                 roughness: this.options.visualProperties?.roughness || 0.8,
-                metalness: this.options.visualProperties?.metalness || 0.2,
-                opacity: this.options.visualProperties?.opacity || 1.0,
-                transparent: this.options.visualProperties?.opacity < 1.0
+                metalness: this.options.visualProperties?.metalness || 0.2
             })
         );
         base.position.y = 3;
@@ -95,7 +93,7 @@ export default class WindmillModel extends BaseModel {
         windowMesh.position.set(0, 4, 1.5);
         windowMesh.rotation.y = Math.PI;
         this.mesh.add(windowMesh);
-        
+        this.addPart(windowMesh);
         // Add window frame
         const windowFrame = new THREE.Mesh(
             new THREE.RingGeometry(0.4, 0.55, 16),
@@ -116,9 +114,8 @@ export default class WindmillModel extends BaseModel {
                 metalness: 0.1
             })
         );
-        door.position.set(0, 1, 1.5);
+        door.position.set(0, 1, 2.0);
         this.mesh.add(door);
-        
         // Door handle
         const doorHandle = new THREE.Mesh(
             new THREE.SphereGeometry(0.1, 8, 8),
@@ -128,7 +125,7 @@ export default class WindmillModel extends BaseModel {
                 metalness: 0.8
             })
         );
-        doorHandle.position.set(0.3, 1, 1.56);
+        doorHandle.position.set(0.3, 1, 2.06);
         this.mesh.add(doorHandle);
     }
     
@@ -170,6 +167,7 @@ export default class WindmillModel extends BaseModel {
         }
 
         this.mesh.add(this.blades);
+        
     }
     
     // Called by CustomTerrain's update method
@@ -184,18 +182,17 @@ export default class WindmillModel extends BaseModel {
             this.blades.rotation.z += deltaTime * this.rotationSpeed;
         }
     }
-    
-    // Custom collision detection for the windmill
+
     handleCollision(point) {
-        // Create a bounding box for the windmill
-        const boundingBox = new THREE.Box3().setFromObject(this.mesh);
-        
-        // Check if point is inside the bounding box
-        const isInside = boundingBox.containsPoint(point);
-        
-        return {
-            collided: isInside,
-            point: point.clone()
-        };
+        const collision = super.handleCollision(point);
+        collision.isWindmill = true;
+        if (collision.collided) {
+            // increase the rotation speed of the windmill for 1 second
+            this.rotationSpeed += 0.2;
+            setTimeout(() => {
+                this.rotationSpeed -= 0.2;
+            }, 1000);
+        }
+        return collision;
     }
 }

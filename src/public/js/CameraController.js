@@ -14,6 +14,9 @@ class CameraController {
         this.controls.zoomSpeed = 1.2;
         this.controls.enablePan = true;
 
+        // Auto-target state
+        this.autoTarget = true;
+
         // Animation state
         this.isAnimating = false;
         this.animationStartTime = 0;
@@ -52,47 +55,84 @@ class CameraController {
     }
 
     // Focus camera on a specific player
-    focusOnPlayer(player) {
+    focusOnPlayer(player, forceHoleTarget = false) {
         if (!player) return;
         
         // Get player position
         const playerPosition = player.position.clone();
         
-        // Get current hole position from course manager
-        let targetPosition;
-        if (window.courseManager && window.courseManager.getCurrentCourse()) {
-            const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
-            if (holePosition) {
-                targetPosition = new THREE.Vector3(
-                    holePosition.x,
-                    holePosition.y || 0,
-                    holePosition.z
-                );
+        if (this.autoTarget || forceHoleTarget) {
+            // Auto-target mode or forced hole target: point at hole
+            let targetPosition;
+            if (window.courseManager && window.courseManager.getCurrentCourse()) {
+                const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                if (holePosition) {
+                    targetPosition = new THREE.Vector3(
+                        holePosition.x,
+                        holePosition.y || 0,
+                        holePosition.z
+                    );
+                }
             }
+            
+            // If no hole position available, use default forward direction
+            if (!targetPosition) {
+                const forwardDirection = new THREE.Vector3(0, 0, -1);
+                targetPosition = playerPosition.clone().add(forwardDirection.multiplyScalar(10));
+            }
+            
+            // Position camera behind player looking at hole
+            this.positionBehindPlayer(playerPosition, targetPosition);
+        } else {
+            // Free throw mode: maintain current camera direction
+            const currentDirection = new THREE.Vector3()
+                .subVectors(this.controls.target, this.camera.position)
+                .normalize();
+            
+            // Project the direction onto the horizontal plane
+            currentDirection.y = 0;
+            currentDirection.normalize();
+            
+            // Calculate target position in front of player using current direction
+            const targetPosition = playerPosition.clone().add(currentDirection.multiplyScalar(10));
+            
+            // Position camera behind player maintaining current direction
+            this.positionBehindPlayer(playerPosition, targetPosition);
         }
-        
-        // If no hole position available, use default forward direction
-        if (!targetPosition) {
-            const forwardDirection = new THREE.Vector3(0, 0, -1);
-            targetPosition = playerPosition.clone().add(forwardDirection.multiplyScalar(10));
-        }
-        
-        // Position camera behind player looking at hole
-        this.positionBehindPlayer(playerPosition, targetPosition);
+    }
+
+    // Set auto-target mode
+    setAutoTarget(enabled) {
+        this.autoTarget = enabled;
     }
 
     // Update camera target during gameplay
     updateTarget(position) {
-        // Get current hole position
-        if (window.courseManager && window.courseManager.getCurrentCourse()) {
-            const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
-            if (holePosition) {
-                this.controls.target.copy(holePosition);
-                return;
+        if (this.autoTarget) {
+            // Auto-target mode: target the hole
+            if (window.courseManager && window.courseManager.getCurrentCourse()) {
+                const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
+                if (holePosition) {
+                    this.controls.target.copy(holePosition);
+                    return;
+                }
             }
+            // Fallback to player position if no hole position
+            this.controls.target.copy(position);
+        } else {
+            // Free throw mode: maintain current camera direction relative to new position
+            const currentDirection = new THREE.Vector3()
+                .subVectors(this.controls.target, this.camera.position)
+                .normalize();
+            
+            // Project the direction onto the horizontal plane
+            currentDirection.y = 0;
+            currentDirection.normalize();
+            
+            // Set new target point in front of player using current direction
+            const targetOffset = currentDirection.multiplyScalar(5); // 5 units in front
+            this.controls.target.copy(position).add(targetOffset);
         }
-        // Fallback to provided position if no hole position available
-        this.controls.target.copy(position);
     }
 
     // Animate camera to show hole and return

@@ -166,9 +166,78 @@ class BaseModel {
 
     // Override this for custom collision detection
     handleCollision(point) {
-        const box = new THREE.Box3().setFromObject(this.mesh);
+        // First check with a slightly smaller bounding box for quick rejection
+        const boundingBox = new THREE.Box3().setFromObject(this.mesh);
+        
+        // Make the bounding box a bit smaller for more accurate collisions
+        const shrinkAmount = 0.5; // Adjust based on your model's scale
+        boundingBox.min.add(new THREE.Vector3(shrinkAmount, shrinkAmount, shrinkAmount));
+        boundingBox.max.sub(new THREE.Vector3(shrinkAmount, shrinkAmount, shrinkAmount));
+        
+        if (!boundingBox.containsPoint(point)) {   
+            return {
+                collided: false,
+                point: null
+            };
+        }
+        //console.log("Collision detected: ", this.mesh);
+        
+        // Check against individual mesh children
+        for (let childIdx in this.mesh.children) {
+            const child = this.mesh.children[childIdx];
+            // Skip parts without geometry (like groups)
+            if (!child.geometry) {
+                
+                // If it's a group, recursively check its children
+                if (child.children && child.children.length > 0) {
+                    for (const grandchild of child.children) {
+                        if (!grandchild.geometry) {
+                            console.log("Grandchild without geometry: ", grandchild);
+                            continue;
+                        }
+                        
+                        // Convert point to local space of this specific part
+                        const localPoint = point.clone();
+                        grandchild.worldToLocal(localPoint);
+                        
+                        // Check if local point is within this part's bounds
+                        const partBox = new THREE.Box3().setFromObject(grandchild);
+                        if (partBox.containsPoint(localPoint)) {
+                            return {
+                                collided: true,
+                                point: point.clone()
+                            };
+                        }
+                    }
+                }
+                continue;
+            }
+            
+            // Create a local point by transforming global point to part's local space
+            const localPoint = point.clone().sub(child.position);
+            if (child.parent !== this.mesh) {
+                // Account for nested hierarchy if part isn't direct child of mesh
+                let current = child;
+                while (current.parent && current.parent !== this.mesh) {
+                    localPoint.sub(current.parent.position);
+                    current = current.parent;
+                }
+            }
+
+            // Create a bounding box for this specific part
+            const partBox = new THREE.Box3().setFromObject(child);
+            if (partBox.containsPoint(point)) {
+                return {
+                    collided: true,
+                    point: point.clone()
+                };
+            }
+
+            
+        }
+        
         return {
-            collided: box.containsPoint(point),
+            collided: false,
             point: point.clone()
         };
     }

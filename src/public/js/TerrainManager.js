@@ -518,7 +518,23 @@ class TerrainManager {
                         return { collided: true, terrain: terrain, point: position.clone() };
                     }
                     break;
+                case 'custom':
+                    // Check collision with custom terrain objects
+                    if (terrain.handleCollision && typeof terrain.handleCollision === 'function') {
+                        const result = terrain.handleCollision(position);
+                        if (result.collided) {
+                            result['terrain'] = terrain;
+                            return result;
+                        }
+                    } else if (terrain.hitboxMesh) {
+                        const customBox = new THREE.Box3().setFromObject(terrain.hitboxMesh);
+                        if (customBox.containsPoint(position)) {
+                            return { collided: true, terrain: terrain, point: position.clone() };
+                        }
+                    }
+                    break;
             }
+
         }
 
         return { collided: false };

@@ -19,6 +19,10 @@ class UI {
         
         // Camera control elements
         this.resetCameraButton = document.getElementById('reset-camera-button');
+        // Set initial auto-target state - on by default with orange border
+        if (this.resetCameraButton) {
+            this.resetCameraButton.classList.add('auto-target');
+        }
         this.showHoleButton = document.getElementById('show-hole-button');
         
         // Throw button state
@@ -121,9 +125,41 @@ class UI {
         this.resetCameraButton.addEventListener('click', () => {
             const currentPlayer = window.playerManager.getCurrentPlayer();
             if (currentPlayer && window.cameraController) {
-                window.cameraController.focusOnPlayer(currentPlayer);
+                // Always target hole when manually resetting camera
+                window.cameraController.focusOnPlayer(currentPlayer, true);
             }
         });
+
+        // Long press handling for reset camera button
+        let longPressTimer;
+        const longPressDuration = 500; // 500ms for long press
+
+        const handleLongPressStart = (e) => {
+            e.preventDefault(); // Prevent default behavior
+            longPressTimer = setTimeout(() => {
+                this.resetCameraButton.classList.toggle('auto-target');
+                // Toggle auto-target mode in camera controller
+                if (window.cameraController) {
+                    // When button has auto-target class (orange border), auto-target should be ON
+                    const isAutoTarget = this.resetCameraButton.classList.contains('auto-target');
+                    window.cameraController.setAutoTarget(isAutoTarget);
+                }
+            }, longPressDuration);
+        };
+
+        const handleLongPressEnd = () => {
+            clearTimeout(longPressTimer);
+        };
+
+        // Mouse events
+        this.resetCameraButton.addEventListener('mousedown', handleLongPressStart);
+        this.resetCameraButton.addEventListener('mouseup', handleLongPressEnd);
+        this.resetCameraButton.addEventListener('mouseleave', handleLongPressEnd);
+
+        // Touch events
+        this.resetCameraButton.addEventListener('touchstart', handleLongPressStart);
+        this.resetCameraButton.addEventListener('touchend', handleLongPressEnd);
+        this.resetCameraButton.addEventListener('touchcancel', handleLongPressEnd);
 
         // Show hole button
         this.showHoleButton.addEventListener('click', () => {

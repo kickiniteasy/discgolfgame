@@ -172,6 +172,7 @@ class Terrain {
     }
 
     setHitboxVisibility(visible) {
+        // CustomTerrain with type 'custom' and modelType 'js' have a hitboxMesh but are made of many children meshes
         if (this.hitboxMesh) {
             this.hitboxMesh.visible = visible;
         }
@@ -197,44 +198,82 @@ class Terrain {
         }
     }
 
-    createHitboxFromBounds() {
-        if (this.hitboxMesh) {
-            this.mesh.remove(this.hitboxMesh);
-            this.hitboxMesh = null;
-        }
-
-        if (!this.mesh) return;
-
-        const boundingBox = new THREE.Box3();
+    createHitboxFromBounds(showIndividualParts = true) {
+        // Remove existing hitbox visualization
         this.mesh.traverse((child) => {
-            if (child.isMesh && child !== this.hitboxMesh) {
-                child.geometry.computeBoundingBox();
-                const childBox = child.geometry.boundingBox.clone();
-                childBox.applyMatrix4(child.matrixWorld);
-                boundingBox.union(childBox);
+            if (child.isHitboxVisualization) {
+                if (child.parent) {
+                    child.parent.remove(child);
+                }
             }
         });
-
-        const size = new THREE.Vector3();
-        boundingBox.getSize(size);
-
-        const hitboxGeometry = new THREE.BoxGeometry(1, 1, 1);
-        const hitboxMaterial = new THREE.MeshBasicMaterial({
-            color: 0xffff00,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.3,
-            visible: this.options.showHitboxes
-        });
-
-        this.hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
-        this.hitboxMesh.scale.copy(size);
         
-        const center = new THREE.Vector3();
-        boundingBox.getCenter(center);
-        this.hitboxMesh.position.copy(center);
-
-        this.mesh.add(this.hitboxMesh);
+        if (!this.mesh) return;
+        
+        if (!showIndividualParts) {
+            // Original full-model hitbox code
+            const boundingBox = new THREE.Box3().setFromObject(this.mesh);
+            
+            const size = new THREE.Vector3();
+            boundingBox.getSize(size);
+            
+            const hitboxGeometry = new THREE.BoxGeometry(1, 1, 1);
+            const hitboxMaterial = new THREE.MeshBasicMaterial({
+                color: 0xffff00,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.3,
+                visible: this.options.showHitboxes
+            });
+            
+            const hitboxMesh = new THREE.Mesh(hitboxGeometry, hitboxMaterial);
+            hitboxMesh.isHitboxVisualization = true;
+            hitboxMesh.scale.copy(size);
+            
+            const center = new THREE.Vector3();
+            boundingBox.getCenter(center);
+            
+            // Calculate position relative to the mesh
+            const worldCenter = center.clone();
+            const localCenter = worldCenter.clone().sub(this.mesh.position);
+            hitboxMesh.position.copy(localCenter);
+            
+            this.mesh.add(hitboxMesh);
+        } else {
+            // Individual part hitboxes
+            this.mesh.traverse((child) => {
+                if (child.isMesh && !child.isHitboxVisualization && child.geometry) {
+                    // Create a bounding box for this part's geometry
+                    child.geometry.computeBoundingBox();
+                    const geometryBox = child.geometry.boundingBox.clone();
+                    
+                    // Calculate size
+                    const size = new THREE.Vector3();
+                    geometryBox.getSize(size);
+                    
+                    // Create wireframe box to represent hitbox
+                    const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+                    const boxMaterial = new THREE.MeshBasicMaterial({
+                        color: 0x00ff00, // Green for part hitboxes
+                        wireframe: true,
+                        transparent: true,
+                        opacity: 0.3,
+                        visible: this.options.showHitboxes
+                    });
+                    
+                    const hitboxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+                    hitboxMesh.isHitboxVisualization = true;
+                    hitboxMesh.scale.copy(size);
+                    
+                    // Center in local coordinates of the geometry
+                    const center = new THREE.Vector3();
+                    geometryBox.getCenter(center);
+                    hitboxMesh.position.copy(center);
+                    
+                    // Add directly to the part
+                    child.add(hitboxMesh);
+                }
+            });
+        }
     }
-
 } 

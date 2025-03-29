@@ -98,23 +98,6 @@ class Course {
 
     nextHole() {
         if (this.currentHoleIndex < this.holes.length - 1) {
-            // Clean up any portals before advancing
-            if (window.terrainManager) {
-                // Remove all portal terrain (both entry and exit)
-                const portalsToRemove = [];
-                window.terrainManager.terrainObjects.forEach((terrain, id) => {
-                    // Check both constructor type and options to ensure we catch all portals
-                    if (terrain.constructor.type === 'portal' || 
-                        (terrain.options && terrain.options.properties && 
-                         (terrain.options.properties.isEntry !== undefined || terrain.options.properties.targetUrl))) {
-                        portalsToRemove.push(id);
-                        terrain.removeFromScene();
-                    }
-                });
-                // Remove from terrainObjects map after iteration
-                portalsToRemove.forEach(id => window.terrainManager.terrainObjects.delete(id));
-            }
-            
             this.currentHoleIndex++;
             this.updateArrowVisibility(); // Update arrow visibility after changing holes
             return true;

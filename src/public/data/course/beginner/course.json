@@ -311,10 +311,10 @@
             "tags": ["portal", "exit"]
         },
         {
-            "id": "dragon",
+            "id": "windmill-1",
             "type": "custom",
-            "position": { "x": 4, "y": 0, "z": 4 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "position": { "x": -7, "y": 0, "z": 30 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
                 "modelUrl": "./models/js/WindmillModel.js",
@@ -324,16 +324,14 @@
                 "roughness": 0.2,
                 "metalness": 0.8,
                 "opacity": 0.8
-            },
-            "variant": "default",
-            "tags": ["dragon"]
+            }
         },
         {
-            "id": "dragon",
+            "id": "dragon-1",
             "type": "custom",
-            "position": { "x": 4, "y": 5, "z": 20 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
-            "scale": { "x": 1, "y": 1, "z": 1 },
+            "position": { "x": 40, "y": 4.5, "z": 0 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
             "properties": {
                 "modelUrl": "./models/js/DragonModel.js",
                 "animated": true
@@ -347,9 +345,10 @@
             "tags": ["dragon"]
         },
         {
+            "id": "rocket-1",
             "type": "custom",
-            "position": { "x": -8, "y": 1, "z": 10 },
-            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "position": { "x": 15, "y": 3, "z": 30 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
                 "modelUrl": "./models/js/RocketModel.js",
