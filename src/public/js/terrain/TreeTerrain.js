@@ -1,89 +1,37 @@
-class TreeTerrain extends Terrain {
+class TreeTerrain extends CustomTerrain {
     static type = 'tree';
     
-    async createMesh() {
-        const trunkGeometry = new THREE.CylinderGeometry(0.2, 0.3, 2, 8);
-        const trunkMaterial = new THREE.MeshStandardMaterial({
-            color: 0x8B4513,
-            roughness: 0.9
-        });
-        const trunk = new THREE.Mesh(trunkGeometry, trunkMaterial);
+    constructor(scene, options = {}) {
+        // Set the model URL to happy-tree.js
+        options.properties = options.properties || {};
+        options.properties.modelUrl = './models/js/happy-tree.js';
+        options.properties.animated = true; // Enable animations for the happy trees
         
-        const foliageGeometry = new THREE.ConeGeometry(1, 2, 8);
-        const foliageMaterial = new THREE.MeshStandardMaterial({
-            color: 0x228B22,
-            roughness: 1.0
-        });
-        const foliage = new THREE.Mesh(foliageGeometry, foliageMaterial);
-        foliage.position.y = 2;
-        
-        this.mesh = new THREE.Group();
-        this.mesh.add(trunk);
-        this.mesh.add(foliage);
-
-        this.hitboxMesh = new THREE.Group();
-        
-        const trunkHitboxGeometry = new THREE.CylinderGeometry(0.2, 0.3, 1, 8);
-        const hitboxMaterial = new THREE.LineBasicMaterial({
-            color: 0xffff00,
-            transparent: true,
-            opacity: 0.5,
-            visible: this.options.showHitboxes
-        });
-
-        const trunkHitbox = new THREE.LineSegments(
-            new THREE.EdgesGeometry(trunkHitboxGeometry),
-            hitboxMaterial
-        );
-        trunkHitbox.name = 'trunkHitbox';
-
-        const foliageHitboxGeometry = new THREE.ConeGeometry(1, 2, 8);
-        const foliageHitbox = new THREE.LineSegments(
-            new THREE.EdgesGeometry(foliageHitboxGeometry),
-            hitboxMaterial
-        );
-        foliageHitbox.name = 'foliageHitbox';
-
-        this.hitboxMesh.add(trunkHitbox);
-        this.hitboxMesh.add(foliageHitbox);
-        
-        this.scene.add(this.hitboxMesh);
-
-        return Promise.resolve();
+        // Pass the updated options to CustomTerrain constructor
+        super(scene, options);
     }
 
-    updateHitboxes() {
-        if (!this.hitboxMesh || !this.mesh) return;
-
-        const worldPos = new THREE.Vector3();
-        this.mesh.getWorldPosition(worldPos);
-        
-        const worldScale = new THREE.Vector3();
-        this.mesh.getWorldScale(worldScale);
-
-        const trunkHitbox = this.hitboxMesh.children.find(c => c.name === 'trunkHitbox');
-        const foliageHitbox = this.hitboxMesh.children.find(c => c.name === 'foliageHitbox');
-        
-        if (trunkHitbox && foliageHitbox) {
-            this.hitboxMesh.position.set(worldPos.x, 0, worldPos.z);
-            
-            const xzScale = Math.max(worldScale.x, worldScale.z);
-            
-            trunkHitbox.scale.set(xzScale, 1, xzScale);
-            const trunkHeight = worldPos.y + (2 * worldScale.y);
-            trunkHitbox.scale.y = trunkHeight;
-            trunkHitbox.position.y = trunkHeight / 2;
-            
-            foliageHitbox.scale.set(xzScale, worldScale.y, xzScale);
-            foliageHitbox.position.y = worldPos.y + (2 * worldScale.y);
+    // This is the key method for collision detection with trees
+    // TerrainManager will check the terrain constructor.type and process 'tree' types separately
+    // So we need to ensure our CustomTerrain-based trees still handle collisions properly
+    handleCollision(position) {
+        // If we have a model instance, use its handleCollision method
+        if (this.modelInstance && typeof this.modelInstance.handleCollision === 'function') {
+            return this.modelInstance.handleCollision(position);
         }
-    }
-
-    applyTransforms() {
-        super.applyTransforms();
-        this.updateHitboxes();
+        
+        // If model isn't loaded yet or doesn't have collision handling,
+        // implement simple collision detection based on the mesh's bounding box
+        if (this.mesh) {
+            const boundingBox = new THREE.Box3().setFromObject(this.mesh);
+            if (boundingBox.containsPoint(position)) {
+                return { collided: true, point: position.clone() };
+            }
+        }
+        
+        return { collided: false, point: null };
     }
 }
 
-// Register the terrain type
-Terrain.typeMap['tree'] = TreeTerrain; 
+// Register the tree terrain type
+Terrain.typeMap['tree'] = TreeTerrain;

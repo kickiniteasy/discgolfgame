@@ -431,48 +431,7 @@ class TerrainManager {
                     }
                     break;
 
-                case 'tree':
-                    // Check collision with trunk (cylinder) and foliage (cone) separately
-                    if (terrain.hitboxMesh) {
-                        const trunkHitbox = terrain.hitboxMesh.children.find(c => c.name === 'trunkHitbox');
-                        const foliageHitbox = terrain.hitboxMesh.children.find(c => c.name === 'foliageHitbox');
-                        
-                        if (trunkHitbox && foliageHitbox) {
-                            // Get world matrices for transformations
-                            trunkHitbox.updateMatrixWorld();
-                            foliageHitbox.updateMatrixWorld();
-                            
-                            // Create inverse matrices to transform point to local space
-                            const trunkInverseMatrix = new THREE.Matrix4().copy(trunkHitbox.matrixWorld).invert();
-                            const foliageInverseMatrix = new THREE.Matrix4().copy(foliageHitbox.matrixWorld).invert();
-                            
-                            // Transform point to local space of each hitbox
-                            const trunkLocalPoint = position.clone().applyMatrix4(trunkInverseMatrix);
-                            const foliageLocalPoint = position.clone().applyMatrix4(foliageInverseMatrix);
-                            
-                            // Check trunk collision (cylinder)
-                            // In local space, cylinder is centered at origin, aligned with Y axis
-                            const trunkRadialDist = Math.sqrt(trunkLocalPoint.x * trunkLocalPoint.x + trunkLocalPoint.z * trunkLocalPoint.z);
-                            if (trunkRadialDist <= 0.3 && // 0.3 is max radius of trunk (bottom)
-                                trunkLocalPoint.y >= -1 && // Cylinder is centered, so height goes from -1 to 1
-                                trunkLocalPoint.y <= 1) {
-                                return { collided: true, terrain: terrain, point: position.clone() };
-                            }
-                            
-                            // Check foliage collision (cone)
-                            // In local space, cone base is at origin, pointing up
-                            const foliageRadialDist = Math.sqrt(foliageLocalPoint.x * foliageLocalPoint.x + foliageLocalPoint.z * foliageLocalPoint.z);
-                            // Cone radius varies linearly from 1 at base (y=0) to 0 at top (y=2)
-                            const foliageMaxRadius = Math.max(0, 1 - (foliageLocalPoint.y / 2));
-                            if (foliageRadialDist <= foliageMaxRadius && 
-                                foliageLocalPoint.y >= 0 && 
-                                foliageLocalPoint.y <= 2) {
-                                return { collided: true, terrain: terrain, point: position.clone() };
-                            }
-                        }
-                    }
-                    break;
-
+                
                 case 'bush':
                     // Bushes should have very minimal collision unless disc is very low
                     if (position.y < 0.3) { // Only check if disc is very low
@@ -518,6 +477,7 @@ class TerrainManager {
                         return { collided: true, terrain: terrain, point: position.clone() };
                     }
                     break;
+                case 'tree':
                 case 'custom':
                     // Check collision with custom terrain objects
                     if (terrain.handleCollision && typeof terrain.handleCollision === 'function') {

@@ -1,16 +1,11 @@
 LAUNCH LIST
-
-SPONSORS
-- Top of Teebox texture with sponsors
---- Hole #1 has the logo?
---- Fly Discs?
---- Morley Field?
---- OpenAI?
---- Vibe Jam?
---- Sign next to hole with sponsor?
+- background for index.html with logo so not just whitescreen when loading
 - make a help button and help modal
-- make 5 bite sized, engaging course
-
+- make 3 bite sized, engaging courses
+- Can maps have custom grass?
+- Custom skybox for all levels?
+- Custom music for all level?
+X - loading screen
 
 
 NICE TO HAVE
@@ -27,8 +22,16 @@ NICE TO HAVE
 - Achievements? Goals?
 - How do we store the localdata?
 - Link username clicks to Twitter?
-- Can maps have custom grass?
 
+
+SPONSORS
+- Top of Teebox texture with sponsors
+--- Hole #1 has the logo?
+--- Fly Discs?
+--- Morley Field?
+--- OpenAI?
+--- Vibe Jam?
+--- Sign next to hole with sponsor?
 
 
 DONE

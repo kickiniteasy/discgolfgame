@@ -19,8 +19,8 @@
         "backgroundColor": "#324E2D"
     },
     "courseSize": {
-        "width": 300,
-        "length": 600
+        "width": 150,
+        "length": 150
     },
     "holes": [
         {
@@ -28,17 +28,17 @@
             "par": 3,
             "description": "Downhill shot through a wooded corridor. Watch out for the water hazard on the right.",
             "teebox": {
-                "position": { "x": 0, "y": 0, "z": 0 },
+                "position": { "x": 0, "y": 0, "z": 60 },
                 "rotation": { "x": 0, "y": 0, "z": 0 },
                 "type": "pro"
             },
             "basket": {
-                "position": { "x": 0, "y": 0, "z": -30 }
+                "position": { "x": 0, "y": 0, "z": 30 }
             },
             "fairway": {
                 "shape": [
-                    { "x": 0, "z": 0 },
-                    { "x": 0, "z": -20 }
+                    { "x": 0, "z": 60 },
+                    { "x": 0, "z": 40 }
                 ],
                 "width": 12
             }
@@ -48,18 +48,18 @@
             "par": 4,
             "description": "Long dogleg right through dense forest. Requires precise shot placement and course management.",
             "teebox": {
-                "position": { "x": 100, "y": 0, "z": -80 },
+                "position": { "x": 20, "y": 0, "z": 20 },
                 "rotation": { "x": 0, "y": 0, "z": 0 },
                 "type": "pro"
             },
             "basket": {
-                "position": { "x": 120, "y": 0, "z": -80 }
+                "position": { "x": 40, "y": 0, "z": 20 }
             },
             "fairway": {
                 "shape": [
-                    { "x": 100, "z": -80 },
-                    { "x": 110, "z": -80 },
-                    { "x": 120, "z": -80 }
+                    { "x": 20, "z": 20 },
+                    { "x": 30, "z": 20 },
+                    { "x": 40, "z": 20 }
                 ],
                 "width": 10
             }
@@ -69,17 +69,17 @@
             "par": 3,
             "description": "Elevated tee shot over a small valley. Dense rough on both sides punishes errant throws.",
             "teebox": {
-                "position": { "x": -80, "y": 0, "z": -200 },
+                "position": { "x": -20, "y": 0, "z": -10 },
                 "rotation": { "x": 0, "y": 0, "z": 0 },
                 "type": "pro"
             },
             "basket": {
-                "position": { "x": -100, "y": 0, "z": -200 }
+                "position": { "x": -40, "y": 0, "z": -10 }
             },
             "fairway": {
                 "shape": [
-                    { "x": -80, "z": -200 },
-                    { "x": -100, "z": -200 }
+                    { "x": -20, "z": -10 },
+                    { "x": -40, "z": -10 }
                 ],
                 "width": 10
             }
@@ -89,17 +89,17 @@
             "par": 4,
             "description": "Challenging uphill finish with multiple elevation changes and strategic tree placement.",
             "teebox": {
-                "position": { "x": 30, "y": 0, "z": -250 },
+                "position": { "x": 20, "y": 0, "z": -40 },
                 "rotation": { "x": 0, "y": 0, "z": 0 },
                 "type": "pro"
             },
             "basket": {
-                "position": { "x": 50, "y": 0, "z": -250 }
+                "position": { "x": 40, "y": 0, "z": -40 }
             },
             "fairway": {
                 "shape": [
-                    { "x": 30, "z": -250 },
-                    { "x": 50, "z": -250 }
+                    { "x": 20, "z": -40 },
+                    { "x": 40, "z": -40 }
                 ],
                 "width": 12
             }
@@ -109,11 +109,11 @@
         {
             "id": "fairway-1",
             "type": "fairway",
-            "position": { "x": 0, "y": 0, "z": -20 },
+            "position": { "x": 0, "y": 0, "z": 45 },
             "shape": {
                 "type": "rectangle",
                 "width": 20,
-                "length": 50,
+                "length": 30,
                 "rotation": 0
             },
             "visualProperties": {
@@ -125,11 +125,11 @@
         {
             "id": "rough-1",
             "type": "rough",
-            "position": { "x": 0, "y": 0, "z": -20 },
+            "position": { "x": 0, "y": 0, "z": 45 },
             "shape": {
                 "type": "rectangle",
                 "width": 25,
-                "length": 60,
+                "length": 40,
                 "rotation": 0
             },
             "visualProperties": {
@@ -142,10 +142,10 @@
         {
             "id": "fairway-2",
             "type": "fairway",
-            "position": { "x": 110, "y": 0, "z": -80 },
+            "position": { "x": 30, "y": 0, "z": 20 },
             "shape": {
                 "type": "rectangle",
-                "width": 30,
+                "width": 25,
                 "length": 15,
                 "rotation": 0
             },
@@ -158,26 +158,10 @@
         {
             "id": "rough-3",
             "type": "rough",
-            "position": { "x": 110, "y": 0, "z": -90 },
+            "position": { "x": 30, "y": 0, "z": 20 },
             "shape": {
                 "type": "rectangle",
-                "width": 40,
-                "length": 20,
-                "rotation": 0
-            },
-            "visualProperties": {
-                "color": "#355E3B",
-                "roughness": 1.0,
-                "metalness": 0.0
-            }
-        },
-        {
-            "id": "rough-4",
-            "type": "rough",
-            "position": { "x": 110, "y": 0, "z": -70 },
-            "shape": {
-                "type": "rectangle",
-                "width": 40,
+                "width": 35,
                 "length": 20,
                 "rotation": 0
             },
@@ -190,10 +174,10 @@
         {
             "id": "fairway-3",
             "type": "fairway",
-            "position": { "x": -90, "y": 0, "z": -200 },
+            "position": { "x": -30, "y": 0, "z": -10 },
             "shape": {
                 "type": "rectangle",
-                "width": 30,
+                "width": 25,
                 "length": 15,
                 "rotation": 0
             },
@@ -206,26 +190,10 @@
         {
             "id": "rough-5",
             "type": "rough",
-            "position": { "x": -90, "y": 0, "z": -210 },
+            "position": { "x": -30, "y": 0, "z": -10 },
             "shape": {
                 "type": "rectangle",
-                "width": 40,
-                "length": 20,
-                "rotation": 0
-            },
-            "visualProperties": {
-                "color": "#355E3B",
-                "roughness": 1.0,
-                "metalness": 0.0
-            }
-        },
-        {
-            "id": "rough-6",
-            "type": "rough",
-            "position": { "x": -90, "y": 0, "z": -190 },
-            "shape": {
-                "type": "rectangle",
-                "width": 40,
+                "width": 35,
                 "length": 20,
                 "rotation": 0
             },
@@ -238,10 +206,10 @@
         {
             "id": "fairway-4",
             "type": "fairway",
-            "position": { "x": 40, "y": 0, "z": -250 },
+            "position": { "x": 30, "y": 0, "z": -40 },
             "shape": {
                 "type": "rectangle",
-                "width": 30,
+                "width": 25,
                 "length": 15,
                 "rotation": 0
             },
@@ -254,26 +222,10 @@
         {
             "id": "rough-7",
             "type": "rough",
-            "position": { "x": 40, "y": 0, "z": -260 },
+            "position": { "x": 30, "y": 0, "z": -40 },
             "shape": {
                 "type": "rectangle",
-                "width": 40,
-                "length": 20,
-                "rotation": 0
-            },
-            "visualProperties": {
-                "color": "#355E3B",
-                "roughness": 1.0,
-                "metalness": 0.0
-            }
-        },
-        {
-            "id": "rough-8",
-            "type": "rough",
-            "position": { "x": 40, "y": 0, "z": -240 },
-            "shape": {
-                "type": "rectangle",
-                "width": 40,
+                "width": 35,
                 "length": 20,
                 "rotation": 0
             },
@@ -286,88 +238,61 @@
         {
             "id": "tree-1",
             "type": "tree",
-            "position": { "x": -5, "y": 0, "z": -5 },
-            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -5, "y": 0, "z": 55 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 }
         },
         {
             "id": "tree-1-2",
             "type": "tree",
-            "position": { "x": 5, "y": 0, "z": -5 },
-            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 5, "y": 0, "z": 55 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 }
         },
         {
             "id": "tree-1-3",
             "type": "tree",
-            "position": { "x": 5, "y": 0, "z": -15 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 5, "y": 0, "z": 45 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
             "id": "tree-1-4",
             "type": "tree",
-            "position": { "x": 5, "y": 0, "z": -30 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 5, "y": 0, "z": 35 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
             "id": "tree-1-5",
             "type": "tree",
-            "position": { "x": -3, "y": 0, "z": -30 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -3, "y": 0, "z": 35 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
             "id": "tree-1-6",
             "type": "tree",
-            "position": { "x": 6, "y": 0, "z": -25 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 6, "y": 0, "z": 40 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
             "id": "tree-1-7",
             "type": "tree",
-            "position": { "x": -5, "y": 0, "z": -25 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -5, "y": 0, "z": 40 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
-            "id": "tree-1-7",
+            "id": "tree-1-8",
             "type": "tree",
-            "position": { "x":-6, "y": 0, "z": -35 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -6, "y": 0, "z": 32 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
             "id": "tree-3",
             "type": "tree",
-            "position": { "x": -8, "y": 0, "z": -15 },
-            "scale": { "x": 1.1, "y": 1.3, "z": 1.1 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -8, "y": 0, "z": 45 },
+            "scale": { "x": 1.1, "y": 1.3, "z": 1.1 }
         },
         {
             "id": "fantastytree-1",
             "type": "custom",
-            "position": { "x": -4, "y": 0, "z": -10 },
+            "position": { "x": -4, "y": 0, "z": 50 },
             "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
@@ -385,7 +310,7 @@
         {
             "id": "fantastytree-2",
             "type": "custom",
-            "position": { "x": 5, "y": 0, "z": -10 },
+            "position": { "x": 5, "y": 0, "z": 50 },
             "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
@@ -403,7 +328,7 @@
         {
             "id": "fantastytree-3",
             "type": "custom",
-            "position": { "x": 5, "y": 0, "z": -35 },
+            "position": { "x": 5, "y": 0, "z": 32 },
             "rotation": { "x": 0, "y": 3, "z": 0 },
             "scale": { "x": 1, "y": 1, "z": 1 },
             "properties": {
@@ -421,57 +346,38 @@
         {
             "id": "tree-4",
             "type": "tree",
-            "position": { "x": 105, "y": 0, "z": -75 },
-            "scale": { "x": 1.4, "y": 1.6, "z": 1.4 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 22, "y": 0, "z": 22 },
+            "scale": { "x": 1.4, "y": 1.6, "z": 1.4 }
         },
         {
             "id": "tree-5",
             "type": "tree",
-            "position": { "x": 115, "y": 0, "z": -85 },
-            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 36, "y": 0, "z": 18 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 }
         },
         {
             "id": "tree-6",
             "type": "tree",
-            "position": { "x": -85, "y": 0, "z": -195 },
-            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -25, "y": 0, "z": -8 },
+            "scale": { "x": 1.3, "y": 1.4, "z": 1.3 }
         },
         {
             "id": "tree-7",
             "type": "tree",
-            "position": { "x": -95, "y": 0, "z": -205 },
-            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": -35, "y": 0, "z": -12 },
+            "scale": { "x": 1.2, "y": 1.5, "z": 1.2 }
         },
         {
             "id": "tree-8",
             "type": "tree",
-            "position": { "x": 35, "y": 0, "z": -245 },
-            "scale": { "x": 1.4, "y": 1.6, "z": 1.4 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 24, "y": 0, "z": -38 },
+            "scale": { "x": 1.4, "y": 1.6, "z": 1.4 }
         },
         {
             "id": "tree-9",
             "type": "tree",
-            "position": { "x": 45, "y": 0, "z": -255 },
-            "scale": { "x": 1.3, "y": 1.5, "z": 1.3 },
-            "visualProperties": {
-                "color": "#228B22"
-            }
+            "position": { "x": 35, "y": 0, "z": -42 },
+            "scale": { "x": 1.3, "y": 1.5, "z": 1.3 }
         }
-        
     ]
 }

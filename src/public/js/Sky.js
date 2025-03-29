@@ -126,10 +126,11 @@ class Sky {
 
     applyVisualSettings(visualSettings) {
         console.log("Applying visual settings:", visualSettings);
-        if (visualSettings.skyImageUrl) {
-            this.options.textureUrl = visualSettings.skyImageUrl;
-            this.createSky();
-        }
+        // Use the fallback texture if skyImageUrl is not provided
+        this.options.textureUrl = (visualSettings && visualSettings.skyImageUrl) 
+            ? visualSettings.skyImageUrl 
+            : 'textures/sky/skybox_4k.png';
+        this.createSky();
     }
 
 }

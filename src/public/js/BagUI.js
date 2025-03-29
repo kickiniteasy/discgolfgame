@@ -124,21 +124,28 @@ class BagUI {
         // Render discs
         this.discsGrid.innerHTML = this.bag.discs.map(disc => `
             <div class="grid-item ${disc.id === this.bag.selectedDisc.id ? 'selected' : ''}" data-disc-id="${disc.id}">
-                <img src="${disc.image}" alt="${disc.name}" />
-                <div class="name">${disc.name}</div>
-                <div class="stats">
-                    Speed: ${disc.speed} | Glide: ${disc.glide}<br>
-                    Turn: ${disc.turn} | Fade: ${disc.fade}
+                <div class="image-container">
+                    <img src="${disc.image}" alt="${disc.name}" />
+                    <div class="disc-type">${disc.type}</div>
                 </div>
+                <div class="name">${disc.name}</div>
+                <ul class="stats">
+                    <li>Speed: ${disc.speed}</li>
+                    <li>Glide: ${disc.glide}</li>
+                    <li>Turn: ${disc.turn}</li>
+                    <li>Fade: ${disc.fade}</li>
+                </ul>
             </div>
         `).join('');
 
         // Render items
         this.itemsGrid.innerHTML = this.bag.items.map(item => `
             <div class="grid-item" data-item-id="${item.id}">
-                <img src="${item.image}" alt="${item.name}" />
+                <div class="image-container">
+                    <img src="${item.image}" alt="${item.name}" />
+                </div>
                 <div class="name">${item.name}</div>
-                <div class="stats">${item.description}</div>
+                <div class="description">${item.description}</div>
             </div>
         `).join('');
     }

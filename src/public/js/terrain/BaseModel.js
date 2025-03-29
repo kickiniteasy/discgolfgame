@@ -299,4 +299,9 @@ class BaseModel {
             this.mixer = null;
         }
     }
+
+    removePart(part) {
+        this.parts = this.parts.filter(p => p !== part);
+        this.mesh.remove(part);
+    }
 } 

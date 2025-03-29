@@ -62,9 +62,16 @@ async function initGame() {
         const courseSize = currentCourse?.courseSize || { width: 300, length: 400 };
 
         // Create sky with course dimensions and store it globally
+        let tmpVisualSettings = {
+            skyImageUrl: 'textures/sky/skybox_4k.png',
+            backgroundColor: '#87CEEB'
+        };
+        if (typeof currentCourse.visualSettings !== 'undefined') {
+            tmpVisualSettings = currentCourse.visualSettings;
+        }
         let skyData = {
             type: 'panorama', 
-            textureUrl: currentCourse.visualSettings.skyImageUrl ? currentCourse.visualSettings.skyImageUrl : 'textures/sky/skybox_4k.png',
+            textureUrl: tmpVisualSettings.skyImageUrl ? tmpVisualSettings.skyImageUrl : 'textures/sky/skybox_4k.png',
             courseSize: courseSize // Use the actual course size
         };
         console.log("Current course:", currentCourse);

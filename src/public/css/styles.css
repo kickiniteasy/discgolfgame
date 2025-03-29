@@ -11,6 +11,7 @@ body {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
+    background-color: #f0f0f0;  /* Nice subtle light gray */
 }
 
 #container {
@@ -20,10 +21,35 @@ body {
     touch-action: none;
 }
 
+#loading-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    z-index: -1;  /* Put it behind everything */
+}
+
+#loading-content img {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 16px;
+    opacity: 0.7;
+}
+
+#loading-content .game-name {
+    font-family: Arial, sans-serif;
+    font-size: 24px;
+    color: #666;
+    letter-spacing: 2px;
+}
+
 canvas {
     touch-action: none;
     -webkit-user-select: none;
     user-select: none;
+    position: relative;
+    z-index: 1;  /* Ensure canvas is above the loading content */
 }
 
 /* UI Elements */
@@ -122,6 +148,7 @@ canvas {
     align-items: center;
     gap: 10px;
     transition: all 0.3s ease;
+    z-index: 1000;
 }
 
 #bag-button:hover,
@@ -214,19 +241,23 @@ canvas {
 }
 
 .tab-button {
-    background-color: #f1f1f1;
+    flex: 1;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 12px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.2s;
+    font-size: 16px;
 }
 
 .tab-button:hover {
-    background-color: #ddd;
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .tab-button.active {
-    background-color: #ccc;
+    background-color: rgba(255, 255, 255, 0.3);
 }
 
 .tab {
@@ -240,7 +271,7 @@ canvas {
 /* Grid */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-template-columns: repeat(2, 1fr);  /* Force exactly 2 columns */
     gap: 12px;
     padding: 8px;
 }
@@ -249,13 +280,14 @@ canvas {
     background-color: #333;
     border-radius: 8px;
     padding: 12px;
-    text-align: center;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    text-align: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .grid-item:hover {
@@ -269,30 +301,83 @@ canvas {
     box-shadow: 0 0 10px rgba(77, 182, 172, 0.3);
 }
 
+.grid-item .image-container {
+    position: relative;
+    width: 100%;
+    margin-bottom: 8px;
+    box-sizing: border-box;
+}
+
 .grid-item img {
-    width: 80px;
-    height: 80px;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
     object-fit: contain;
     padding: 10px;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 6px;
     transition: transform 0.2s ease;
+    box-sizing: border-box;
 }
 
 .grid-item:hover img {
     transform: scale(1.1);
 }
 
+.grid-item .disc-type {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 .grid-item .name {
     font-weight: bold;
     margin: 0;
     color: #fff;
+    font-size: 16px;
+    margin-bottom: 8px;
 }
 
 .grid-item .stats {
-    font-size: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
     color: #aaa;
-    line-height: 1.4;
+    font-size: 12px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    width: 100%;
+}
+
+.grid-item .stats li {
+    color: #aaa;
+    text-align: center;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.grid-item:hover .stats li {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.grid-item .description {
+    color: #aaa;
+    font-size: 12px;
+    text-align: center;
+}
+
+.grid-item:hover .description {
+    color: #bbb;
 }
 
 /* Power Meter */
@@ -1249,18 +1334,12 @@ canvas {
     }
     
     .grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-template-columns: repeat(2, 1fr);
         gap: 8px;
         padding: 5px;
     }
     
     .grid-item {
-        padding: 8px;
-    }
-    
-    .grid-item img {
-        width: 60px;
-        height: 60px;
         padding: 8px;
     }
 }
