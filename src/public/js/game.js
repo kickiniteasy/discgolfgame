@@ -33,6 +33,13 @@ async function initGame() {
     // Initialize scene
     const scene = new THREE.Scene();
 
+    // Initialize UI first
+    window.ui = new UI();
+
+    // Show welcome message with logo
+    const welcomeMessage = `<div style="display: flex; align-items: center; gap: 10px; justify-content: center; text-align: center; width: 100%;"><img src="img/logo.svg" alt="VIBE DISC" style="height: 24px;"><span>Welcome to Vibe Disc!</span></div>`;
+    window.ui.showMessage(welcomeMessage, 3000, 'info');
+
     // Initialize stats
     const stats = new Stats();
     stats.dom.id = 'stats-panel';
@@ -41,9 +48,6 @@ async function initGame() {
 
     // Initialize managers first
     try {
-        // Initialize UI first
-        window.ui = new UI();
-
         // Initialize managers and make them globally accessible
         window.terrainManager = new TerrainManager(scene);
         window.courseManager = new CourseManager(scene);

@@ -29,6 +29,9 @@ class CourseManager {
             // Create new course instance
             this.currentCourse = new Course(this.scene, courseData);
             
+            // Show success message for course load
+            ToasterMessage.success(`Now playing ${this.currentCourse.name}!`);
+            
             // Update sky with new course size if it exists
             console.log("Load course from JSON:", window.sky, courseData.visualSettings);
             if (window.sky && courseData.courseSize) {

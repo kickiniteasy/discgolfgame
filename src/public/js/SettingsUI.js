@@ -48,25 +48,8 @@ class SettingsUI {
             );
         });
         
-        // Add Reset All Data button
-        const resetAllButton = document.createElement('button');
-        resetAllButton.className = 'reset-all-button';
-        resetAllButton.textContent = 'Reset All Data';
-        resetAllButton.addEventListener('click', () => {
-            this.showConfirmModal(
-                'Reset All Data',
-                'Are you sure you want to reset ALL data? This will:\n\n' +
-                '• Clear all player data and settings\n' +
-                '• Remove all added players\n' +
-                '• Reset all scores and throws\n' +
-                '• Reset game back to Hole 1',
-                () => this.resetAllData()
-            );
-        });
-        
         // Add buttons to container
         resetButtonsContainer.appendChild(resetGameButton);
-        resetButtonsContainer.appendChild(resetAllButton);
         
         // Add the reset buttons container after the player settings list
         this.playerSettingsList.parentNode.insertBefore(resetButtonsContainer, this.playerSettingsList.nextSibling);
@@ -224,6 +207,10 @@ class SettingsUI {
                 if (validHandle !== e.target.value) {
                     e.target.value = validHandle;
                 }
+                // If this is the main player, save the name immediately
+                if (index === 0) {
+                    localStorage.setItem('discGolfPlayerName', validHandle);
+                }
             });
             
             const colorInput = document.createElement('input');
@@ -264,38 +251,11 @@ class SettingsUI {
                 }
             });
 
-            // Add player type selector for all players except Player 1
-            if (index > 0) {
-                const typeSelect = document.createElement('select');
-                typeSelect.className = 'type-select';
-                typeSelect.title = 'Choose player type';
-                typeSelect.dataset.playerIndex = index;
-
-                const aiOption = document.createElement('option');
-                aiOption.value = 'ai';
-                aiOption.textContent = 'AI';
-                typeSelect.appendChild(aiOption);
-
-                const humanOption = document.createElement('option');
-                humanOption.value = 'human';
-                humanOption.textContent = 'Human';
-                typeSelect.appendChild(humanOption);
-
-                typeSelect.value = player.type;
-
-                typeSelect.addEventListener('change', (e) => {
-                    player.type = e.target.value;
-                    this.playerManager.saveAIPlayerData();
-                });
-
-                row.appendChild(typeSelect);
-            }
-            
             // Add remove button for all players except Player 1
             if (index > 0) {
                 const removeButton = document.createElement('button');
                 removeButton.className = 'remove-player-button';
-                removeButton.innerHTML = '&times;';
+                removeButton.innerHTML = '×';
                 removeButton.title = 'Remove player';
                 removeButton.dataset.playerIndex = index;
                 removeButton.addEventListener('click', (e) => {
@@ -328,8 +288,9 @@ class SettingsUI {
                 const nextIndex = this.playerManager.players.length;
                 if (nextIndex < 4) {
                     const nextColor = this.playerManager.playerColors[nextIndex];
-                    const nextName = this.playerManager.aiNames[nextIndex - 1] || `Player ${nextIndex + 1}`;
-                    this.playerManager.addPlayer(nextName, nextColor, 'ai');
+                    // Use the aiNames list for the next player (nextIndex - 1 since index 0 is "You")
+                    const nextName = this.playerManager.aiNames[nextIndex - 1];
+                    this.playerManager.addPlayer(nextName, nextColor, 'human');
                     this.updatePlayersList();
                     if (window.ui) {
                         window.ui.updateScoreboard(this.playerManager.getScorecard());
@@ -705,49 +666,6 @@ class SettingsUI {
         this.confirmModal.classList.remove('show');
         this.settingsModal.style.display = 'none';
         this.showMessage('Game reset successfully! Starting from Hole 1', 'success');
-    }
-
-    resetAllData() {
-        // Store current course data before clearing localStorage
-        const currentCourseId = localStorage.getItem('currentCourseId');
-        const courseData = localStorage.getItem('courseData');
-        
-        // Clear localStorage but preserve course data
-        localStorage.clear();
-        if (currentCourseId) localStorage.setItem('currentCourseId', currentCourseId);
-        if (courseData) localStorage.setItem('courseData', courseData);
-        
-        // Remove existing name labels and discs
-        this.playerManager.players.forEach(player => {
-            if (player.nameSprite && player.nameSprite.parent) {
-                player.nameSprite.parent.remove(player.nameSprite);
-                player.nameSprite.material.map.dispose();
-                player.nameSprite.material.dispose();
-                player.nameSprite.geometry.dispose();
-                player.nameSprite = null;
-            }
-            if (player.disc && player.disc.parent) {
-                player.disc.parent.remove(player.disc);
-                if (player.disc.geometry) player.disc.geometry.dispose();
-                if (player.disc.material) player.disc.material.dispose();
-                player.disc = null;
-            }
-        });
-        
-        // Clear players and reinitialize
-        while (this.playerManager.players.length > 0) {
-            this.playerManager.players.pop();
-        }
-        this.playerManager.initializePlayers();
-        
-        // Reset game state (reuse resetGame function)
-        this.resetGame();
-        
-        // Update UI
-        this.updatePlayersList();
-        
-        // Show success message
-        this.showMessage('All data reset successfully!', 'success');
     }
 
     addSetting(id, label, type, defaultValue, onChange) {

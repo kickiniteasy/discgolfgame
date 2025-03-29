@@ -13,11 +13,11 @@ class PlayerManager {
             0xFF9800  // Orange
         ];
 
-        // AI player names
+        // Additional player names (for players 2-4)
         this.aiNames = [
+            'Alice',
             'Bob',
-            'Cindy',
-            'Dave'
+            'Cindy'
         ];
     }
     
@@ -51,7 +51,7 @@ class PlayerManager {
         return this.playerColors[0];
     }
     
-    initializePlayers(defaultUsername = 'You') {
+    initializePlayers() {
         // Check for portal parameters
         const urlParams = new URLSearchParams(window.location.search);
         const portalUsername = urlParams.get('username');
@@ -71,24 +71,25 @@ class PlayerManager {
             }
         }
 
-        // Create main player with portal name or default
-        const username = portalUsername || defaultUsername;
+        // Create main player with portal name or default "You"
+        const savedName = localStorage.getItem('discGolfPlayerName');
+        const username = portalUsername || savedName || 'You';
         this.addPlayer(username, playerColor, 'human');
         
-        // Get saved player count or default to 4
-        const savedPlayerCount = parseInt(localStorage.getItem('discGolfPlayerCount')) || 4;
+        // Get saved player count or default to 1
+        const savedPlayerCount = parseInt(localStorage.getItem('discGolfPlayerCount')) || 1;
         const aiPlayerCount = Math.min(Math.max(savedPlayerCount - 1, 0), 3); // Ensure between 0 and 3 AI players
         
         // Load saved AI player data or use defaults
         const savedAIPlayers = JSON.parse(localStorage.getItem('discGolfAIPlayers') || '[]');
         
-        // Add AI players with saved or default names/colors
+        // Add additional players with saved or default names/colors
         for (let i = 0; i < aiPlayerCount; i++) {
             const savedAIPlayer = savedAIPlayers[i];
             if (savedAIPlayer) {
-                this.addPlayer(savedAIPlayer.name, parseInt(savedAIPlayer.color, 16), savedAIPlayer.type || 'ai');
+                this.addPlayer(savedAIPlayer.name, parseInt(savedAIPlayer.color, 16), savedAIPlayer.type || 'human');
             } else {
-                this.addPlayer(this.aiNames[i], this.playerColors[i + 1], 'ai');
+                this.addPlayer(this.aiNames[i], this.playerColors[i + 1], 'human');
             }
         }
         
@@ -162,11 +163,23 @@ class PlayerManager {
             const teePosition = window.courseManager.getCurrentCourse().getCurrentTeeboxPosition();
             const holePosition = window.courseManager.getCurrentCourse().getCurrentHolePosition();
             
-            // Position new player behind teebox with other non-active players
-            const backOffset = 2;
-            const sideSpread = 0.6;
-            const xPosition = teePosition.x + ((this.players.length - 2) * sideSpread - sideSpread);
-            const zPosition = teePosition.z + backOffset;
+            // Calculate direction from tee to hole
+            const teeToHole = new THREE.Vector2(
+                holePosition.x - teePosition.x,
+                holePosition.z - teePosition.z
+            ).normalize();
+            
+            // Calculate the back direction (opposite of tee-to-hole)
+            const backDirection = teeToHole.clone().multiplyScalar(-1);
+            
+            // Position new player behind and to the side of teebox
+            const backOffset = 2; // Fixed distance behind the tee
+            const sideSpread = 0.6; // Gentle side spread
+            
+            // Calculate position behind the tee based on direction to hole
+            const xOffset = ((this.players.length - 2) * sideSpread - sideSpread);
+            const xPosition = teePosition.x + (backDirection.x * backOffset) + xOffset;
+            const zPosition = teePosition.z + (backDirection.y * backOffset);
             
             player.moveToPosition(new THREE.Vector3(
                 xPosition,
