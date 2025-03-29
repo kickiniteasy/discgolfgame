@@ -54,8 +54,9 @@ async function initGame() {
         const settingsUI = new SettingsUI(window.playerManager);
 
         // Load initial course through course manager
-        //await window.courseManager.loadCourseFromFile('beginner');
-        await window.courseManager.loadCourseFromFile('forest_valley');
+        await window.courseManager.loadCourseFromFile('beginner');
+        //await window.courseManager.loadCourseFromFile('forest_valley');
+
         // Get course size after course is loaded
         const currentCourse = window.courseManager.getCurrentCourse();
         const courseSize = currentCourse?.courseSize || { width: 300, length: 400 };

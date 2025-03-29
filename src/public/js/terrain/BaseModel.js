@@ -9,6 +9,9 @@ MODEL CREATION PATTERN:
 2. Create the THREE.Group() in the constructor
 3. Override the init() method to build your model parts
 4. Make sure to handle properties correctly using the visualProperties and properties objects
+5. Never import THREE in the model file, it will be imported by the CustomTerrain loader
+6. Never use any imports at all, they are not supported
+7. Remember, this is a THREE.js library, not a React library so it uses (x,y,z,) coordinates
 
 REQUIRED MODEL STRUCTURE:
 export default class YourModel extends BaseModel {
@@ -84,6 +87,17 @@ export default class YourModel extends BaseModel {
         
         // Perform animations here
     }
+
+    // Override this for custom collision detection
+    handleCollision(point) {
+        const collision = super.handleCollision(point);
+        if (collision.collided) {
+            console.log("Collision detected with: ", this.mesh);
+            // Add any custom collision handling here, like fun animations or effects
+        }
+        return collision;
+    }
+    
 }
 
 PROPERTIES HANDLING:

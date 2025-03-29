@@ -361,6 +361,191 @@
             },
             "variant": "default",
             "tags": ["dragon"]
+        },
+
+
+
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -40, "y": 2, "z": 10 },
+            "rotation": { "x": 3.14, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/alien-plant.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -43, "y": 0.25, "z": 10 },
+            "rotation": { "x": 0, "y": 3.14, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/portal-gateway.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -49, "y": 0.25, "z": 10 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/weather-controller.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -49, "y": 0, "z": 2 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/campfire-model.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -37, "y": 0, "z": 2 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/house-model.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": 3, "y": 0.2, "z": 2 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
+            "properties": {
+                "modelUrl": "./models/js/dizzy-duck.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": 3, "y": 0, "z": 7 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 },
+            "properties": {
+                "modelUrl": "./models/js/mushroom-cluster.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -3, "y": 1, "z": 7 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
+            "properties": {
+                "modelUrl": "./models/js/mystical-pond.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
+        },
+        {
+            "id": "rocket-2",
+            "type": "custom",
+            "position": { "x": -3, "y": 1, "z": 1 },
+            "rotation": { "x": 0, "y": 3, "z": 0 },
+            "scale": { "x": 0.5, "y": 0.5, "z": 0.5 },
+            "properties": {
+                "modelUrl": "./models/js/portal-gateway.js",
+                "animated": true
+            },
+            "visualProperties": {
+                "roughness": 0.2,
+                "metalness": 0.8,
+                "opacity": 0.8
+            },
+            "variant": "default",
+            "tags": ["dragon"]
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     ]
 }
