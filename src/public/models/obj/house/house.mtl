@@ -1,0 +1,31 @@
+# House Material Library
+# Created by Claude
+
+newmtl Walls
+Ka 0.9 0.9 0.9     # Ambient color (light gray)
+Kd 0.9 0.9 0.9     # Diffuse color (light gray)
+Ks 0.1 0.1 0.1     # Specular color (slight shine)
+Ns 10.0            # Specular exponent (low glossiness)
+illum 2            # Illumination model (2 = highlight on)
+
+newmtl Roof
+Ka 0.5 0.1 0.1     # Ambient color (dark red)
+Kd 0.8 0.2 0.2     # Diffuse color (red)
+Ks 0.3 0.1 0.1     # Specular color (slight shine)
+Ns 20.0            # Specular exponent (medium glossiness)
+illum 2            # Illumination model (2 = highlight on)
+
+newmtl Door
+Ka 0.3 0.2 0.1     # Ambient color (brown)
+Kd 0.6 0.4 0.2     # Diffuse color (medium brown)
+Ks 0.4 0.3 0.2     # Specular color (wooden shine)
+Ns 10.0            # Specular exponent (low glossiness)
+illum 2            # Illumination model (2 = highlight on)
+
+newmtl Windows
+Ka 0.7 0.8 0.9     # Ambient color (light blue)
+Kd 0.7 0.8 0.9     # Diffuse color (light blue)
+Ks 1.0 1.0 1.0     # Specular color (bright white)
+Ns 100.0           # Specular exponent (high glossiness)
+d 0.3              # Opacity (transparent)
+illum 2            # Illumination model (2 = highlight on)

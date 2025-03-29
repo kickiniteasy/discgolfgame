@@ -1,0 +1,128 @@
+# Simple House OBJ File
+# Created by Claude
+
+mtllib materials.mtl
+
+# Object: House
+o House
+
+# Material assignments
+usemtl Walls
+# Vertices for the main cube (house base)
+v -5.0 0.0 -5.0
+v -5.0 0.0  5.0
+v  5.0 0.0  5.0
+v  5.0 0.0 -5.0
+v -5.0 6.0 -5.0
+v -5.0 6.0  5.0
+v  5.0 6.0  5.0
+v  5.0 6.0 -5.0
+
+# Vertices for the roof
+usemtl Roof
+v  0.0 10.0  5.0
+v  0.0 10.0 -5.0
+
+# Vertices for the door
+usemtl Door
+v -1.0 0.0  5.01
+v -1.0 3.0  5.01
+v  1.0 3.0  5.01
+v  1.0 0.0  5.01
+
+# Vertices for windows
+usemtl Windows
+# Front window
+v  3.0 3.0  5.01
+v  3.0 4.5  5.01
+v  4.5 4.5  5.01
+v  4.5 3.0  5.01
+# Back window
+v -3.0 3.0 -5.01
+v -3.0 4.5 -5.01
+v -4.5 4.5 -5.01
+v -4.5 3.0 -5.01
+# Left side window
+v -5.01 3.0  0.0
+v -5.01 4.5  0.0
+v -5.01 4.5  2.0
+v -5.01 3.0  2.0
+# Right side window
+v  5.01 3.0  0.0
+v  5.01 4.5  0.0
+v  5.01 4.5 -2.0
+v  5.01 3.0 -2.0
+
+# Normals
+vn  0.0 -1.0  0.0  # Bottom
+vn  0.0  1.0  0.0  # Top
+vn  0.0  0.0  1.0  # Front
+vn  0.0  0.0 -1.0  # Back
+vn -1.0  0.0  0.0  # Left
+vn  1.0  0.0  0.0  # Right
+vn  0.0  0.7  0.7  # Roof front
+vn  0.0  0.7 -0.7  # Roof back
+vn -0.7  0.7  0.0  # Roof left
+vn  0.7  0.7  0.0  # Roof right
+
+# Texture coordinates
+vt 0.0 0.0
+vt 1.0 0.0
+vt 1.0 1.0
+vt 0.0 1.0
+vt 0.5 1.0
+vt 0.0 0.5
+vt 1.0 0.5
+vt 0.5 0.0
+
+# Faces for the main house cube (bottom, sides, excluding top)
+# Format: f vertex/texture/normal
+
+# Bottom face
+f 1/1/1 2/2/1 3/3/1
+f 1/1/1 3/3/1 4/4/1
+
+# Front face (excluding door area)
+f 2/1/3 6/4/3 7/3/3
+f 2/1/3 7/3/3 3/2/3
+
+# Back face
+f 1/1/4 5/4/4 6/3/4
+f 1/1/4 6/3/4 2/2/4
+
+# Left face
+f 1/1/5 4/2/5 8/3/5
+f 1/1/5 8/3/5 5/4/5
+
+# Right face
+f 3/1/6 7/4/6 8/3/6
+f 3/1/6 8/3/6 4/2/6
+
+# Roof faces
+f 5/1/2 8/2/2 10/5/2
+f 5/1/2 10/5/2 9/4/2
+f 6/1/2 5/2/2 9/5/2
+f 7/4/2 6/1/2 9/5/2
+f 8/3/2 7/4/2 9/5/2
+f 8/3/2 9/5/2 10/2/2
+
+# Door
+f 11/1/3 12/4/3 13/3/3
+f 11/1/3 13/3/3 14/2/3
+
+# Windows
+# Front window
+f 15/1/3 16/4/3 17/3/3
+f 15/1/3 17/3/3 18/2/3
+
+# Back window
+f 19/1/4 20/4/4 21/3/4
+f 19/1/4 21/3/4 22/2/4
+
+# Left side window
+f 23/1/5 24/4/5 25/3/5
+f 23/1/5 25/3/5 26/2/5
+
+# Right side window
+f 27/1/6 28/4/6 29/3/6
+f 27/1/6 29/3/6 30/2/6

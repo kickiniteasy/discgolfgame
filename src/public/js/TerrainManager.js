@@ -176,6 +176,11 @@ class TerrainManager {
             return;
         }
 
+        // Generate a unique ID if none provided or if it's already in use
+        if (!terrainData.id || this.terrainObjects.has(terrainData.id)) {
+            terrainData.id = crypto.randomUUID();
+        }
+
         const position = new THREE.Vector3(
             terrainData.position?.x || 0,
             terrainData.position?.y || 0,
@@ -212,7 +217,10 @@ class TerrainManager {
         const terrain = new TerrainClass(this.scene, options);
         const success = await terrain.init();
         
-        if (terrain.mesh) {
+        // Always track JS models, even if mesh isn't immediately available
+        if (terrainData.type === 'custom' && terrainData.properties?.modelUrl?.endsWith('.js')) {
+            this.terrainObjects.set(terrain.id, terrain);
+        } else if (terrain.mesh) {
             this.terrainObjects.set(terrain.id, terrain);
         } else {
             console.warn(`Failed to initialize terrain: ${terrainData.id} (${terrainData.type})`);
@@ -289,20 +297,48 @@ class TerrainManager {
     }
 
     clearTerrain() {
+        // Log the number of terrain objects being cleaned up
+        console.log(`Clearing ${this.terrainObjects.size} terrain objects`);
+        
         // First remove and cleanup all terrain objects
-        this.terrainObjects.forEach(terrain => {
-            // Remove from scene and dispose resources
-            terrain.removeFromScene();
+        this.terrainObjects.forEach((terrain, id) => {
+            try {
+                // Check if removeFromScene exists before calling
+                if (typeof terrain.removeFromScene === 'function') {
+                    terrain.removeFromScene();
+                } else {
+                    console.warn(`Terrain ${id} has no removeFromScene method`);
+                    
+                    // Fallback cleanup
+                    if (terrain.mesh) {
+                        this.scene.remove(terrain.mesh);
+                    }
+                }
+            } catch (error) {
+                console.error(`Error removing terrain ${id} from scene:`, error);
+            }
         });
+        
         // Clear the terrain objects map
         this.terrainObjects.clear();
-
+    
         // Clean up ground plane
         if (this.groundPlane) {
             this.scene.remove(this.groundPlane);
             if (this.groundPlane.geometry) this.groundPlane.geometry.dispose();
-            if (this.groundPlane.material) this.groundPlane.material.dispose();
+            if (this.groundPlane.material) {
+                if (Array.isArray(this.groundPlane.material)) {
+                    this.groundPlane.material.forEach(m => m.dispose());
+                } else {
+                    this.groundPlane.material.dispose();
+                }
+            }
             this.groundPlane = null;
+        }
+        
+        // Force a garbage collection hint
+        if (window.gc) {
+            window.gc();
         }
     }
 
@@ -346,6 +382,7 @@ class TerrainManager {
 
     update(deltaTime) {
         this.terrainObjects.forEach(terrain => {
+            //console.log('terrain:', terrain);
             terrain.update(deltaTime);
         });
     }
