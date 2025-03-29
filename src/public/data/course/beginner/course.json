@@ -15,7 +15,7 @@
         "creationDate": "2024-03-20T12:00:00Z"
     },
     "visualSettings": {
-        "skyImageUrl": "https://example.com/textures/clear_blue_sky.jpg",
+        "skyImageUrl": "./textures/sky/skybox_4k.png",
         "backgroundColor": "#87CEEB"
     },
     "courseSize": {

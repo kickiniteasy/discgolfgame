@@ -123,4 +123,13 @@ class Sky {
             });
         }
     }
+
+    applyVisualSettings(visualSettings) {
+        console.log("Applying visual settings:", visualSettings);
+        if (visualSettings.skyImageUrl) {
+            this.options.textureUrl = visualSettings.skyImageUrl;
+            this.createSky();
+        }
+    }
+
 }

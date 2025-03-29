@@ -115,7 +115,6 @@ class CustomTerrain extends Terrain {
 
     async loadJSModel() {
         try {
-            console.log('Loading JS model:', this.modelUrl);
             if (this.modelUrl.startsWith('./')) {
                 this.modelUrl = this.modelUrl.replace('./', '../../');
             }
@@ -123,7 +122,6 @@ class CustomTerrain extends Terrain {
             const modelModule = await import(this.modelUrl);
 
             // Create an instance of the model
-            console.log('modelModule:', modelModule.default);
             if (modelModule.default) {
                 // Remove the placeholder mesh if it exists
                 if (this.mesh) {
@@ -134,7 +132,6 @@ class CustomTerrain extends Terrain {
                 // Create and initialize the model instance
                 this.modelInstance = new modelModule.default(this.scene, this.options);
                 await this.modelInstance.init();
-                console.log('modelInstance:', this.modelInstance);
                 // Ensure we have the model's mesh
                 if (!this.modelInstance.mesh) {
                     throw new Error('Model instance did not create a mesh');

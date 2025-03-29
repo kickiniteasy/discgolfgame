@@ -30,8 +30,10 @@ class CourseManager {
             this.currentCourse = new Course(this.scene, courseData);
             
             // Update sky with new course size if it exists
+            console.log("Load course from JSON:", window.sky, courseData.visualSettings);
             if (window.sky && courseData.courseSize) {
                 window.sky.updateCourseSize(courseData.courseSize);
+                this.applyVisualSettings(courseData.visualSettings);
             }
             
             // Load terrain if available
@@ -56,14 +58,8 @@ class CourseManager {
     }
 
     applyVisualSettings(visualSettings) {
-        // Apply sky image if provided
-        if (visualSettings.skyImageUrl && window.sky) {
-            window.sky.setSkyImage(visualSettings.skyImageUrl);
-        }
-
-        // Apply background color if provided
-        if (visualSettings.backgroundColor && window.sky) {
-            window.sky.setBackgroundColor(visualSettings.backgroundColor);
+        if (typeof window.sky !== 'undefined') {
+            window.sky.applyVisualSettings(visualSettings);
         }
     }
 

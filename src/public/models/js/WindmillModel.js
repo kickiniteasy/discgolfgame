@@ -186,13 +186,15 @@ export default class WindmillModel extends BaseModel {
     handleCollision(point) {
         const collision = super.handleCollision(point);
         collision.isWindmill = true;
+
         if (collision.collided) {
             // increase the rotation speed of the windmill for 1 second
-            this.rotationSpeed += 0.2;
+            this.rotationSpeed += 10;
             setTimeout(() => {
-                this.rotationSpeed -= 0.2;
-            }, 1000);
+                this.rotationSpeed -= 10;
+            }, 3000);
         }
+
         return collision;
     }
 }

@@ -203,7 +203,6 @@ export default class FantasyTreeModel extends BaseModel {
     createFruits() {
         // Create glowing fruits distributed among the leaf clusters
         for (let i = 0; i < this.fruitCount; i++) {
-            console.log("Creating fruit: ", i);
             // Choose a random branch to place this fruit
             const branchIndex = Math.floor(Math.random() * this.branches.length);
             const branch = this.branches[branchIndex];
@@ -233,9 +232,12 @@ export default class FantasyTreeModel extends BaseModel {
             
             // Get base position from leaf cluster
             const leafCluster = branch.leafCluster.mesh;
-            fruit.position.x = leafCluster.position.x + 0.3 + Math.cos(offsetAngle) * offset;
+            // get a random for plus or minus
+            const random = Math.random() - 0.5;
+            const plusOrMinus = Math.random() < 0.5 ? 1 : -1;
+            fruit.position.x = leafCluster.position.x + plusOrMinus * 0.3 + Math.cos(offsetAngle) * offset;
             fruit.position.y = leafCluster.position.y + (Math.random() - 0.5) * offset;
-            fruit.position.z = leafCluster.position.z + 0.3 + Math.sin(offsetAngle) * offset;
+            fruit.position.z = leafCluster.position.z + plusOrMinus * 0.3 + Math.sin(offsetAngle) * offset;
             
             fruit.castShadow = true;
             this.mesh.add(fruit);
@@ -306,6 +308,10 @@ export default class FantasyTreeModel extends BaseModel {
             // Subtle size pulsing
             const scale = 1 + fruitPulse * 0.2;
             fruit.mesh.scale.set(scale, scale, scale);
+
+            if (fruit.falling) {
+                fruit.mesh.position.y -= 1 * deltaTime;
+            }
         });
     }
     
@@ -319,9 +325,14 @@ export default class FantasyTreeModel extends BaseModel {
         const fruitIndex = Math.floor(Math.random() * this.fruits.length);
         const fruit = this.fruits[fruitIndex];
         
+        // make the fruit fall down
+        fruit.falling = true;
+        
         // Remove from scene and array
-        this.mesh.remove(fruit.mesh);
-        this.fruits.splice(fruitIndex, 1);
+        setTimeout(() => {
+            this.mesh.remove(fruit.mesh);
+            this.fruits.splice(fruitIndex, 1);
+        }, 3000);
         
         return true;
     }

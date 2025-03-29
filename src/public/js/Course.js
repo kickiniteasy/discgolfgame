@@ -14,6 +14,7 @@ class Course {
         this.name = courseData.name;
         this.metadata = courseData.metadata || {};
         this.courseSize = courseData.courseSize || { width: 300, length: 400 };
+        this.visualSettings = courseData.visualSettings || {};
         
         // Calculate total par from hole data
         this.holePars = courseData.holes.map(hole => hole.par);

@@ -13,7 +13,7 @@ export default class DragonModel extends BaseModel {
         this.mesh = new THREE.Group();
         
         // Animation parameters
-        this.wingFlapSpeed = 0.1;
+        this.wingFlapSpeed = 0.06;
         this.wingFlapDirection = 1;
         this.wingFlapAmount = 0;
         this.tailSwingAmount = 0;

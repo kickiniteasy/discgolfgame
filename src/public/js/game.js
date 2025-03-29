@@ -54,18 +54,25 @@ async function initGame() {
         const settingsUI = new SettingsUI(window.playerManager);
 
         // Load initial course through course manager
-        await window.courseManager.loadCourseFromFile('beginner');
-        
+        //await window.courseManager.loadCourseFromFile('beginner');
+        await window.courseManager.loadCourseFromFile('forest_valley');
         // Get course size after course is loaded
         const currentCourse = window.courseManager.getCurrentCourse();
         const courseSize = currentCourse?.courseSize || { width: 300, length: 400 };
 
         // Create sky with course dimensions and store it globally
-        window.sky = new Sky(scene, {
+        let skyData = {
             type: 'panorama', 
-            textureUrl: 'textures/sky/skybox_4k.png',
+            textureUrl: currentCourse.visualSettings.skyImageUrl ? currentCourse.visualSettings.skyImageUrl : 'textures/sky/skybox_4k.png',
             courseSize: courseSize // Use the actual course size
-        });
+        };
+        console.log("Current course:", currentCourse);
+        if (currentCourse.visualSettings) {
+            skyData.textureUrl = currentCourse.visualSettings.skyImageUrl;
+            skyData.backgroundColor = currentCourse.visualSettings.backgroundColor;
+        }
+        console.log("Sky data:", skyData);
+        window.sky = new Sky(scene, skyData);
 
         // Initialize camera
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
